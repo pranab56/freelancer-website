@@ -129,6 +129,10 @@
 	@apply text-white px-4 py-2 rounded-lg;
 	background-image: linear-gradient(to right, #002282, #0170da);
 }
+.button-gradient-rounded {
+	@apply text-white px-4 py-2 rounded-full;
+	background-image: linear-gradient(to right, #002282, #0170da);
+}
 .gradient {
 	@apply text-white;
 	background-image: linear-gradient(to right, #002282, #0170da);
