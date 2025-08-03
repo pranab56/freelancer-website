@@ -1,39 +1,46 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import provideIcon from "@/utils/IconProvider/provideIcon";
+import Image from "next/image";
 
 function SkilledFreelancersSection() {
 	return (
-		<section className="py-20 px-6 bg-white">
+		<section className="py-20 px-6 bg-white ">
 			<div className="max-w-7xl mx-auto">
-				<div className="grid lg:grid-cols-2 gap-16 items-center">
+				<div className="grid lg:grid-cols-2 gap-16 items-start  max-h-[35rem]">
 					{/* Left Side - Visual Element */}
-					<div className="relative flex justify-center lg:justify-start">
-						{/* Main Bubble */}
-						<div className="relative">
-							{provideIcon({ name: "message_icon_bigsize" })}
-							{/* Stats Cards */}
-							<Card className="absolute top-12 left-8 bg-white shadow-lg border-0">
-								<CardContent className="p-6 text-center min-w-[140px]">
-									<div className="text-3xl font-bold text-blue-600 mb-1">
-										500+
-									</div>
-									<div className="text-sm text-gray-600">freelancers</div>
-								</CardContent>
-							</Card>
+					{/* <div className="relative flex justify-center lg:justify-start border h-[35rem]"> */}
+					{/* Main Bubble */}
+					<div className="relative">
+						<Image
+							src={"/auth/chat.png"}
+							width={550}
+							height={600}
+							alt="#"
+							className=""
+						/>
+						{/* Stats Cards */}
+						<Card className="absolute top-14 right-48 bg-white shadow-lg border-0">
+							<CardContent className="p-2 text-center min-w-[140px]">
+								<div className="text-3xl font-bold text-blue-600 mb-1">
+									500+
+								</div>
+								<div className="text-sm text-gray-600">freelancers</div>
+							</CardContent>
+						</Card>
 
-							<Card className="absolute bottom-20 left-4 bg-white shadow-lg border-0">
-								<CardContent className="p-6 text-center min-w-[160px]">
-									<div className="text-3xl font-bold text-blue-600 mb-1">
-										300+
-									</div>
-									<div className="text-sm text-gray-600">
-										freelance work Posted
-									</div>
-								</CardContent>
-							</Card>
-						</div>
+						<Card className="absolute bottom-1/2 left-28 bg-white shadow-lg border-0">
+							<CardContent className="p-2 text-center min-w-60">
+								<div className="text-3xl font-bold text-blue-600 mb-1">
+									300+
+								</div>
+								<div className="text-sm text-gray-600">
+									freelance work Posted
+								</div>
+							</CardContent>
+						</Card>
 					</div>
+					{/* </div> */}
 
 					{/* Right Side - Content */}
 					<div className="space-y-6">
