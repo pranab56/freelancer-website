@@ -41,7 +41,7 @@ function WhyChooseUs() {
             {/* Left side - Content */}
             <div className="space-y-8">
               {/* Feature Cards */}
-              <Card className="p-6 space-y-4 flex flex-col items-center justify-center">
+              <Card className="p-6 space-y-4 flex flex-col items-center justify-center ">
                 <h2 className="text-4xl lg:text-5xl font-bold h2-gradient-text leading-tight">
                   Why Choose Us
                 </h2>
