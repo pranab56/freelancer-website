@@ -1,5 +1,6 @@
 import React from "react";
 import { Card } from "../ui/card";
+import { Button } from "../ui/button";
 
 function PopularServices() {
 	const popularCategories = [
@@ -50,12 +51,13 @@ function PopularServices() {
 				Our Popular services
 			</h2>
 			<div className="grid grid-cols-4 gap-5 my-12">
-				{popularCategories.map((category) => (
-					<Card className="h-[241px] flex items-center justify-center">
+				{popularCategories.map((category, index) => (
+					<Card className="h-[241px] flex items-center justify-center" key={index}>
 						{category.label}
 					</Card>
 				))}
 			</div>
+			<Button className="w-60 button-gradient mx-auto">See All Categories</Button>
 		</div>
 	);
 }
