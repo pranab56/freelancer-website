@@ -4,7 +4,7 @@ import React from "react";
 
 function Banner({ src, header, text, buttonName }) {
   return (
-    <div className="flex justify-between p-4">
+    <div className="flex justify-between py-4 px-4 sm:px-6 lg:px-10 2xl:px-0">
       <div className="space-y-4 w-1/2">
         <h2 className="text-4xl h2-gradient-text leading-14 font-bold">
           {header}
