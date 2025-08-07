@@ -11,7 +11,7 @@ function JobTenderSidebar({ jobData }) {
     id: 1,
     company: {
       name: "CONLINE",
-      logo: "/api/placeholder/80/80",
+      logo: "/jobtender/job_tender_details.png",
       website: "visit Website",
     },
     title: "CONLINE",
@@ -28,7 +28,7 @@ function JobTenderSidebar({ jobData }) {
       <CardHeader className="text-center p-6 pb-4">
         {/* Company Avatar */}
         <div className="flex justify-center mb-4">
-          <Avatar className="w-20 h-20 bg-gray-900">
+          <Avatar className="w-36 h-36 bg-gray-900">
             <AvatarImage src={job.company.logo} alt={job.company.name} />
             <AvatarFallback className="bg-gray-900 text-white text-lg font-semibold">
               {job.company.name.slice(0, 2).toUpperCase()}
@@ -43,12 +43,11 @@ function JobTenderSidebar({ jobData }) {
         <p className="text-sm text-gray-500 mb-4">{job.company.website}</p>
 
         {/* Apply Button */}
-        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium">
+        <Button className="max-w-60 mx-auto button-gradient text-white font-medium">
           Apply For This Position
         </Button>
+        <Separator className="mt-4" />
       </CardHeader>
-
-      <Separator className="" />
 
       <CardContent className="p-6 pt-4 space-y-4">
         {/* Job Type */}

@@ -36,7 +36,9 @@ function JobBoardLayout() {
       </div>
       <div className="flex mt-10 px-4 sm:px-6 lg:px-10 2xl:px-0">
         <SideBar />
-        <MainContent />
+        <div className="flex-1">
+          <MainContent type="job" />
+        </div>
       </div>
     </div>
   );

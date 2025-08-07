@@ -83,17 +83,17 @@ function JobDetailsPage({ jobData }) {
                 variant="outline"
                 size="sm"
                 onClick={handleCopyLink}
-                className="flex items-center gap-2"
+                className="h-9 flex items-center gap-2 button-gradient"
               >
-                <Copy className="w-4 h-4" />
+                <Copy />
                 Copy Link
               </Button>
               <Button
                 size="sm"
                 onClick={handleShare}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+                className="h-9 flex items-center gap-2 button-gradient"
               >
-                <Share2 className="w-4 h-4" />
+                <Share2 size={15} />
                 Share
               </Button>
             </div>
@@ -182,7 +182,7 @@ function JobDetailsPage({ jobData }) {
       <div className="flex justify-center pt-6">
         <Button
           size="lg"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-base font-medium"
+          className="button-gradient text-white px-8 py-3 text-base font-medium"
         >
           Apply For This Position
         </Button>

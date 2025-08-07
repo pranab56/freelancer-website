@@ -1,29 +1,25 @@
-// import React from "react";
-// import JobTenderCard from "../JobTenderCard";
-
-// function MainContent() {
-//   return (
-//     <div>
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-//         {Array.from(6).map((_, index) => (
-//           <JobTenderCard key={index} />
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default MainContent;
-
 import React from "react";
 import JobTenderCard from "../JobTenderCard";
 
-function MainContent() {
+function MainContent({ type = "tender" }) {
   // Mock data for demonstration - in real app this would come from props or API
-  const jobTenders = Array.from({ length: 6 }, (_, index) => ({
+  const items = Array.from({ length: 6 }, (_, index) => ({
     id: index + 1,
-    title: `Job Tender ${index + 1}`,
-    // Add other properties as needed for your JobTenderCard component
+    ...(type === "job"
+      ? {
+          jobImg: "/jobtender/job_tender.png",
+          name: `Company ${index + 1}`,
+          designation: `Senior Position ${index + 1}`,
+          location: ["Austin", "Remote", "New York"][index % 3],
+          jobType: ["Remote", "On-site", "Hybrid"][index % 3],
+        }
+      : {
+          jobImg: "/jobtender/job_tender.png",
+          projectName: `Project ${index + 1}`,
+          projectRole: `Role ${index + 1}`,
+          posted: "03/2023",
+          deadline: "05/2023",
+        }),
   }));
 
   return (
@@ -32,16 +28,20 @@ function MainContent() {
       <div className="mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Job Board</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {type === "job" ? "Job Board" : "Tenders"}
+            </h1>
             <p className="text-gray-600 mt-1">
-              Find the perfect opportunities that match your skills
+              {type === "job"
+                ? "Find the perfect opportunities that match your skills"
+                : "Explore available tenders and submit your proposals"}
             </p>
           </div>
 
           {/* Results count and sorting */}
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-500">
-              Showing {jobTenders.length} results
+              Showing {items.length} results
             </span>
             <select className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
               <option value="newest">Newest First</option>
@@ -55,17 +55,18 @@ function MainContent() {
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
-        {jobTenders.map((job) => (
+        {items.map((item) => (
           <JobTenderCard
-            key={job.id}
-            jobData={job}
+            key={item.id}
+            type={type}
+            data={item}
             className="h-full" // Ensures cards have equal height
           />
         ))}
       </div>
 
       {/* Empty State - Show when no jobs available */}
-      {jobTenders.length === 0 && (
+      {items.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16">
           <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mb-4">
             <svg
@@ -92,10 +93,10 @@ function MainContent() {
       )}
 
       {/* Load More Button - For pagination */}
-      {jobTenders.length > 0 && jobTenders.length >= 6 && (
+      {items.length > 0 && items.length >= 6 && (
         <div className="flex justify-center mt-8">
           <button className="px-6 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-colors font-medium">
-            Load More Jobs
+            Load More {type === "job" ? "Jobs" : "Tenders"}
           </button>
         </div>
       )}
