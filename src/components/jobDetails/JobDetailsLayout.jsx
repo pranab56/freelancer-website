@@ -4,14 +4,14 @@ import JobTenderDetails from "../common/JobTenderDetails";
 
 function JobDetailsLayout() {
   return (
-    <div className="flex items-start max-w-7xl mx-auto mt-10 px-4 sm:px-6 lg:px-10 2xl:px-0">
+    <div className="flex flex-col md:flex-row md:items-start gap-x-6 max-w-7xl mx-auto mt-10 px-4 sm:px-6 lg:px-10 2xl:px-0 border">
       {/* Sidebar */}
-      <div className="w-80 flex-shrink-0">
+      <div className="w-full md:max-w-72 flex-1 flex-shrink-0">
         <JobTenderSidebar />
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
+      <div className="w-full flex-1 overflow-auto pt-6 md:pt-0">
         <JobTenderDetails jobData={null} />
       </div>
     </div>

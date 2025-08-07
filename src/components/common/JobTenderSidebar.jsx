@@ -48,7 +48,7 @@ function JobTenderSidebar({ jobData }) {
         </Button>
       </CardHeader>
 
-      <Separator className="mx-6" />
+      <Separator className="" />
 
       <CardContent className="p-6 pt-4 space-y-4">
         {/* Job Type */}
