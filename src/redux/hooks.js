@@ -15,6 +15,11 @@ export const useUser = () => {
   return useSelector((state) => state.user);
 };
 
+// Custom hook for chat state
+export const useChat = () => {
+  return useSelector((state) => state.chat);
+};
+
 // Custom hook for getting store state
 export const useStore = () => {
   return store.getState();

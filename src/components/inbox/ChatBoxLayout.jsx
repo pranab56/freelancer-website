@@ -1,8 +1,13 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { Send, Paperclip, Image } from "lucide-react";
+import { useChat, useAppDispatch } from "../../redux/hooks";
+import { sendMessage, addMessage, setTypingIndicator, fetchChatMessages } from "../../redux/features/chat/chatSlice";
 
 const ChatInterface = () => {
+  const dispatch = useAppDispatch();
+  const { selectedChat, messages, isSendingMessage, typingUsers } = useChat();
+  
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -10,10 +15,14 @@ const ChatInterface = () => {
     seconds: 0,
   });
 
-  // Set the target date (e.g., 7 days from now)
+  // Set the target date from selected chat's project info
   useEffect(() => {
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + 7); // Set to 7 days from now
+    if (!selectedChat?.projectInfo?.deliveryDate) {
+      setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      return;
+    }
+
+    const targetDate = new Date(selectedChat.projectInfo.deliveryDate);
 
     const timer = setInterval(() => {
       const now = new Date().getTime();
@@ -49,97 +58,12 @@ const ChatInterface = () => {
 
     // Cleanup timer
     return () => clearInterval(timer);
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, [selectedChat?.projectInfo?.deliveryDate]); // Re-run when delivery date changes
 
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: "omg, this is amazing",
-      sender: "user1",
-      timestamp: "2 min ago",
-      avatar: "👨‍💼",
-    },
-    {
-      id: 2,
-      text: "perfect! ✅",
-      sender: "user1",
-      timestamp: "2 min ago",
-      avatar: "👨‍💼",
-    },
-    {
-      id: 3,
-      text: "Wow, this is really epic",
-      sender: "user1",
-      timestamp: "2 min ago",
-      avatar: "👨‍💼",
-    },
-    {
-      id: 4,
-      text: "woohooo",
-      sender: "user2",
-      timestamp: "just now",
-      avatar: "👤",
-    },
-    {
-      id: 5,
-      text: "Haha oh man",
-      sender: "user2",
-      timestamp: "just now",
-      avatar: "👤",
-    },
-    {
-      id: 6,
-      text: "Haha that's terrifying 😱",
-      sender: "user2",
-      timestamp: "just now",
-      avatar: "👤",
-    },
-    {
-      id: 7,
-      text: "omg, this is amazing",
-      sender: "user1",
-      timestamp: "just now",
-      avatar: "👨‍💼",
-    },
-    {
-      id: 8,
-      text: "perfect! ✅",
-      sender: "user1",
-      timestamp: "just now",
-      avatar: "👨‍💼",
-    },
-    {
-      id: 9,
-      text: "Wow, this is really epic",
-      sender: "user1",
-      timestamp: "just now",
-      avatar: "👨‍💼",
-    },
-    {
-      id: 10,
-      text: "woohooo",
-      sender: "user2",
-      timestamp: "just now",
-      avatar: "👤",
-    },
-    {
-      id: 11,
-      text: "Haha oh man",
-      sender: "user2",
-      timestamp: "just now",
-      avatar: "👤",
-    },
-    {
-      id: 12,
-      text: "Haha that's terrifying 😱",
-      sender: "user2",
-      timestamp: "just now",
-      avatar: "👤",
-    },
-  ]);
+  // Get messages for selected chat
+  const currentMessages = selectedChat ? (messages[selectedChat.id] || []) : [];
 
   const [newMessage, setNewMessage] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
   const currentUser = "user2"; // Current user identifier
 
@@ -147,37 +71,45 @@ const ChatInterface = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Fetch messages when chat is selected
+  useEffect(() => {
+    if (selectedChat) {
+      dispatch(fetchChatMessages(selectedChat.id));
+    }
+  }, [selectedChat, dispatch]);
+
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [currentMessages]);
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() === "") return;
+  const handleSendMessage = async () => {
+    if (newMessage.trim() === "" || !selectedChat) return;
 
-    const message = {
-      id: messages.length + 1,
-      text: newMessage,
-      sender: currentUser,
-      timestamp: "just now",
-      avatar: "👤",
-    };
-
-    setMessages([...messages, message]);
+    const messageText = newMessage;
     setNewMessage("");
 
-    // Simulate typing indicator and auto-reply
-    setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
-      const autoReply = {
-        id: messages.length + 2,
-        text: getRandomReply(),
-        sender: "user1",
-        timestamp: "just now",
-        avatar: "👨‍💼",
-      };
-      setMessages((prev) => [...prev, autoReply]);
-    }, 1500);
+    // Send message to server (this will handle optimistic updates)
+    try {
+      await dispatch(sendMessage({ chatId: selectedChat.id, message: messageText })).unwrap();
+      
+      // Simulate typing indicator and auto-reply
+      dispatch(setTypingIndicator({ chatId: selectedChat.id, userId: "user1", isTyping: true }));
+      setTimeout(() => {
+        dispatch(setTypingIndicator({ chatId: selectedChat.id, userId: "user1", isTyping: false }));
+        const autoReply = {
+          id: Date.now() + 1,
+          text: getRandomReply(),
+          sender: "user1",
+          timestamp: "just now",
+          avatar: "👨‍💼",
+        };
+        dispatch(addMessage({ chatId: selectedChat.id, message: autoReply }));
+      }, 1500);
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      // Restore the message if sending failed
+      setNewMessage(messageText);
+    }
   };
 
   const getRandomReply = () => {
@@ -205,7 +137,7 @@ const ChatInterface = () => {
     const groups = [];
     let currentGroup = null;
 
-    messages.forEach((message) => {
+    currentMessages.forEach((message) => {
       if (!currentGroup || currentGroup.sender !== message.sender) {
         currentGroup = {
           sender: message.sender,
@@ -229,14 +161,18 @@ const ChatInterface = () => {
       <div className="bg-white border-b border-gray-200 px-6 shadow-sm flex justify-between">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-content-center text-white font-semibold">
-            👥
+            {selectedChat ? "👥" : "💬"}
           </div>
           <div>
-            <h2 className="font-semibold text-gray-900">Group Chat</h2>
-            <p className="text-sm text-gray-500">2 members</p>
+            <h2 className="font-semibold text-gray-900">
+              {selectedChat ? selectedChat.name : "Select a chat"}
+            </h2>
+            <p className="text-sm text-gray-500">
+              {selectedChat ? `${selectedChat.projectInfo?.title || "Project"}` : "No chat selected"}
+            </p>
           </div>
         </div>
-        <div className="flex justify-between items-center w-6/12">
+        {/* <div className="flex justify-between items-center "> */}
           {/* Left Side - Countdown Timer */}
           <div className="flex flex-col items-center py-2">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -283,11 +219,20 @@ const ChatInterface = () => {
             </button>
           </div>
         </div>
-      </div>
+      {/* </div> */}
 
       {/* Messages Container */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {groupMessages().map((group, groupIndex) => (
+        {!selectedChat ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+              <div className="text-6xl mb-4">💬</div>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">No chat selected</h3>
+              <p className="text-gray-500">Select a chat from the sidebar to start messaging</p>
+            </div>
+          </div>
+        ) : (
+          groupMessages().map((group, groupIndex) => (
           <div
             key={groupIndex}
             className={`flex ${
@@ -351,9 +296,10 @@ const ChatInterface = () => {
               </div>
             )}
           </div>
-        ))}
+        ))
+        )}
 
-        {isTyping && (
+        {selectedChat && typingUsers[selectedChat.id] && (
           <div className="flex justify-start">
             <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm mr-3">
               👨‍💼
@@ -400,7 +346,7 @@ const ChatInterface = () => {
 
           <button
             onClick={handleSendMessage}
-            disabled={newMessage.trim() === ""}
+            disabled={newMessage.trim() === "" || !selectedChat || isSendingMessage}
             className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-full p-3 transition-colors"
           >
             <Send size={16} />

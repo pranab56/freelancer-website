@@ -1,16 +1,42 @@
 "use client";
 import { Search } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useChat, useAppDispatch } from "../../redux/hooks";
+import { selectChat, setSearchQuery, fetchChatList } from "../../redux/features/chat/chatSlice";
 
 function ChatListSidebar() {
+  const dispatch = useAppDispatch();
+  const { chatList, selectedChat, isLoading, searchQuery, filteredChatList } = useChat();
+
+  useEffect(() => {
+    // Fetch chat list on component mount
+    dispatch(fetchChatList());
+  }, [dispatch]);
+
+  const handleChatSelect = (chatId) => {
+    dispatch(selectChat(chatId));
+  };
+
+  const handleSearchChange = (query) => {
+    dispatch(setSearchQuery(query));
+  };
+
+  // Use filtered list if search query exists, otherwise use full list
+  const displayChatList = searchQuery.trim() ? filteredChatList : chatList;
+
   return (
     <div className="w-80 bg-white border-r border-gray-200 flex flex-col h-screen">
       <div className="p-4 border-b border-gray-200">
-        <TotalMessageCount />
-        <SearchBar />
+        <TotalMessageCount chatList={chatList} />
+        <SearchBar searchQuery={searchQuery} onSearchChange={handleSearchChange} />
       </div>
       <div className="flex-1 overflow-y-auto">
-        <ChatList />
+        <ChatList 
+          chats={displayChatList} 
+          selectedChat={selectedChat}
+          onChatSelect={handleChatSelect}
+          isLoading={isLoading}
+        />
       </div>
     </div>
   );
@@ -18,110 +44,63 @@ function ChatListSidebar() {
 
 export default ChatListSidebar;
 
-function TotalMessageCount() {
+function TotalMessageCount({ chatList }) {
+  const totalUnread = chatList.reduce((sum, chat) => sum + (chat.unreadCount || 0), 0);
+  
   return (
     <div className="flex items-center mb-4">
       <h2 className="text-lg font-semibold text-gray-900">Messages</h2>
-      <span className="ml-2 bg-blue-500 text-white text-xs font-medium px-2 py-1 rounded-full">
-        6+
-      </span>
+      {totalUnread > 0 && (
+        <span className="ml-2 bg-blue-500 text-white text-xs font-medium px-2 py-1 rounded-full">
+          {totalUnread}+
+        </span>
+      )}
     </div>
   );
 }
 
-function SearchBar() {
+function SearchBar({ searchQuery, onSearchChange }) {
   return (
     <div className="relative mb-4">
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
       <input
         type="text"
         placeholder="Search Client"
+        value={searchQuery}
+        onChange={(e) => onSearchChange(e.target.value)}
         className="w-full pl-10 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
       />
     </div>
   );
 }
 
-function ChatList() {
-  const [selectedChat, setSelectedChat] = useState(1);
-
-  const chats = [
-    {
-      id: 1,
-      name: "Larry",
-      status: "Woof! Woof!",
-      timestamp: "24m",
-      avatar:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face",
-      isOnline: true,
-      isActive: true,
-      hasNewMessage: true,
-    },
-    {
-      id: 2,
-      name: "Max",
-      status: "Hello",
-      timestamp: "40m",
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face",
-      isOnline: true,
-      isActive: false,
-      hasNewMessage: false,
-    },
-    {
-      id: 3,
-      name: "Lemon",
-      status: "Where are You?",
-      timestamp: "1 hr",
-      avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face",
-      isOnline: false,
-      isActive: false,
-      hasNewMessage: false,
-    },
-    {
-      id: 4,
-      name: "Katy",
-      status: "",
-      timestamp: "3 hr",
-      avatar:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b1c7?w=40&h=40&fit=crop&crop=face",
-      isOnline: true,
-      isActive: false,
-      hasNewMessage: false,
-    },
-    {
-      id: 5,
-      name: "Chedder",
-      status: "Yes",
-      timestamp: "1 day",
-      avatar:
-        "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?w=40&h=40&fit=crop&crop=face",
-      isOnline: false,
-      isActive: false,
-      hasNewMessage: false,
-    },
-    {
-      id: 6,
-      name: "Daisy",
-      status: "Sure",
-      timestamp: "2 day",
-      avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face",
-      isOnline: true,
-      isActive: false,
-      hasNewMessage: false,
-    },
-  ];
+function ChatList({ chats, selectedChat, onChatSelect, isLoading }) {
+  if (isLoading) {
+    return (
+      <div className="p-4">
+        <div className="animate-pulse space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+              <div className="flex-1">
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-2">
       {chats.map((chat) => (
         <div
           key={chat.id}
-          onClick={() => setSelectedChat(chat.id)}
+          onClick={() => onChatSelect(chat.id)}
           className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 mb-1 ${
-            chat.isActive ? "bg-blue-500 text-white" : "hover:bg-gray-50"
+            selectedChat?.id === chat.id ? "bg-blue-500 text-white" : "hover:bg-gray-50"
           }`}
         >
           {/* Avatar with online status */}
@@ -141,14 +120,14 @@ function ChatList() {
             <div className="flex justify-between items-start mb-1">
               <h3
                 className={`font-semibold text-sm truncate ${
-                  chat.isActive ? "text-white" : "text-gray-900"
+                  selectedChat?.id === chat.id ? "text-white" : "text-gray-900"
                 }`}
               >
                 {chat.name}
               </h3>
               <span
                 className={`text-xs ml-2 ${
-                  chat.isActive ? "text-blue-100" : "text-gray-500"
+                  selectedChat?.id === chat.id ? "text-blue-100" : "text-gray-500"
                 }`}
               >
                 {chat.timestamp}
@@ -157,16 +136,23 @@ function ChatList() {
 
             <p
               className={`text-sm truncate ${
-                chat.isActive ? "text-blue-100" : "text-gray-600"
+                selectedChat?.id === chat.id ? "text-blue-100" : "text-gray-600"
               }`}
             >
-              {chat.status || "No recent message"}
+              {chat.lastMessage || "No recent message"}
             </p>
           </div>
 
           {/* New message indicator */}
-          {chat.hasNewMessage && !chat.isActive && (
+          {chat.hasNewMessage && selectedChat?.id !== chat.id && (
             <div className="w-2 h-2 bg-blue-500 rounded-full ml-2"></div>
+          )}
+          
+          {/* Unread count */}
+          {chat.unreadCount > 0 && selectedChat?.id !== chat.id && (
+            <div className="ml-2 bg-blue-500 text-white text-xs font-medium px-2 py-1 rounded-full min-w-[20px] text-center">
+              {chat.unreadCount}
+            </div>
           )}
         </div>
       ))}
