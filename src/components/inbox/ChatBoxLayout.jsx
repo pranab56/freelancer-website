@@ -2,12 +2,23 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Send, Paperclip, Image } from "lucide-react";
 import { useChat, useAppDispatch } from "../../redux/hooks";
-import { sendMessage, addMessage, setTypingIndicator, fetchChatMessages } from "../../redux/features/chat/chatSlice";
+import {
+  sendMessage,
+  addMessage,
+  setTypingIndicator,
+  fetchChatMessages,
+} from "../../redux/features/chat/chatSlice";
+import { Button } from "../ui/button";
+import { Dialog } from "@radix-ui/react-dialog";
+import { DialogContent, DialogTrigger, DialogTitle } from "../ui/dialog";
+import ReportFreeLancer from "./ReportFreeLancer";
+import Link from "next/link";
 
 const ChatInterface = () => {
   const dispatch = useAppDispatch();
   const { selectedChat, messages, isSendingMessage, typingUsers } = useChat();
-  
+  const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
+
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -61,7 +72,7 @@ const ChatInterface = () => {
   }, [selectedChat?.projectInfo?.deliveryDate]); // Re-run when delivery date changes
 
   // Get messages for selected chat
-  const currentMessages = selectedChat ? (messages[selectedChat.id] || []) : [];
+  const currentMessages = selectedChat ? messages[selectedChat.id] || [] : [];
 
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
@@ -90,12 +101,26 @@ const ChatInterface = () => {
 
     // Send message to server (this will handle optimistic updates)
     try {
-      await dispatch(sendMessage({ chatId: selectedChat.id, message: messageText })).unwrap();
-      
+      await dispatch(
+        sendMessage({ chatId: selectedChat.id, message: messageText })
+      ).unwrap();
+
       // Simulate typing indicator and auto-reply
-      dispatch(setTypingIndicator({ chatId: selectedChat.id, userId: "user1", isTyping: true }));
+      dispatch(
+        setTypingIndicator({
+          chatId: selectedChat.id,
+          userId: "user1",
+          isTyping: true,
+        })
+      );
       setTimeout(() => {
-        dispatch(setTypingIndicator({ chatId: selectedChat.id, userId: "user1", isTyping: false }));
+        dispatch(
+          setTypingIndicator({
+            chatId: selectedChat.id,
+            userId: "user1",
+            isTyping: false,
+          })
+        );
         const autoReply = {
           id: Date.now() + 1,
           text: getRandomReply(),
@@ -106,7 +131,7 @@ const ChatInterface = () => {
         dispatch(addMessage({ chatId: selectedChat.id, message: autoReply }));
       }, 1500);
     } catch (error) {
-      console.error('Failed to send message:', error);
+      console.error("Failed to send message:", error);
       // Restore the message if sending failed
       setNewMessage(messageText);
     }
@@ -168,57 +193,74 @@ const ChatInterface = () => {
               {selectedChat ? selectedChat.name : "Select a chat"}
             </h2>
             <p className="text-sm text-gray-500">
-              {selectedChat ? `${selectedChat.projectInfo?.title || "Project"}` : "No chat selected"}
+              {selectedChat
+                ? `${selectedChat.projectInfo?.title || "Project"}`
+                : "No chat selected"}
             </p>
           </div>
         </div>
         {/* <div className="flex justify-between items-center "> */}
-          {/* Left Side - Countdown Timer */}
-          <div className="flex flex-col items-center py-2">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Delivery Date
-            </h3>
-            <div className="flex items-center space-x-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">
-                  {String(timeLeft.days).padStart(2, "0")}
-                </div>
-                <div className="text-sm text-gray-500">Days</div>
+        {/* Left Side - Countdown Timer */}
+        <div className="flex flex-col items-center py-2">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Delivery Date
+          </h3>
+          <div className="flex items-center space-x-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">
+                {String(timeLeft.days).padStart(2, "0")}
               </div>
-              <div className="text-2xl font-bold text-gray-400">:</div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">
-                  {String(timeLeft.hours).padStart(2, "0")}
-                </div>
-                <div className="text-sm text-gray-500">Hours</div>
+              <div className="text-sm text-gray-500">Days</div>
+            </div>
+            <div className="text-2xl font-bold text-gray-400">:</div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">
+                {String(timeLeft.hours).padStart(2, "0")}
               </div>
-              <div className="text-2xl font-bold text-gray-400">:</div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">
-                  {String(timeLeft.minutes).padStart(2, "0")}
-                </div>
-                <div className="text-sm text-gray-500">Mins</div>
+              <div className="text-sm text-gray-500">Hours</div>
+            </div>
+            <div className="text-2xl font-bold text-gray-400">:</div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">
+                {String(timeLeft.minutes).padStart(2, "0")}
               </div>
-              <div className="text-2xl font-bold text-gray-400">:</div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">
-                  {String(timeLeft.seconds).padStart(2, "0")}
-                </div>
-                <div className="text-sm text-gray-500">Secs</div>
+              <div className="text-sm text-gray-500">Mins</div>
+            </div>
+            <div className="text-2xl font-bold text-gray-400">:</div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">
+                {String(timeLeft.seconds).padStart(2, "0")}
               </div>
+              <div className="text-sm text-gray-500">Secs</div>
             </div>
           </div>
-
-          {/* Right Side - Action Buttons */}
-          <div className="flex items-center space-x-4">
-            <button className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium transition-colors">
-              View Client Profile
-            </button>
-            <button className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium transition-colors">
-              Report
-            </button>
-          </div>
         </div>
+
+        {/* Right Side - Action Buttons */}
+        <div className="flex items-center space-x-4">
+          <Link href={`/client-profile/${selectedChat?.id}`}>
+            <Button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 font-medium transition-colors">
+              View Client Profile
+            </Button>
+          </Link>
+
+          <Dialog
+            open={isReportDialogOpen}
+            onOpenChange={setIsReportDialogOpen}
+          >
+            <DialogTrigger asChild>
+              <Button className="px-4 py-2 bg-red-400 hover:bg-red-500 text-white hover:text-gray-900 font-medium transition-colors">
+                Report
+              </Button>
+            </DialogTrigger>
+
+            <DialogContent className="min-w-5xl border">
+              <DialogTitle className="sr-only">Report Freelancer</DialogTitle>
+              <ReportFreeLancer onClose={() => setIsReportDialogOpen(false)} />
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
       {/* </div> */}
 
       {/* Messages Container */}
@@ -227,76 +269,80 @@ const ChatInterface = () => {
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <div className="text-6xl mb-4">💬</div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No chat selected</h3>
-              <p className="text-gray-500">Select a chat from the sidebar to start messaging</p>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                No chat selected
+              </h3>
+              <p className="text-gray-500">
+                Select a chat from the sidebar to start messaging
+              </p>
             </div>
           </div>
         ) : (
           groupMessages().map((group, groupIndex) => (
-          <div
-            key={groupIndex}
-            className={`flex ${
-              group.sender === currentUser ? "justify-end" : "justify-start"
-            }`}
-          >
-            {group.sender !== currentUser && (
-              <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm mr-3 mt-auto">
-                {group.avatar}
-              </div>
-            )}
-
             <div
-              className={`flex flex-col space-y-1 max-w-xs lg:max-w-md ${
-                group.sender === currentUser ? "items-end" : "items-start"
+              key={groupIndex}
+              className={`flex ${
+                group.sender === currentUser ? "justify-end" : "justify-start"
               }`}
             >
-              {group.messages.map((message, messageIndex) => (
-                <div
-                  key={message.id}
-                  className={`px-4 py-2 rounded-2xl break-words ${
-                    group.sender === currentUser
-                      ? "bg-gradient-to-r from-[#002282] to-[#0170DA] text-white rounded-br-sm"
-                      : "bg-white text-gray-900 border border-gray-200 rounded-bl-sm"
-                  } ${
-                    messageIndex === group.messages.length - 1 ? "mb-1" : ""
-                  }`}
-                >
-                  <p className="text-sm">{message.text}</p>
+              {group.sender !== currentUser && (
+                <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm mr-3 mt-auto">
+                  {group.avatar}
                 </div>
-              ))}
+              )}
+
               <div
-                className={`flex items-center space-x-2 text-xs text-gray-500 ${
-                  group.sender === currentUser
-                    ? "flex-row-reverse space-x-reverse"
-                    : ""
+                className={`flex flex-col space-y-1 max-w-xs lg:max-w-md ${
+                  group.sender === currentUser ? "items-end" : "items-start"
                 }`}
               >
-                <span>{group.timestamp}</span>
-                {group.sender === currentUser && (
-                  <div className="flex space-x-1">
-                    <div className="w-4 h-3 flex items-center">
-                      <svg
-                        viewBox="0 0 16 11"
-                        className="w-4 h-3 text-blue-600"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M11.071.653a.5.5 0 0 1 .708 0L15.414 4.3a.5.5 0 0 1 0 .707L12.12 8.654a.5.5 0 0 1-.707-.707L14.293 5 11.071 1.778a.5.5 0 0 1 0-.707zM7.071.653a.5.5 0 0 1 .708 0L11.414 4.3a.5.5 0 0 1 0 .707L8.12 8.654a.5.5 0 0 1-.707-.707L10.293 5 7.071 1.778a.5.5 0 0 1 0-.707z"
-                        />
-                      </svg>
-                    </div>
+                {group.messages.map((message, messageIndex) => (
+                  <div
+                    key={message.id}
+                    className={`px-4 py-2 rounded-2xl break-words ${
+                      group.sender === currentUser
+                        ? "bg-gradient-to-r from-[#002282] to-[#0170DA] text-white rounded-br-sm"
+                        : "bg-white text-gray-900 border border-gray-200 rounded-bl-sm"
+                    } ${
+                      messageIndex === group.messages.length - 1 ? "mb-1" : ""
+                    }`}
+                  >
+                    <p className="text-sm">{message.text}</p>
                   </div>
-                )}
+                ))}
+                <div
+                  className={`flex items-center space-x-2 text-xs text-gray-500 ${
+                    group.sender === currentUser
+                      ? "flex-row-reverse space-x-reverse"
+                      : ""
+                  }`}
+                >
+                  <span>{group.timestamp}</span>
+                  {group.sender === currentUser && (
+                    <div className="flex space-x-1">
+                      <div className="w-4 h-3 flex items-center">
+                        <svg
+                          viewBox="0 0 16 11"
+                          className="w-4 h-3 text-blue-600"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M11.071.653a.5.5 0 0 1 .708 0L15.414 4.3a.5.5 0 0 1 0 .707L12.12 8.654a.5.5 0 0 1-.707-.707L14.293 5 11.071 1.778a.5.5 0 0 1 0-.707zM7.071.653a.5.5 0 0 1 .708 0L11.414 4.3a.5.5 0 0 1 0 .707L8.12 8.654a.5.5 0 0 1-.707-.707L10.293 5 7.071 1.778a.5.5 0 0 1 0-.707z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
 
-            {group.sender === currentUser && (
-              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-sm ml-3 mt-auto">
-                {group.avatar}
-              </div>
-            )}
-          </div>
-        ))
+              {group.sender === currentUser && (
+                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-sm ml-3 mt-auto">
+                  {group.avatar}
+                </div>
+              )}
+            </div>
+          ))
         )}
 
         {selectedChat && typingUsers[selectedChat.id] && (
@@ -346,7 +392,9 @@ const ChatInterface = () => {
 
           <button
             onClick={handleSendMessage}
-            disabled={newMessage.trim() === "" || !selectedChat || isSendingMessage}
+            disabled={
+              newMessage.trim() === "" || !selectedChat || isSendingMessage
+            }
             className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-full p-3 transition-colors"
           >
             <Send size={16} />

@@ -2,11 +2,17 @@
 import { Search } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useChat, useAppDispatch } from "../../redux/hooks";
-import { selectChat, setSearchQuery, fetchChatList } from "../../redux/features/chat/chatSlice";
+import {
+  selectChat,
+  setSearchQuery,
+  fetchChatList,
+} from "../../redux/features/chat/chatSlice";
 
 function ChatListSidebar() {
   const dispatch = useAppDispatch();
-  const { chatList, selectedChat, isLoading, searchQuery, filteredChatList } = useChat();
+
+  const { chatList, selectedChat, isLoading, searchQuery, filteredChatList } =
+    useChat();
 
   useEffect(() => {
     // Fetch chat list on component mount
@@ -25,14 +31,17 @@ function ChatListSidebar() {
   const displayChatList = searchQuery.trim() ? filteredChatList : chatList;
 
   return (
-    <div className="w-80 bg-white border-r border-gray-200 flex flex-col h-screen">
+    <div className="w-[30rem] bg-white border-r border-gray-200 flex flex-col h-screen">
       <div className="p-4 border-b border-gray-200">
         <TotalMessageCount chatList={chatList} />
-        <SearchBar searchQuery={searchQuery} onSearchChange={handleSearchChange} />
+        <SearchBar
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+        />
       </div>
       <div className="flex-1 overflow-y-auto">
-        <ChatList 
-          chats={displayChatList} 
+        <ChatList
+          chats={displayChatList}
           selectedChat={selectedChat}
           onChatSelect={handleChatSelect}
           isLoading={isLoading}
@@ -45,8 +54,11 @@ function ChatListSidebar() {
 export default ChatListSidebar;
 
 function TotalMessageCount({ chatList }) {
-  const totalUnread = chatList.reduce((sum, chat) => sum + (chat.unreadCount || 0), 0);
-  
+  const totalUnread = chatList.reduce(
+    (sum, chat) => sum + (chat.unreadCount || 0),
+    0
+  );
+
   return (
     <div className="flex items-center mb-4">
       <h2 className="text-lg font-semibold text-gray-900">Messages</h2>
@@ -100,7 +112,9 @@ function ChatList({ chats, selectedChat, onChatSelect, isLoading }) {
           key={chat.id}
           onClick={() => onChatSelect(chat.id)}
           className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 mb-1 ${
-            selectedChat?.id === chat.id ? "bg-blue-500 text-white" : "hover:bg-gray-50"
+            selectedChat?.id === chat.id
+              ? "bg-blue-500 text-white"
+              : "hover:bg-gray-50"
           }`}
         >
           {/* Avatar with online status */}
@@ -127,7 +141,9 @@ function ChatList({ chats, selectedChat, onChatSelect, isLoading }) {
               </h3>
               <span
                 className={`text-xs ml-2 ${
-                  selectedChat?.id === chat.id ? "text-blue-100" : "text-gray-500"
+                  selectedChat?.id === chat.id
+                    ? "text-blue-100"
+                    : "text-gray-500"
                 }`}
               >
                 {chat.timestamp}
@@ -147,7 +163,7 @@ function ChatList({ chats, selectedChat, onChatSelect, isLoading }) {
           {chat.hasNewMessage && selectedChat?.id !== chat.id && (
             <div className="w-2 h-2 bg-blue-500 rounded-full ml-2"></div>
           )}
-          
+
           {/* Unread count */}
           {chat.unreadCount > 0 && selectedChat?.id !== chat.id && (
             <div className="ml-2 bg-blue-500 text-white text-xs font-medium px-2 py-1 rounded-full min-w-[20px] text-center">

@@ -5,6 +5,8 @@ import { store } from './store/store';
 export const useAppDispatch = useDispatch;
 export const useAppSelector = useSelector;
 
+
+
 // Custom hook for auth state
 export const useAuth = () => {
   return useSelector((state) => state.auth);

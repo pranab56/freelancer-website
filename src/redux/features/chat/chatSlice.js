@@ -191,7 +191,7 @@ const initialState = {
       name: "Chedder",
       status: "Yes",
       timestamp: "1 day",
-      avatar: "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?w=40&h=40&fit=crop&crop=face",
+      avatar: "https://images.unsplash.com/photo-1558499932-9609acb6f443?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       isOnline: false,
       isActive: false,
       hasNewMessage: false,
@@ -313,7 +313,7 @@ const chatSlice = createSlice({
     // Select a chat
     selectChat: (state, action) => {
       const chatId = action.payload;
-      
+      console.log("action.payload", action.payload)
       // Update active status for all chats
       state.chatList = state.chatList.map(chat => ({
         ...chat,
@@ -333,6 +333,7 @@ const chatSlice = createSlice({
     // Add a new message locally (optimistic update)
     addMessage: (state, action) => {
       const { chatId, message } = action.payload;
+      console.log("action.payload.addMessage", action.payload)
       
       if (!state.messages[chatId]) {
         state.messages[chatId] = [];
@@ -362,7 +363,7 @@ const chatSlice = createSlice({
     // Update search query
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
-      
+      console.log("action.payload.searchQuery", action.payload)
       if (action.payload.trim() === "") {
         state.filteredChatList = [];
       } else {

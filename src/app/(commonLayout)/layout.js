@@ -27,7 +27,7 @@ export default function CommonLayout({ children }) {
         {/* <NavBar /> */}
         {!isLogedInAsClient && <FreelancerNavBar />}
         {children}
-        {/* <Footer /> */}
+        <Footer />
      
     </>
     
