@@ -2,12 +2,15 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+
 import { Copy, Share2, CheckCircle } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 function JobDetailsPage({ jobData }) {
+  const pathname = usePathname();
+  const isTenderPage = pathname.includes("tenders-details");
   // Default/mock data
-  const defaultData = {
+  const defaultJobData = {
     title: "Senior Graphic Designer",
     description:
       "Bakery is an independent creative and culture agency designed to ignite people's obsession in great products. From our headquarters in Austin, TX, we work with highly ambitious brands to infuse cultural value and drive desire at every interaction point, increasing their fandom and helping them make things people want. Bakery is a 2017 and 2024 Adage Small Agency of the Year.",
@@ -51,7 +54,28 @@ function JobDetailsPage({ jobData }) {
     ],
   };
 
-  const job = jobData || defaultData;
+  const defaultTenderData = {
+    title: "Project 1: CRMS Alignment",
+    role: "Business Analyst",
+    fullDescription: [
+      "This project involves aligning customer relationship management systems across departments to improve data accessibility and performance.XYZ Corp",
+    ],
+    location: "Paris",
+    datePosted: "3/2025",
+    deadLine: "05/2023",
+
+    requirements: [
+      "5+ years of experience in Business Analysis",
+      "Experience with CRM systems (Salesforce, Zoho, etc.)",
+      "Strong problem-solving and analytical skills",
+      "Ability to work in a fast-paced environment",
+    ],
+    startDate: "07/2023",
+    endDate: "12/2023",
+    postedOn: "3/2025",
+  };
+
+  const job = jobData || (isTenderPage ? defaultTenderData : defaultJobData);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -75,7 +99,9 @@ function JobDetailsPage({ jobData }) {
         <CardHeader>
           <div className="flex items-start justify-between">
             <div className="space-y-2">
-              <p className="text-sm text-gray-500">Job Details</p>
+              <p className="text-sm text-gray-500">
+                {isTenderPage ? "Tender Details" : "Job Details"}
+              </p>
               <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
             </div>
             <div className="flex gap-2">
@@ -112,33 +138,36 @@ function JobDetailsPage({ jobData }) {
       </Card>
 
       {/* Responsibilities Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl font-bold text-gray-900">
-            RESPONSIBILITIES
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {job.responsibilities.map((responsibility, index) => (
-              <div key={index} className="flex items-start gap-3">
-                {index === 0 ? (
-                  <p className="text-gray-700 leading-relaxed">
-                    {responsibility}
-                  </p>
-                ) : (
-                  <>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full mt-2 flex-shrink-0"></div>
+      {/* Responsibilities Section - Only show for jobs */}
+      {!isTenderPage && job.responsibilities && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-gray-900">
+              RESPONSIBILITIES
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {job.responsibilities.map((responsibility, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  {index === 0 ? (
                     <p className="text-gray-700 leading-relaxed">
                       {responsibility}
                     </p>
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+                  ) : (
+                    <>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full mt-2 flex-shrink-0"></div>
+                      <p className="text-gray-700 leading-relaxed">
+                        {responsibility}
+                      </p>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Requirements Section */}
       <Card>
@@ -159,32 +188,58 @@ function JobDetailsPage({ jobData }) {
         </CardContent>
       </Card>
 
-      {/* Benefits Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl font-bold text-gray-900">
-            Benefits
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {job.benefits.map((benefit, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                <p className="text-gray-700">{benefit}</p>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      {/* Benefits Section - Only show for jobs */}
+      {!isTenderPage && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-gray-900">
+              Benefits
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {job.benefits?.map((benefit, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                  <p className="text-gray-700">{benefit}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+      {isTenderPage && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-gray-900">
+              Important Dates
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <p className="text-gray-700">
+                Start Date: {job.startDate || "N/A"}
+              </p>
 
-      {/* Apply Button */}
+              <p className="text-gray-700">End Date: {job.endDate || "N/A"}</p>
+
+              <p className="text-gray-700">
+                Posted On: {job.postedOn || "N/A"}
+              </p>
+
+              <p className="text-gray-700">Deadline: {job.deadLine || "N/A"}</p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Action Button */}
       <div className="flex justify-center pt-6">
         <Button
           size="lg"
           className="button-gradient text-white px-8 py-3 text-base font-medium"
         >
-          Apply For This Position
+          {isTenderPage ? "Respond to Tender" : "Apply For This Position"}
         </Button>
       </div>
     </div>

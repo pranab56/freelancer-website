@@ -1,11 +1,15 @@
+"use client";
 import React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Calendar, Users, Briefcase } from "lucide-react";
-
+import { usePathname } from "next/navigation";
 function JobTenderSidebar({ jobData }) {
+  const pathname = usePathname();
+  const isTenderPage = pathname.includes("tenders-details");
+
   // Default/mock data if no jobData is provided
   const defaultData = {
     id: 1,
@@ -43,9 +47,16 @@ function JobTenderSidebar({ jobData }) {
         <p className="text-sm text-gray-500 mb-4">{job.company.website}</p>
 
         {/* Apply Button */}
-        <Button className="max-w-60 mx-auto button-gradient text-white font-medium">
-          Apply For This Position
-        </Button>
+
+        {isTenderPage ? (
+          <Button className="max-w-60 mx-auto button-gradient text-white font-medium">
+            Respond to Tender
+          </Button>
+        ) : (
+          <Button className="max-w-60 mx-auto button-gradient text-white font-medium">
+            Apply For This Position
+          </Button>
+        )}
         <Separator className="mt-4" />
       </CardHeader>
 
