@@ -1,28 +1,13 @@
-import { Geist, Geist_Mono } from "next/font/google";
+
 import "../globals.css";
 import Image from "next/image";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata = {
-  title: "Lunq - Find Top Freelancers",
-  description: "Find the best freelancers for your projects",
-};
 
 export default function AuthLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    
+     
         <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-white to-white">
           {/* Background geometric shapes */}
           <div className="absolute inset-0 overflow-hidden">
@@ -78,7 +63,6 @@ export default function AuthLayout({ children }) {
             </div>
           </div>
         </div>
-      </body>
-    </html>
+      
   );
 }

@@ -22,15 +22,14 @@ export const metadata = {
 export default function CommonLayout({ children }) {
   const isLogedInAsClient = false;
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    
+    <>
         {/* <NavBar /> */}
         {!isLogedInAsClient && <FreelancerNavBar />}
         {children}
         {/* <Footer /> */}
-      </body>
-    </html>
+     
+    </>
+    
   );
 }
