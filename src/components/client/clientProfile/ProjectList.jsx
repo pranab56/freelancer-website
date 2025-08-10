@@ -29,7 +29,7 @@ function ProjectList() {
   ];
   return (
     <>
-      <div className="w-full bg-gray-100 mx-auto py-6 my-6">
+      <div className="w-full bg-gray-100 mx-auto py-6 my-6 px-4">
         <div className="space-y-4 w-full max-w-7xl mx-auto py-6">
           <h1 className="h2-gradient-text text-2xl font-bold text-justify">
             Recent Projects
@@ -46,7 +46,7 @@ function ProjectList() {
         </div>
       </div>
 
-      <div className="w-full max-w-7xl mx-auto py-6 my-6 ">
+      <div className="w-full max-w-7xl mx-auto py-6 my-6 px-4 md:px-6 2xl:px-0">
         <h1 className="h2-gradient-text text-2xl font-bold text-justify">
           Company Life
         </h1>

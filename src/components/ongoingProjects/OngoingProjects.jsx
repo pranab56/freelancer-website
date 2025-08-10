@@ -35,7 +35,7 @@ function OngoingProjects() {
   ];
 
   return (
-    <div className="w-full bg-white py-6 max-w-7xl mx-auto">
+    <div className="w-full bg-white py-6 max-w-7xl mx-auto px-4 lg:px-6">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-4xl font-bold h2-gradient-text mb-2 leading-relaxed">
@@ -75,7 +75,7 @@ function OngoingProjects() {
             className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
           >
             <CardContent className="p-6">
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col  md:flex-row items-start justify-between gap-4">
                 {/* Project Info */}
                 <div className="flex-1 ">
                   <h3 className="text-xl font-semibold h2-gradient-text mb-3">

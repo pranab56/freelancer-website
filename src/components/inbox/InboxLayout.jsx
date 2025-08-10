@@ -5,7 +5,7 @@ import ChatInterface from "./ChatBoxLayout";
 
 function InboxLayout() {
   return (
-    <div className="flex h-screen w-full ">
+    <div className="flex flex-col md:flex-row  md:h-screen overflow-hidden bg-white">
       <ChatListSidebar />
       <ChatInterface />
     </div>

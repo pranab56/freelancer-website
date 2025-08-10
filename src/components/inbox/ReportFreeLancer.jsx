@@ -49,7 +49,7 @@ export default function ReportFreeLancer({ onClose }) {
   };
 
   return (
-    <div className="w-full min-w-4xl mx-auto p-2">
+    <div className="w-full md:min-w-xl mx-auto p-2">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900">

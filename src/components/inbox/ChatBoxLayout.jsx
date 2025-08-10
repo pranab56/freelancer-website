@@ -183,12 +183,18 @@ const ChatInterface = () => {
   return (
     <div className="flex flex-col w-full  bg-gray-50">
       {/* Chat Header */}
-      <div className="bg-white border-b border-gray-200 px-6 shadow-sm flex justify-between">
+      <div className="bg-white border-b border-gray-200 px-2 md:px-6 shadow-sm flex justify-between">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-content-center text-white font-semibold">
-            {selectedChat ? "👥" : "💬"}
+            <Image
+              src="/images/logo.png"
+              alt="logo"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
           </div>
-          <div>
+          <div className="hidden md:block">
             <h2 className="font-semibold text-gray-900">
               {selectedChat ? selectedChat.name : "Select a chat"}
             </h2>
@@ -237,10 +243,11 @@ const ChatInterface = () => {
         </div>
 
         {/* Right Side - Action Buttons */}
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-col md:flex-row justify-center gap-2 items-center space-x-0 md:space-x-4 ">
           <Link href={`/client-profile/${selectedChat?.id}`}>
-            <Button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 font-medium transition-colors">
-              View Client Profile
+            <Button className="px-4 py-2  bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 font-medium transition-colors">
+              <span className="hidden md:block">View Client Profile</span>
+              <span className="block md:hidden">Client</span>
             </Button>
           </Link>
 
@@ -254,7 +261,7 @@ const ChatInterface = () => {
               </Button>
             </DialogTrigger>
 
-            <DialogContent className="min-w-5xl border">
+            <DialogContent className="md:min-w-2xl border">
               <DialogTitle className="sr-only">Report Freelancer</DialogTitle>
               <ReportFreeLancer onClose={() => setIsReportDialogOpen(false)} />
             </DialogContent>
@@ -264,7 +271,7 @@ const ChatInterface = () => {
       {/* </div> */}
 
       {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4  max-h-[90vh] md:max-h-[calc(100vh-17rem)]">
         {!selectedChat ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">

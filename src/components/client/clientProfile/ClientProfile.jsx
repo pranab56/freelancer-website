@@ -15,8 +15,8 @@ function ClientProfile() {
     isVerified: true,
   };
   return (
-    <div className="space-y-4 w-full max-w-7xl mx-auto py-6">
-      <div className="flex gap-2 justify-end">
+    <div className="space-y-4 w-full max-w-7xl mx-auto py-6 px-4 md:px-6 2xl:px-0">
+      <div className="flex gap-2 justify-center md:justify-end ">
         <Button className="button-gradient">
           Follow {provideIcon({ name: "user_plus" })}
         </Button>
@@ -27,7 +27,7 @@ function ClientProfile() {
           Consult Website {provideIcon({ name: "globe" })}
         </Button>
       </div>
-      <div className="flex gap-10 items-start">
+      <div className="flex gap-10 items-start py-2">
         <Image
           src={clientInfo.profilePicture}
           alt="client-profile"
