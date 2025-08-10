@@ -20,8 +20,12 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import AddNewProjectDialog from "./AddNewProjectDialog";
+import EducationDialogAddEdit from "./EducationDialogAddEdit";
+import Link from "next/link";
 function ProfileSections() {
   const [isAddProjectDialogOpen, setIsAddProjectDialogOpen] = useState(false);
+  const [isAddEducationDialogOpen, setIsAddEducationDialogOpen] =
+    useState(false);
 
   const educationCertifications = [
     "MSc",
@@ -41,8 +45,14 @@ function ProfileSections() {
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2 text-lg font-semibold text-blue-600">
               Education & Certifications
-              <Plus className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700" />
-              <Edit3 className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700" />
+              <Plus
+                className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
+                onClick={() => setIsAddEducationDialogOpen(true)}
+              />
+              <Edit3
+                className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
+                onClick={() => setIsAddEducationDialogOpen(true)}
+              />
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -72,10 +82,13 @@ function ProfileSections() {
               Discover my achievements and detailed case studies.
             </p>
 
-            <Button className="button-gradient w-full sm:w-auto">
-              <Eye className="w-4 h-4 mr-2" />
-              View All Project
-            </Button>
+            <Link href="/my-projects">
+              <Button className="button-gradient w-full sm:w-auto">
+                <Eye className="w-4 h-4 mr-2" />
+                View All Project
+              </Button>
+            </Link>
+
             <Button
               className="button-gradient w-full sm:w-auto"
               onClick={() => setIsAddProjectDialogOpen(true)}
@@ -119,6 +132,14 @@ function ProfileSections() {
         <AddNewProjectDialog
           isOpen={isAddProjectDialogOpen}
           onClose={() => setIsAddProjectDialogOpen(false)}
+        />
+      )}
+
+      {/* Add New Education Dialog */}
+      {isAddEducationDialogOpen && (
+        <EducationDialogAddEdit
+          isOpen={isAddEducationDialogOpen}
+          onClose={() => setIsAddEducationDialogOpen(false)}
         />
       )}
     </div>
