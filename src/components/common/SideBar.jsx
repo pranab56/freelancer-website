@@ -46,7 +46,7 @@ function SideBar() {
   };
 
   return (
-    <div className="w-64 bg-white   space-y-8">
+    <div className="w-64 bg-white   space-y-8 hidden lg:block">
       {/* border-r border-gray-200 */}
       {/* Service Type Section */}
       <div className="space-y-4">

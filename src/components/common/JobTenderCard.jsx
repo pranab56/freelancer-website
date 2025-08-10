@@ -29,8 +29,8 @@ function JobTenderCard({ type = "tender", data }) {
           cardData.id
         }`}
       >
-        <Card className="max-w-[20rem]  space-y-4">
-          <CardContent>
+        <Card className="max-w-[20rem] mx-auto  -space-y-6  -md:space-y-8 p-1 md:p-2">
+          <CardContent className="p-1 md:p-2">
             <Image
               src={cardData.jobImg}
               width={600}
@@ -40,20 +40,24 @@ function JobTenderCard({ type = "tender", data }) {
             />
           </CardContent>
           {type === "job" ? (
-            <CardFooter className="">
-              <div className="flex items-start justify-between w-full">
-                <div>
-                  <h1 className="text-xl font-bold">{cardData.name}</h1>
+            <CardFooter className="p-1 md:p-2 my-4 lg:my-0 ">
+              <div className="flex md:flex-row items-start space-y-2 md:space-y-4 lg:space-y-6   justify-between w-full px-1 md:px-2">
+                <div className="space-y-1 md:space-y-2">
+                  <h1 className="text-md md:text-xl font-bold">
+                    {cardData.name}
+                  </h1>
                   <p className="text-sm">{cardData.designation}</p>
                 </div>
-                <div className="flex flex-col items-end h2-gradient-text ">
+                <div className="flex flex-col items-start lg:items-end h2-gradient-text space-y-1 md:space-y-2">
                   <p>Location: {cardData.location}</p>
-                  <p className="font-bold ">{cardData.jobType}</p>
+                  <p className="font-semibold text-sm md:text-base">
+                    {cardData.jobType}
+                  </p>
                 </div>
               </div>
             </CardFooter>
           ) : (
-            <CardFooter className="">
+            <CardFooter className="px-1 md:px-2 my-4">
               <div className="text-[#667085]">
                 <h1 className="text-xl font-bold text-black">
                   Project {1}: {cardData.projectName}

@@ -21,19 +21,26 @@ function JobBoardLayout() {
         text={setTopTalentBanner.text}
         buttonName={setTopTalentBanner.buttonName}
       />
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 px-4 md:px-6 w-full">
+        {/* Heading */}
         <Heading
           heading="Recent Posts"
           subheading="Choose the best talent for your organization's success."
         />
-        <div className="flex flex-col items-center gap-4 my-10">
-          <div className="relative w-full ">
-            <IoSearchOutline className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
 
-            <Input type="text" className="pr-10" />
+        {/* Search Box */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 w-full md:w-auto">
+          <div className="relative w-full sm:w-64 md:w-72">
+            <IoSearchOutline className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
+            <Input
+              type="text"
+              placeholder="Search..."
+              className="pl-9 pr-3 w-full"
+            />
           </div>
         </div>
       </div>
+
       <div className="flex mt-10 px-4 sm:px-6 lg:px-10 2xl:px-0">
         <SideBar />
         <div className="flex-1">

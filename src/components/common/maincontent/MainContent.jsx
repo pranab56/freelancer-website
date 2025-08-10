@@ -1,7 +1,13 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import JobTenderCard from "../JobTenderCard";
+import { Button } from "@/components/ui/button";
+import { Filter } from "lucide-react";
+import FilterDrawer from "../FilterDrawer";
 
 function MainContent({ type = "tender" }) {
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+
   // Mock data for demonstration - in real app this would come from props or API
   const items = Array.from({ length: 6 }, (_, index) => ({
     id: index + 1,
@@ -23,7 +29,7 @@ function MainContent({ type = "tender" }) {
   }));
 
   return (
-    <div className="flex-1 ">
+    <div className="flex-1">
       {/* Header Section */}
       <div className="mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -38,11 +44,21 @@ function MainContent({ type = "tender" }) {
             </p>
           </div>
 
-          {/* Results count and sorting */}
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => setIsFilterDrawerOpen(true)}
+            className="flex items-center gap-2 button-gradient"
+          >
+            <Filter className="w-4 h-4" />
+            Filter
+          </Button>
+          {/* Results count, filter button and sorting */}
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-500">
               Showing {items.length} results
             </span>
+
             <select className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
@@ -53,8 +69,14 @@ function MainContent({ type = "tender" }) {
         </div>
       </div>
 
+      {/* Filter Drawer */}
+      <FilterDrawer
+        isOpen={isFilterDrawerOpen}
+        onClose={() => setIsFilterDrawerOpen(false)}
+      />
+
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 mx-auto px-4 md:px-0">
         {items.map((item) => (
           <JobTenderCard
             key={item.id}
