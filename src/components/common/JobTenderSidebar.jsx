@@ -28,7 +28,7 @@ function JobTenderSidebar({ jobData }) {
   const job = jobData || defaultData;
 
   return (
-    <Card className="w-full max-w-sm mx-auto bg-white shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200">
+    <Card className="w-full max-w-[17rem] mx-auto bg-white shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200">
       <CardHeader className="text-center p-6 pb-4">
         {/* Company Avatar */}
         <div className="flex justify-center mb-4">

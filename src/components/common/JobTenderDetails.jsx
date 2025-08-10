@@ -101,10 +101,30 @@ function JobDetailsPage({ jobData }) {
             <div className="space-y-2">
               <p className="text-sm text-gray-500">
                 {isTenderPage ? "Tender Details" : "Job Details"}
-              </p>
+              </p>{" "}
+              <div className="flex gap-2 lg:hidden">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyLink}
+                  className="h-9 flex items-center gap-2 button-gradient"
+                >
+                  <Copy />
+                  Copy Link
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleShare}
+                  className="h-9 flex items-center gap-2 button-gradient"
+                >
+                  <Share2 size={15} />
+                  Share
+                </Button>
+              </div>
               <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
             </div>
-            <div className="flex gap-2">
+
+            <div className="flex gap-2 hidden lg:block">
               <Button
                 variant="outline"
                 size="sm"
