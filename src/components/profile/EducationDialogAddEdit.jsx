@@ -66,7 +66,7 @@ export default function EducationDialogAddEdit({ isOpen, onClose }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] min-w-5xl p-0 gap-0 overflow-hidden">
+      <DialogContent className="md:min-w-3xl lg:min-w-5xl p-0 gap-0 overflow-hidden">
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4 border-b-0">
           <DialogTitle className="text-lg font-semibold text-gray-900">
@@ -188,7 +188,7 @@ export default function EducationDialogAddEdit({ isOpen, onClose }) {
             type="button"
             variant="outline"
             onClick={onCancel}
-            className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50"
+            className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50 w-full md:w-auto"
           >
             Cancel
           </Button>

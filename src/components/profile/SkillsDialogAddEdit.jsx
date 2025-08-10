@@ -238,7 +238,7 @@ export default function SkillsDialogAddEdit({
             type="button"
             variant="outline"
             onClick={onCancel}
-            className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50"
+            className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50 w-full md:w-auto"
           >
             Cancel
           </Button>

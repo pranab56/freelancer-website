@@ -24,7 +24,9 @@ import Image from "next/image";
 
 function ProfileHeader() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState("/api/placeholder/128/128");
+  const [profileImage, setProfileImage] = useState(
+    "/client/profile/client.png"
+  );
   const [coverImage, setCoverImage] = useState(null);
   const [profileData, setProfileData] = useState({
     name: "Sabbir Ahmed",
@@ -487,6 +489,7 @@ function ProfileHeader() {
                 <Button
                   type="submit"
                   className="bg-blue-600 hover:bg-blue-700 button-gradient"
+                  onClick={() => setIsDialogOpen(false)}
                 >
                   Save Changes
                 </Button>
@@ -497,67 +500,73 @@ function ProfileHeader() {
       </div>
 
       {/* Main profile content */}
-      <div className="flex items-start gap-6 py-6">
-        {/* Profile Image */}
-        <div className="relative">
-          <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-lg">
-            <img
-              src={profileImage}
-              alt={profileData.name}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          {/* Online indicator */}
-          <div className="absolute -top-1 -right-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
-            <div className="w-3 h-3 bg-white rounded-full flex items-center justify-center">
-              <span className="text-xs font-bold text-pink-500">m</span>
+
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 py-6">
+        {/* Profile Section */}
+        <div className="flex flex-col sm:flex-row items-center sm:items-center gap-6 sm:gap-8 w-full lg:w-auto">
+          {/* Profile Image */}
+          <div className="relative flex-shrink-0">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-white shadow-lg">
+              <Image
+                src={profileImage}
+                alt={profileData.name}
+                width={112}
+                height={112}
+                className="w-full h-full object-cover"
+              />
             </div>
-          </div>
-        </div>
-
-        {/* Profile Info */}
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            {profileData.name}
-          </h1>
-
-          <div className="flex items-center gap-2 text-gray-600 mb-3">
-            <span>{profileData.categoryType}</span>
-            <span>|</span>
-            <span>5 Years of experience</span>
-            <span>|</span>
-            <span>{profileData.location}</span>
-          </div>
-
-          {/* Country flags */}
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-4 rounded-sm overflow-hidden">
-              <div className="w-full h-1/3 bg-blue-600"></div>
-              <div className="w-full h-1/3 bg-white"></div>
-              <div className="w-full h-1/3 bg-red-600"></div>
-            </div>
-            <div className="w-6 h-4 rounded-sm overflow-hidden bg-red-600 flex items-center justify-center">
-              <div className="w-3 h-2 bg-white flex items-center justify-center">
-                <div className="w-1 h-1 bg-red-600"></div>
+            {/* Online Indicator */}
+            <div className="absolute -top-1 -right-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
+              <div className="w-3 h-3 bg-white rounded-full flex items-center justify-center">
+                <span className="text-xs font-bold text-pink-500">m</span>
               </div>
             </div>
-            <div className="w-6 h-4 rounded-sm overflow-hidden">
-              <div className="w-full h-1/3 bg-black"></div>
-              <div className="w-full h-1/3 bg-red-600"></div>
-              <div className="w-full h-1/3 bg-yellow-400"></div>
+          </div>
+
+          {/* Profile Info */}
+          <div className="flex-1">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 break-words text-center md:text-left">
+              {profileData.name}
+            </h1>
+
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-gray-600 mb-3 text-sm sm:text-base">
+              <p>{profileData.categoryType}</p>
+              <span>|</span>
+              <p>5 Years of experience</p>
+              <span>|</span>
+              <p>{profileData.location}</p>
             </div>
-            <div className="w-6 h-4 rounded-sm overflow-hidden">
-              <div className="w-full h-1/3 bg-red-600"></div>
-              <div className="w-full h-1/3 bg-white"></div>
-              <div className="w-full h-1/3 bg-red-600"></div>
+
+            {/* Country Flags */}
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+              <div className="w-6 h-4 rounded-sm overflow-hidden">
+                <div className="w-full h-1/3 bg-blue-600"></div>
+                <div className="w-full h-1/3 bg-white"></div>
+                <div className="w-full h-1/3 bg-red-600"></div>
+              </div>
+              <div className="w-6 h-4 rounded-sm overflow-hidden bg-red-600 flex items-center justify-center">
+                <div className="w-3 h-2 bg-white flex items-center justify-center">
+                  <div className="w-1 h-1 bg-red-600"></div>
+                </div>
+              </div>
+              <div className="w-6 h-4 rounded-sm overflow-hidden">
+                <div className="w-full h-1/3 bg-black"></div>
+                <div className="w-full h-1/3 bg-red-600"></div>
+                <div className="w-full h-1/3 bg-yellow-400"></div>
+              </div>
+              <div className="w-6 h-4 rounded-sm overflow-hidden">
+                <div className="w-full h-1/3 bg-red-600"></div>
+                <div className="w-full h-1/3 bg-white"></div>
+                <div className="w-full h-1/3 bg-red-600"></div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Status and Info Panel */}
-        <div className="flex flex-col items-end gap-3">
+        {/* Status & Info */}
+        <div className="flex flex-col sm:flex-row lg:flex-col items-center sm:items-center lg:items-end gap-3 w-full lg:w-auto">
           {/* Available Badge */}
-          <Badge className="bg-none">
+          <Badge className="bg-none flex items-center">
             <div className="w-2.5 h-2.5 bg-green-500 rounded-full mr-2"></div>
             Available
           </Badge>

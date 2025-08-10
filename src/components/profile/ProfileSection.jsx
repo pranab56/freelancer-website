@@ -43,7 +43,7 @@ function ProfileSections() {
         {/* Education & Certifications */}
         <Card className="max-h-60">
           <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-blue-600">
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-blue-600 h2-gradient-text">
               Education & Certifications
               <Plus
                 className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
@@ -73,7 +73,7 @@ function ProfileSections() {
         {/* Projects */}
         <Card className="max-h-auto">
           <CardHeader className="pb-4">
-            <CardTitle className="text-lg font-semibold text-blue-600">
+            <CardTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">
               Projects
             </CardTitle>
           </CardHeader>
@@ -102,7 +102,7 @@ function ProfileSections() {
         {/* Contact */}
         <Card className="max-h-60">
           <CardHeader className="">
-            <CardTitle className="text-lg font-semibold text-blue-600">
+            <CardTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">
               Contact
             </CardTitle>
           </CardHeader>

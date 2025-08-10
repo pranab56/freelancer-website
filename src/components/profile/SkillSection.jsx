@@ -35,7 +35,7 @@ function SkillsSection() {
         <Card className="h-fit border-none shadow-none">
           <CardHeader className="pb-4">
             <div className="flex items-center gap-4">
-              <CardTitle className="text-lg font-semibold text-blue-600">
+              <CardTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">
                 Skills
               </CardTitle>
               <div className="flex items-center gap-2">

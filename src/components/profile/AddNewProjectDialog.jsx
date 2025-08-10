@@ -87,7 +87,7 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-[600px] min-w-5xl p-0 gap-0">
+        <DialogContent className="md:min-w-3xl lg:min-w-5xl p-0 gap-0">
           {/* Header */}
           <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4 border-b-0">
             <DialogTitle className="text-lg font-semibold text-gray-900">
@@ -99,40 +99,20 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
           <div className="px-6 pb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column - Thumbnail */}
-              <div className="space-y-4">
-                <div className="relative bg-gradient-to-br from-purple-600 to-purple-800 rounded-lg p-6 text-white min-h-[200px] flex flex-col justify-between overflow-hidden">
+              <div className="space-y-1 md:space-y-4">
+                <div className="relative  rounded-lg px-6 py-4 text-white min-h-42 border-2 border-gray-300 flex flex-col justify-between items-center overflow-hidden">
                   {thumbnailImage ? (
                     <div className="absolute inset-0">
                       <img
                         src={thumbnailImage}
                         alt="Project thumbnail"
-                        className="w-full h-full object-cover rounded-lg"
+                        width={250}
+                        height={150}
+                        className="w-80 h-42 object-cover rounded-lg"
                       />
                     </div>
                   ) : (
-                    <>
-                      <div>
-                        <h3 className="text-xl font-bold mb-2 relative z-10">
-                          Websites to learn
-                          <br />
-                          UI/UX
-                          <br />
-                          DESIGN
-                        </h3>
-                      </div>
-                      <div className="flex items-end justify-between relative z-10">
-                        <div className="text-sm opacity-90">WATCH NOW</div>
-                        <div className="relative">
-                          {/* Character illustration placeholder */}
-                          <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center">
-                            <div className="text-2xl">👨‍💼</div>
-                          </div>
-                        </div>
-                      </div>
-                      {/* Decorative elements */}
-                      <div className="absolute top-4 right-4 w-8 h-8 border-2 border-white opacity-50 rounded"></div>
-                      <div className="absolute top-12 right-12 w-4 h-4 border-2 border-white opacity-30 rounded"></div>
-                    </>
+                    <></>
                   )}
                 </div>
 
@@ -150,7 +130,7 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
               </div>
 
               {/* Right Column - Form */}
-              <div className="space-y-4">
+              <div className="space-y-3 md:space-y-6">
                 {/* Name Field */}
                 <div className="space-y-2">
                   <Label
@@ -243,7 +223,7 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
               type="button"
               variant="outline"
               onClick={onCancel}
-              className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50"
+              className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50 w-full md:w-auto"
             >
               Cancel
             </Button>

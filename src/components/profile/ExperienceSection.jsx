@@ -35,7 +35,7 @@ function ExperienceSection() {
       <Card className="max-w-7xl mx-auto h-fit border-none shadow-none bg-transparent">
         <CardHeader className="pb-4 px-0">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-semibold text-blue-600">
+            <CardTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">
               Experience
             </CardTitle>
             <div className="flex items-center gap-4">
