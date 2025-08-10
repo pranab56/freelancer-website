@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,8 +12,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search, FileText, Plus, Calendar, Truck } from "lucide-react";
+import CreateInvoicesDialog from "./CreateInvoicesDialog";
+import ViewInvoiceDetailsDialog from "./ViewInvoiceDetailsDialog";
+import ProjectCompleteDialog from "./ProjectCompleteDialog";
 
 function Invoices() {
+  const [isCreateInvoicesDialogOpen, setIsCreateInvoicesDialogOpen] =
+    useState(false);
+  const [isViewInvoiceDetailsDialogOpen, setIsViewInvoiceDetailsDialogOpen] =
+    useState(false);
+  const [isProjectCompleteDialogOpen, setIsProjectCompleteDialogOpen] =
+    useState(false);
   const invoices = [
     {
       id: "12345",
@@ -41,7 +51,10 @@ function Invoices() {
           </p>
         </div>
 
-        <Button className="button-gradient">
+        <Button
+          className="button-gradient cursor-pointer"
+          onClick={() => setIsCreateInvoicesDialogOpen(true)}
+        >
           <Plus className="w-4 h-4 mr-2" />
           Create New Invoice
         </Button>
@@ -93,7 +106,10 @@ function Invoices() {
 
                 {/* Status and Main Actions */}
                 <div className="flex items-center gap-4">
-                  <Button className="button-gradient">
+                  <Button
+                    className="button-gradient"
+                    onClick={() => setIsViewInvoiceDetailsDialogOpen(true)}
+                  >
                     <FileText className="w-4 h-4 mr-2" />
                     View Details
                   </Button>
@@ -119,7 +135,10 @@ function Invoices() {
                     Extend Delivery Date
                   </Button>
 
-                  <Button className="button-gradient">
+                  <Button
+                    className="button-gradient"
+                    onClick={() => setIsProjectCompleteDialogOpen(true)}
+                  >
                     <Truck className="w-4 h-4 mr-2" />
                     Delivery Now
                   </Button>
@@ -129,6 +148,30 @@ function Invoices() {
           </Card>
         ))}
       </div>
+
+      {/* Create Invoices Dialog */}
+      {isCreateInvoicesDialogOpen && (
+        <CreateInvoicesDialog
+          isOpen={isCreateInvoicesDialogOpen}
+          onClose={() => setIsCreateInvoicesDialogOpen(false)}
+        />
+      )}
+
+      {/* View Invoice Details Dialog */}
+      {isViewInvoiceDetailsDialogOpen && (
+        <ViewInvoiceDetailsDialog
+          isOpen={isViewInvoiceDetailsDialogOpen}
+          onClose={() => setIsViewInvoiceDetailsDialogOpen(false)}
+        />
+      )}
+
+      {/* Project Complete Dialog */}
+      {isProjectCompleteDialogOpen && (
+        <ProjectCompleteDialog
+          isOpen={isProjectCompleteDialogOpen}
+          onClose={() => setIsProjectCompleteDialogOpen(false)}
+        />
+      )}
     </div>
   );
 }
