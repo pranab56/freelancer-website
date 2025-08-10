@@ -71,26 +71,26 @@ function ProfileSections() {
         </Card>
 
         {/* Projects */}
-        <Card className="max-h-60">
+        <Card className="max-h-auto">
           <CardHeader className="pb-4">
             <CardTitle className="text-lg font-semibold text-blue-600">
               Projects
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 flex flex-col items-center">
-            <p className="text-gray-600 text-sm leading-relaxed text-center">
+            <p className="text-gray-600 text-sm leading-tight text-center">
               Discover my achievements and detailed case studies.
             </p>
 
-            <Link href="/my-projects">
-              <Button className="button-gradient w-full sm:w-auto">
+            <Link href="/my-projects" className="w-full md:w-auto">
+              <Button className="button-gradient w-full md:w-auto">
                 <Eye className="w-4 h-4 mr-2" />
                 View All Project
               </Button>
             </Link>
 
             <Button
-              className="button-gradient w-full sm:w-auto"
+              className="button-gradient w-full md:w-auto"
               onClick={() => setIsAddProjectDialogOpen(true)}
             >
               <FaPlus className="w-4 h-4 mr-2" />
@@ -108,17 +108,17 @@ function ProfileSections() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3 flex flex-col items-center">
-              <Button className="w-40 button-gradient ">
+              <Button className="w-full md:w-40 button-gradient ">
                 <UserPlus className="w-4 h-4 mr-2" />
                 Follow
               </Button>
 
-              <Button className="w-40 button-gradient ">
+              <Button className="w-full md:w-40 button-gradient ">
                 <Calendar className="w-4 h-4 mr-2" />
                 Schedule Meeting
               </Button>
 
-              <Button className="w-40 button-gradient ">
+              <Button className="w-full md:w-40 button-gradient ">
                 <MessageCircle className="w-4 h-4 mr-2" />
                 Message
               </Button>

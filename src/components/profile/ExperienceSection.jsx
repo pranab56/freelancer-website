@@ -31,7 +31,7 @@ function ExperienceSection() {
   ];
 
   return (
-    <div className="w-full bg-gray-50  mb-10">
+    <div className="w-full bg-gray-50  mb-10 px-4 md:px-6 2xl:px-0">
       <Card className="max-w-7xl mx-auto h-fit border-none shadow-none bg-transparent">
         <CardHeader className="pb-4 px-0">
           <div className="flex items-center justify-between">

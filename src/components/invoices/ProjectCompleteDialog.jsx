@@ -112,7 +112,7 @@ export default function ProjectCompleteDialog({ isOpen, onClose }) {
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-[600px] min-w-5xl p-0 gap-0 overflow-hidden">
+        <DialogContent className="sm:max-w-[600px] md:min-w-3xl lg:min-w-5xl p-0 gap-0 overflow-hidden">
           {/* Header */}
           <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4 border-b-0">
             <DialogTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">

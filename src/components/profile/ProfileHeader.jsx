@@ -111,9 +111,9 @@ function ProfileHeader() {
               <Edit className="w-4 h-4 ml-2" />
             </Button>
           </DialogTrigger>
-          <DialogContent className="min-w-5xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="md:min-w-3xl lg:min-w-5xl max-h-[90vh] overflow-y-auto">
             <DialogHeader className="flex flex-row items-center justify-between pb-4">
-              <DialogTitle className="text-xl font-semibold text-blue-600">
+              <DialogTitle className="text-xl font-semibold text-blue-600 h2-gradient-text">
                 Profile Edit
               </DialogTitle>
             </DialogHeader>
@@ -124,7 +124,7 @@ function ProfileHeader() {
                 <div className="space-y-6">
                   {/* Profile Picture */}
                   <div className="flex flex-col items-center space-y-3">
-                    <div className="w-52 h-52 rounded-full overflow-hidden border-4 ">
+                    <div className="w-32 h-32 md:w-52 md:h-52 rounded-full overflow-hidden border-4 ">
                       <Image
                         src={profileImage}
                         alt="Profile"
@@ -484,7 +484,10 @@ function ProfileHeader() {
                 <Button type="button" variant="outline" onClick={handleCancel}>
                   Cancel
                 </Button>
-                <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+                <Button
+                  type="submit"
+                  className="bg-blue-600 hover:bg-blue-700 button-gradient"
+                >
                   Save Changes
                 </Button>
               </div>

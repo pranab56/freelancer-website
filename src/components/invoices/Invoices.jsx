@@ -39,12 +39,14 @@ function Invoices() {
   ];
 
   return (
-    <div className="w-full bg-white py-6 max-w-7xl mx-auto">
+    <div className="w-full bg-white py-4 md:py-6 max-w-7xl mx-auto px-4 md:px-6 2xl:px-0">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4 md:mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold h2-gradient-text mb-2">Invoices</h1>
-          <p className="text-gray-600 max-w-2xl">
+          <h1 className="text-2xl md:text-3xl font-bold h2-gradient-text mb-2">
+            Invoices
+          </h1>
+          <p className="text-gray-600 max-w-2xl text-sm md:text-base">
             With our simple invoicing system, managing payments is quick and
             easy for both freelancers and clients. Never miss a payment or
             detail again!
@@ -52,7 +54,7 @@ function Invoices() {
         </div>
 
         <Button
-          className="button-gradient cursor-pointer"
+          className="button-gradient cursor-pointer w-full md:w-auto"
           onClick={() => setIsCreateInvoicesDialogOpen(true)}
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -61,14 +63,14 @@ function Invoices() {
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="flex items-center gap-4 mb-8">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-4 mb-6 md:mb-8">
+        <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input placeholder="Search" className="pl-10 border-gray-300" />
         </div>
 
         <Select defaultValue="all-invoice">
-          <SelectTrigger className="w-48 border-gray-300">
+          <SelectTrigger className="w-full md:w-48 border-gray-300">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -81,43 +83,29 @@ function Invoices() {
       </div>
 
       {/* Invoices List */}
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         {invoices.map((invoice, index) => (
           <Card
             key={index}
             className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
           >
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                {/* Invoice Info */}
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold h2-gradient-text mb-3">
+            <CardContent className="p-4 md:p-6">
+              {/* Mobile: Stacked Layout */}
+              <div className="md:hidden space-y-4">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold h2-gradient-text">
                     Invoice #{invoice.id}
                   </h3>
-                </div>
-                <div className="flex-1 h-9 ">
                   <Badge
                     variant="outline"
-                    className=" text-gray-700 gradient px-4 py-1 h-9"
+                    className="text-gray-700 gradient px-3 py-1"
                   >
                     {invoice.status}
                   </Badge>
                 </div>
 
-                {/* Status and Main Actions */}
-                <div className="flex items-center gap-4">
-                  <Button
-                    className="button-gradient"
-                    onClick={() => setIsViewInvoiceDetailsDialogOpen(true)}
-                  >
-                    <FileText className="w-4 h-4 mr-2" />
-                    View Details
-                  </Button>
-                </div>
-              </div>
-
-              {/* Client Info and Action Buttons */}
-              <div className="flex items-center justify-between">
+                {/* Client Info */}
                 <div className="space-y-1 text-sm text-gray-700">
                   <p>
                     <span className="font-medium">Client:</span>{" "}
@@ -129,19 +117,88 @@ function Invoices() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <Button className="button-gradient">
+                {/* Action Buttons - Stacked */}
+                <div className="space-y-2">
+                  <Button
+                    className="button-gradient w-full"
+                    onClick={() => setIsViewInvoiceDetailsDialogOpen(true)}
+                  >
+                    <FileText className="w-4 h-4 mr-2" />
+                    View Details
+                  </Button>
+
+                  <Button className="button-gradient w-full">
                     <Calendar className="w-4 h-4 mr-2" />
                     Extend Delivery Date
                   </Button>
 
                   <Button
-                    className="button-gradient"
+                    className="button-gradient w-full"
                     onClick={() => setIsProjectCompleteDialogOpen(true)}
                   >
                     <Truck className="w-4 h-4 mr-2" />
                     Delivery Now
                   </Button>
+                </div>
+              </div>
+
+              {/* Desktop: Original Layout */}
+              <div className="hidden md:block">
+                <div className="flex items-center justify-between mb-4">
+                  {/* Invoice Info */}
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold h2-gradient-text mb-3">
+                      Invoice #{invoice.id}
+                    </h3>
+                  </div>
+                  <div className="flex-1 h-9 ">
+                    <Badge
+                      variant="outline"
+                      className=" text-gray-700 gradient px-4 py-1 h-9"
+                    >
+                      {invoice.status}
+                    </Badge>
+                  </div>
+
+                  {/* Status and Main Actions */}
+                  <div className="flex items-center gap-4">
+                    <Button
+                      className="button-gradient"
+                      onClick={() => setIsViewInvoiceDetailsDialogOpen(true)}
+                    >
+                      <FileText className="w-4 h-4 mr-2" />
+                      View Details
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Client Info and Action Buttons */}
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1 text-sm text-gray-700">
+                    <p>
+                      <span className="font-medium">Client:</span>{" "}
+                      {invoice.client}
+                    </p>
+                    <p>
+                      <span className="font-medium">Amount:</span>{" "}
+                      {invoice.amount}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Button className="button-gradient">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Extend Delivery Date
+                    </Button>
+
+                    <Button
+                      className="button-gradient"
+                      onClick={() => setIsProjectCompleteDialogOpen(true)}
+                    >
+                      <Truck className="w-4 h-4 mr-2" />
+                      Delivery Now
+                    </Button>
+                  </div>
                 </div>
               </div>
             </CardContent>

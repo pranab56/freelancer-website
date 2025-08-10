@@ -48,14 +48,17 @@ function OngoingProjects() {
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="flex items-center gap-4 mb-8">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col md:flex-row items-center gap-4 mb-8">
+        <div className="relative flex-1 w-full md:max-w-md ">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <Input placeholder="Search" className="pl-10 border-gray-300" />
+          <Input
+            placeholder="Search"
+            className="pl-10 border-gray-300 w-full"
+          />
         </div>
 
         <Select defaultValue="all-invoice">
-          <SelectTrigger className="w-48 border-gray-300">
+          <SelectTrigger className="w-full md:w-48 border-gray-300">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
