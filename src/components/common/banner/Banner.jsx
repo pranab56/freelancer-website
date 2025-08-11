@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
-function Banner({ src, header, text, buttonName }) {
+function Banner({ src, header, text, buttonName, buttonLink }) {
   return (
     <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-6 py-4 px-4 sm:px-6 lg:px-10 2xl:px-0">
       {/* Text section */}
@@ -12,7 +13,9 @@ function Banner({ src, header, text, buttonName }) {
         </h2>
         <p className="text-sm sm:text-base text-gray-700">{text}</p>
         {buttonName && (
-          <Button className="button-gradient">{buttonName}</Button>
+          <Link href={buttonLink}>
+            <Button className="button-gradient">{buttonName}</Button>
+          </Link>
         )}
       </div>
 

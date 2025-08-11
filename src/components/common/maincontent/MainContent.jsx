@@ -48,7 +48,7 @@ function MainContent({ type = "tender" }) {
             variant="default"
             size="sm"
             onClick={() => setIsFilterDrawerOpen(true)}
-            className="flex items-center gap-2 button-gradient"
+            className="flex items-center gap-2 button-gradient lg:hidden"
           >
             <Filter className="w-4 h-4" />
             Filter

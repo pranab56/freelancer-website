@@ -7,21 +7,50 @@ import { Input } from "../ui/input";
 import Heading from "../common/heading/Heading";
 
 function JobBoardLayout() {
-  const setTopTalentBanner = {
+  const isClient = true;
+  const setTopTalentBannerFreelancer = {
     src: "/jobtender/job_banner.png",
     header: "Explore Top Freelance Opportunities",
     text: "Browse through the latest freelance projects and find your next big opportunity. Whether you're looking to work remotely or collaborate on-site, discover jobs that match your skills and expertise.",
     buttonName: "Post a Job",
   };
+  const setTopTalentBannerClient = {
+    src: "/jobtender/job_banner.png",
+    header: "Post Your Job & Find Top Talent",
+    text: "Looking to hire skilled freelancers for your next project? Our job board connects you with top-tier professionals across various industries to help bring your vision to life.",
+    buttonName: "Post a Job",
+    buttonLink: "/create-job-client",
+  };
   return (
     <div className="max-w-7xl py-6 mx-auto">
       <Banner
-        src={setTopTalentBanner.src}
-        header={setTopTalentBanner.header}
-        text={setTopTalentBanner.text}
-        buttonName={setTopTalentBanner.buttonName}
+        src={
+          isClient
+            ? setTopTalentBannerClient.src
+            : setTopTalentBannerFreelancer.src
+        }
+        header={
+          isClient
+            ? setTopTalentBannerClient.header
+            : setTopTalentBannerFreelancer.header
+        }
+        text={
+          isClient
+            ? setTopTalentBannerClient.text
+            : setTopTalentBannerFreelancer.text
+        }
+        buttonName={
+          isClient
+            ? setTopTalentBannerClient.buttonName
+            : setTopTalentBannerFreelancer.buttonName
+        }
+        buttonLink={
+          isClient
+            ? setTopTalentBannerClient.buttonLink
+            : setTopTalentBannerFreelancer.buttonLink
+        }
       />
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 px-4 md:px-6 w-full">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 px-4 md:px-6 lg:px-10 2xl:px-0 w-full">
         {/* Heading */}
         <Heading
           heading="Recent Posts"

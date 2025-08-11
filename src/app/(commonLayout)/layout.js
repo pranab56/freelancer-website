@@ -20,7 +20,7 @@ export const metadata = {
 };
 
 export default function CommonLayout({ children }) {
-  const isLogedInAsClient = true;
+  const isLogedInAsClient = false;
   return (
     <>
       {/* <NavBar /> */}
