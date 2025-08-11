@@ -19,11 +19,13 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
 function FreelancerNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-
+  const router = useRouter();
   // Navigation items
   const navItems = [
     { label: "Job Board", href: "/job-board" },
@@ -43,7 +45,12 @@ function FreelancerNavBar() {
   const user = {
     name: "Sabbir Ahmed",
     role: "UI/UX Designer",
-    avatar: "/api/placeholder/40/40",
+    avatar: "/client/profile/client.png",
+  };
+
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    router.push("/login");
   };
 
   return (
@@ -74,16 +81,18 @@ function FreelancerNavBar() {
         </div>
 
         {/* User Profile Section */}
-        <div className="hidden lg:flex items-center">
+        <div className="hidden lg:flex items-center  ">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="flex items-center space-x-3 hover:bg-gray-50"
+                className="flex items-center space-x-3 shadow-md border hover:bg-gray-50  h-12"
               >
-                <img
+                <Image
                   src={user.avatar}
                   alt={user.name}
+                  width={40}
+                  height={40}
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div className="text-left">
@@ -117,7 +126,10 @@ function FreelancerNavBar() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-red-600 cursor-pointer">
+              <DropdownMenuItem
+                className="text-red-600 cursor-pointer"
+                onClick={handleSignOut}
+              >
                 Sign Out
               </DropdownMenuItem>
             </DropdownMenuContent>
