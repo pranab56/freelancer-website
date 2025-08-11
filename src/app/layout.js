@@ -1,8 +1,4 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
-import { Provider } from "../redux/Provider";
-import { Toaster } from "sonner";
-
 import { Geist, Geist_Mono } from "next/font/google";
 
 const geistSans = Geist({
@@ -22,15 +18,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Provider>
-          {children}
-          <Toaster position="top-right" richColors />
-        </Provider>
-      </body>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

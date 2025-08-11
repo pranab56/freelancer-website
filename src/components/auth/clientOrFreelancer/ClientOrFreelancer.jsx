@@ -7,10 +7,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "@/redux/features/currentUser/currentuserSlice";
 
 const AccountTypeDialog = () => {
   const [selectedType, setSelectedType] = useState("");
   const [isOpen, setIsOpen] = useState(true);
+  const dispatch = useDispatch();
 
   const handleAccountTypeSelect = (type) => {
     setSelectedType(type);
@@ -20,7 +23,7 @@ const AccountTypeDialog = () => {
     console.log("Selected account type:", selectedType);
     setIsOpen(false);
     localStorage.setItem("accountType", selectedType);
-    // Handle the selection logic here
+    dispatch(setCurrentUser({ type: selectedType }));
   };
 
   return (

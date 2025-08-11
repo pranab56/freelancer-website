@@ -8,8 +8,7 @@ import { useRouter } from "next/navigation";
 function ThankYouPageLayout() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const type = searchParams.get("type");
-  console.log(type);
+  const type = searchParams.get("type") || "job"; // Default to job if no type is provided
 
   const getContent = (type) => {
     switch (type) {

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -20,12 +20,18 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import Image from "next/image";
-import { useRouter } from "next/router";
-
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "@/redux/features/currentUser/currentuserSlice";
 function FreelancerNavBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   // Navigation items
   const navItems = [
     { label: "Job Board", href: "/job-board" },
@@ -50,8 +56,14 @@ function FreelancerNavBar() {
 
   const handleSignOut = () => {
     localStorage.removeItem("token");
-    router.push("/login");
+    dispatch(setCurrentUser({ type: null }));
+    router.replace("/login");
+    console.log("sign out");
   };
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <nav className="w-full bg-white border-b border-gray-200 px-6 py-4">

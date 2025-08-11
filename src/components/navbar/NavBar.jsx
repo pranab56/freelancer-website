@@ -1,15 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, ChevronDown, User, Menu, X } from "lucide-react";
+import { Search, User, Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "@/redux/features/currentUser/currentuserSlice";
 import {
   Drawer,
   DrawerClose,
@@ -18,12 +14,35 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { LiaUserTieSolid } from "react-icons/lia";
 function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
+  const [userType, setUserType] = useState("freelancer");
   const pathname = usePathname();
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    const savedType = localStorage.getItem("accountType");
+    if (savedType) {
+      setUserType(savedType);
+      dispatch(setCurrentUser({ type: savedType }));
+    }
+  }, [dispatch]);
+
+  const toggleUserType = () => {
+    const newType = userType === "freelancer" ? "client" : "freelancer";
+    setUserType(newType);
+    localStorage.setItem("accountType", newType);
+    dispatch(setCurrentUser({ type: newType }));
+  };
   // Services dropdown items
   const serviceItems = [
     {
@@ -102,7 +121,7 @@ function NavBar() {
                   <Link
                     href={item.href}
                     className={`w-full cursor-pointer ${
-                      isActiveLink(item.href) ? "bg-blue-50 text-blue-600" : ""
+                      isActiveLink(item.href) ? "text-blue-600" : ""
                     }`}
                   >
                     {item.label}
@@ -125,34 +144,20 @@ function NavBar() {
             />
           </div>
 
-          {/* Freelancer Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex items-center">
-                <User className="mr-2 h-4 w-4" />
-                Freelancer
-                <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/freelancer-profile"
-                  className="w-full cursor-pointer"
-                >
-                  View Profile
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/freelancer-settings"
-                  className="w-full cursor-pointer"
-                >
-                  Settings
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {/* User Type Toggle */}
+          <Button
+            variant="outline"
+            className="flex items-center"
+            onClick={toggleUserType}
+          >
+            {userType === "freelancer" ? (
+              <User className="mr-2 h-4 w-4" />
+            ) : (
+              <LiaUserTieSolid className="mr-2 h-4 w-4" />
+            )}
+
+            {userType === "freelancer" ? "Freelancer" : "Client"}
+          </Button>
 
           {/* Auth Buttons */}
           <div className="flex items-center space-x-3">
@@ -160,7 +165,7 @@ function NavBar() {
               <Link href="/login">Login</Link>
             </Button>
             <Button asChild className="button-gradient">
-              <Link href="/signup" className="flex items-center">
+              <Link href="/sign-up" className="flex items-center">
                 Sign Up
                 <svg
                   className="ml-2 h-4 w-4"
@@ -268,34 +273,15 @@ function NavBar() {
                   </div>
                 </div>
 
-                {/* Mobile User Type */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="w-full justify-start">
-                      <User className="mr-2 h-4 w-4" />
-                      Freelancer
-                      <ChevronDown className="ml-auto h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="center" className="w-48">
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href="/freelancer-profile"
-                        className="w-full cursor-pointer"
-                      >
-                        View Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href="/freelancer-settings"
-                        className="w-full cursor-pointer"
-                      >
-                        Settings
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                {/* Mobile User Type Toggle */}
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={toggleUserType}
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  {userType === "freelancer" ? "Freelancer" : "Client"}
+                </Button>
 
                 {/* Mobile Auth */}
                 <div className="space-y-2 pt-4 border-t">
@@ -304,7 +290,7 @@ function NavBar() {
                   </Button>
                   <Button className="w-full" asChild>
                     <Link
-                      href="/signup"
+                      href="/sign-up"
                       className="flex items-center justify-center"
                     >
                       Sign Up
