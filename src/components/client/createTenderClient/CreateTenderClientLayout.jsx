@@ -1,11 +1,19 @@
+"use client";
 import React from "react";
 import CreateTenderTopForm from "./CreateTenderTopForm";
 import TenderDescription from "./TenderDescription";
 import QualificationsTender from "./QualificationsTender";
 import PrefferedQualificationsTender from "./PrefferedQualificationsTender";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 function CreateTenderClientLayout() {
+  const router = useRouter();
+  const { type } = useParams();
+  const handlePostTender = () => {
+    router.push("/thank-you-page?type=tender");
+  };
   return (
     <div className="space-y-6">
       <CreateTenderTopForm />
@@ -16,7 +24,9 @@ function CreateTenderClientLayout() {
         <Button className="bg-white text-black hover:bg-gray-100 border ">
           Cancel
         </Button>
-        <Button className="button-gradient">Post Tender</Button>
+        <Button className="button-gradient" onClick={handlePostTender}>
+          Post Tender
+        </Button>
       </div>
     </div>
   );
