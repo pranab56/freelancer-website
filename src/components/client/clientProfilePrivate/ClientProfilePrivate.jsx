@@ -1,10 +1,14 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import provideIcon from "@/utils/IconProvider/provideIcon";
 import Image from "next/image";
-import React from "react";
-import tr from "zod/v4/locales/tr.cjs";
+import React, { useState } from "react";
+
+import EditProfileDialog from "./EditProfileDialog";
 
 function ClientProfilePrivate() {
+  const [isEditProfileDialogOpen, setIsEditProfileDialogOpen] = useState(false);
+
   const clientInfo = {
     name: "John Doe",
     profilePicture: "/client/profile/client.png",
@@ -17,7 +21,10 @@ function ClientProfilePrivate() {
   return (
     <div className="space-y-4 w-full max-w-7xl mx-auto py-6 px-4 md:px-6 2xl:px-0">
       <div className="flex gap-2 justify-center md:justify-end ">
-        <Button className="button-gradient">
+        <Button
+          className="button-gradient"
+          onClick={() => setIsEditProfileDialogOpen(true)}
+        >
           Edit Profile {provideIcon({ name: "edit" })}
         </Button>
       </div>
@@ -58,6 +65,10 @@ function ClientProfilePrivate() {
           the power of skilled freelancers tailored to your needs
         </p>
       </div>
+      <EditProfileDialog
+        isOpen={isEditProfileDialogOpen}
+        onClose={() => setIsEditProfileDialogOpen(false)}
+      />
     </div>
   );
 }

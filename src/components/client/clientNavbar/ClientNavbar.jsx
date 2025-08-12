@@ -45,6 +45,7 @@ function ClientNavBar() {
     { label: "Tenders", href: "/tenders" },
     { label: "My Projects", href: "/my-projects" },
     { label: "Invoices", href: "/invoices" },
+    { label: "Inbox", href: "/inbox" },
     { label: "My Subscription", href: "/my-subscription" },
   ];
 

@@ -1,3 +1,4 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,10 +9,23 @@ import {
 } from "@/components/ui/card";
 import { LucideCirclePlus } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { FiEdit } from "react-icons/fi";
+import CompanyLifeAddEditDialog from "./CompanyLifeAddEditDialog";
 
 function ProjectListPrivate() {
+  const [isCompanyLifeDialogOpen, setIsCompanyLifeDialogOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleAddPost = () => {
+    setIsEditing(false);
+    setIsCompanyLifeDialogOpen(true);
+  };
+
+  const handleEditPost = () => {
+    setIsEditing(true);
+    setIsCompanyLifeDialogOpen(true);
+  };
   const projects = [
     {
       id: 1,
@@ -57,10 +71,16 @@ function ProjectListPrivate() {
             Company Life
           </h1>
           <div className="flex gap-2">
-            <Button className="bg-transparent shadow-none h2-gradient-text">
+            <Button
+              className="bg-transparent shadow-none h2-gradient-text"
+              onClick={handleAddPost}
+            >
               Add New Post <LucideCirclePlus className="text-blue-500" />
             </Button>
-            <Button className="bg-transparent shadow-none h2-gradient-text">
+            <Button
+              className="bg-transparent shadow-none h2-gradient-text"
+              onClick={handleEditPost}
+            >
               Edit Post <FiEdit className="text-blue-500" />
             </Button>
           </div>
@@ -72,6 +92,13 @@ function ProjectListPrivate() {
           ))}
         </div>
       </div>
+
+      {/* Company Life Dialog */}
+      <CompanyLifeAddEditDialog
+        isOpen={isCompanyLifeDialogOpen}
+        onClose={() => setIsCompanyLifeDialogOpen(false)}
+        isEditing={isEditing}
+      />
     </>
   );
 }

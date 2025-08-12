@@ -13,11 +13,13 @@ import { Dialog } from "@radix-ui/react-dialog";
 import { DialogContent, DialogTrigger, DialogTitle } from "../ui/dialog";
 import ReportFreeLancer from "./ReportFreeLancer";
 import Link from "next/link";
-
+import { useSelector } from "react-redux";
+import { getCurrentUser } from "@/redux/features/currentUser/currentuserSlice";
 const ChatInterface = () => {
   const dispatch = useAppDispatch();
   const { selectedChat, messages, isSendingMessage, typingUsers } = useChat();
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
+  const { type } = useSelector((state) => state.currentUser.currentUser || {});
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -211,7 +213,7 @@ const ChatInterface = () => {
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             Delivery Date
           </h3>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-gray-900">
                 {String(timeLeft.days).padStart(2, "0")}
@@ -244,10 +246,14 @@ const ChatInterface = () => {
 
         {/* Right Side - Action Buttons */}
         <div className="flex flex-col md:flex-row justify-center gap-2 items-center space-x-0 md:space-x-4 ">
-          <Link href={`/client-profile/${selectedChat?.id}`}>
+          <Link href={type === "client" ? `/profile/1` : `/client-profile/1`}>
             <Button className="px-4 py-2  bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 font-medium transition-colors">
-              <span className="hidden md:block">View Client Profile</span>
-              <span className="block md:hidden">Client</span>
+              <span className="hidden md:block">
+                {type === "client" ? "View Profile" : "View Client Profile"}
+              </span>
+              <span className="block md:hidden">
+                {type === "client" ? "Profile" : "Client"}
+              </span>
             </Button>
           </Link>
 
