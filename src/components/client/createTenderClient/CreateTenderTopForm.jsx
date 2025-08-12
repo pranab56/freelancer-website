@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -19,24 +17,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setProjectTitle,
+  setStartDate,
+  setEndDate,
+} from "@/redux/features/createTender/createtenderSlice";
 
 export default function CreateTenderTopForm() {
-  const [jobTitle, setJobTitle] = useState("");
-  const [jobType, setJobType] = useState("");
-  const [jobLink, setJobLink] = useState("");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const dispatch = useDispatch();
+  const projectTitle =
+    useSelector((state) => state.createTender.projectTitle) || "";
+  const startDateString = useSelector((state) => state.createTender.startDate);
+  const endDateString = useSelector((state) => state.createTender.endDate);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log({
-      jobTitle,
-      jobType,
-      jobLink,
-      startDate,
-      endDate,
-    });
+  // Handle date selection
+  const handleStartDateSelect = (date) => {
+    dispatch(setStartDate(date ? date.toISOString() : null));
   };
+
+  const handleEndDateSelect = (date) => {
+    dispatch(setEndDate(date ? date.toISOString() : null));
+  };
+
+  // Convert ISO strings to Date objects for the Calendar component
+  const startDate = startDateString ? new Date(startDateString) : null;
+  const endDate = endDateString ? new Date(endDateString) : null;
 
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 md:px-6 2xl:px-0">
@@ -55,7 +61,10 @@ export default function CreateTenderTopForm() {
         <div className="space-y-4">
           <div className="flex flex-col gap-2 ">
             <label className="font-medium">Project title*</label>
-            <Select value={jobTitle} onValueChange={setJobTitle}>
+            <Select
+              value={projectTitle}
+              onValueChange={(value) => dispatch(setProjectTitle(value))}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select project title" />
               </SelectTrigger>
@@ -88,7 +97,7 @@ export default function CreateTenderTopForm() {
                   <Calendar
                     mode="single"
                     selected={startDate}
-                    onSelect={setStartDate}
+                    onSelect={handleStartDateSelect}
                     initialFocus
                   />
                 </PopoverContent>
@@ -114,7 +123,7 @@ export default function CreateTenderTopForm() {
                   <Calendar
                     mode="single"
                     selected={endDate}
-                    onSelect={setEndDate}
+                    onSelect={handleEndDateSelect}
                     initialFocus
                   />
                 </PopoverContent>

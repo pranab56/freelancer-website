@@ -9,6 +9,7 @@ import userSlice from "../features/user/userSlice";
 import chatSlice from "../features/chat/chatSlice";
 import currentUserSlice from "../features/currentUser/currentuserSlice";
 import createJobSlice from "../features/createJob/createjobSlice";
+import createTenderSlice from "../features/createTender/createtenderSlice";
 // import projectSlice from '../features/project/projectSlice';
 
 // Root reducer
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   chat: chatSlice,
   currentUser: currentUserSlice,
   createJob: createJobSlice,
+  createTender: createTenderSlice,
   // project: projectSlice,
 });
 
@@ -25,7 +27,14 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "user", "chat", "currentUser", "createJob"], // Only persist these reducers
+  whitelist: [
+    "auth",
+    "user",
+    "chat",
+    "currentUser",
+    "createJob",
+    "createTender",
+  ], // Only persist these reducers
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

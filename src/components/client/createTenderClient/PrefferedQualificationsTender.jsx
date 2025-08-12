@@ -1,7 +1,17 @@
 import TipTapEditor from "@/utils/TipTapEditor/TipTapEditor";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setPreferredQualifications } from "@/redux/features/createTender/createtenderSlice";
 
 function PrefferedQualificationsTender() {
+  const dispatch = useDispatch();
+
+  const resetTrigger = useSelector((state) => state.createTender.resetTrigger);
+
+  const handlePreferredQualifications = (qualifications) => {
+    dispatch(setPreferredQualifications(qualifications));
+  };
+
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 md:px-6 2xl:px-0">
       <div className="space-y-6">
@@ -13,7 +23,10 @@ function PrefferedQualificationsTender() {
           </p>
         </div>
         <div>
-          <TipTapEditor />
+          <TipTapEditor
+            handlePreferredQualifications={handlePreferredQualifications}
+            resetTrigger={resetTrigger}
+          />
         </div>
       </div>
     </div>
