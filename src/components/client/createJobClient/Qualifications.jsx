@@ -1,10 +1,12 @@
 import TipTapEditor from "@/utils/TipTapEditor/TipTapEditor";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setMustHaveQualifications } from "@/redux/features/createJob/createjobSlice";
 import React from "react";
 
 function Qualifications() {
   const dispatch = useDispatch();
+  const resetTrigger = useSelector((state) => state.createJob.resetTrigger);
+
   const handleMustHaveQualifications = (qualifications) => {
     dispatch(setMustHaveQualifications(qualifications));
   };
@@ -22,6 +24,7 @@ function Qualifications() {
         <div>
           <TipTapEditor
             handleMustHaveQualifications={handleMustHaveQualifications}
+            resetTrigger={resetTrigger}
           />
         </div>
       </div>

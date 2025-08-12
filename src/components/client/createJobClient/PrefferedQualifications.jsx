@@ -1,10 +1,12 @@
 import TipTapEditor from "@/utils/TipTapEditor/TipTapEditor";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setPreferredQualifications } from "@/redux/features/createJob/createjobSlice";
 import React from "react";
 
 function PrefferedQualifications() {
   const dispatch = useDispatch();
+  const resetTrigger = useSelector((state) => state.createJob.resetTrigger);
+
   const handlePreferredQualifications = (qualifications) => {
     dispatch(setPreferredQualifications(qualifications));
   };
@@ -21,6 +23,7 @@ function PrefferedQualifications() {
         <div>
           <TipTapEditor
             handlePreferredQualifications={handlePreferredQualifications}
+            resetTrigger={resetTrigger}
           />
         </div>
       </div>

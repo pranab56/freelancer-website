@@ -10,6 +10,7 @@ const TipTapEditor = ({
   handleJobDescription,
   handleMustHaveQualifications,
   handlePreferredQualifications,
+  resetTrigger,
 }) => {
   const [description, setDescription] = useState("");
   const [wordCount, setWordCount] = useState(0);
@@ -293,6 +294,16 @@ const TipTapEditor = ({
     handleMustHaveQualifications,
     handlePreferredQualifications,
   ]);
+
+  // Handle reset trigger
+  useEffect(() => {
+    if (resetTrigger && editor) {
+      setDescription("");
+      setWordCount(0);
+      editor.commands.setContent("");
+      editorInitialized.current = false;
+    }
+  }, [resetTrigger, editor]);
 
   // Handle dark mode change
   useEffect(() => {

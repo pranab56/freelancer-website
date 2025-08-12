@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -19,24 +18,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setJobTitle,
+  setJobType,
+  setJobLink,
+  setStartDate,
+  setEndDate,
+} from "@/redux/features/createJob/createjobSlice";
 
 export default function CreateJobTopForm() {
-  const [jobTitle, setJobTitle] = useState("");
-  const [jobType, setJobType] = useState("");
-  const [jobLink, setJobLink] = useState("");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const dispatch = useDispatch();
+  const jobTitle = useSelector((state) => state.createJob.jobTitle) || "";
+  const jobType = useSelector((state) => state.createJob.jobType) || "";
+  const jobLink = useSelector((state) => state.createJob.jobLink) || "";
+  const startDateString = useSelector((state) => state.createJob.startDate);
+  const endDateString = useSelector((state) => state.createJob.endDate);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log({
-      jobTitle,
-      jobType,
-      jobLink,
-      startDate,
-      endDate,
-    });
-  };
+  // Convert ISO strings back to Date objects for the calendar component
+  const startDate = startDateString ? new Date(startDateString) : null;
+  const endDate = endDateString ? new Date(endDateString) : null;
+
+  console.log("Job Data:", {
+    jobTitle,
+    jobType,
+    jobLink,
+    startDate,
+    endDate,
+  });
 
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 md:px-6 2xl:px-0">
@@ -53,7 +62,10 @@ export default function CreateJobTopForm() {
         <div className="space-y-4">
           <div className="flex flex-col gap-2 ">
             <label className="font-medium">Job title*</label>
-            <Select value={jobTitle} onValueChange={setJobTitle}>
+            <Select
+              value={jobTitle}
+              onValueChange={(value) => dispatch(setJobTitle(value))}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select job title" />
               </SelectTrigger>
@@ -68,7 +80,10 @@ export default function CreateJobTopForm() {
           {/* Job Type */}
           <div className="flex flex-col gap-2">
             <label className="font-medium">Job Type</label>
-            <Select value={jobType} onValueChange={setJobType}>
+            <Select
+              value={jobType}
+              onValueChange={(value) => dispatch(setJobType(value))}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select job type" />
               </SelectTrigger>
@@ -85,7 +100,7 @@ export default function CreateJobTopForm() {
             <Input
               placeholder="http://yourcompany.com/job123"
               value={jobLink}
-              onChange={(e) => setJobLink(e.target.value)}
+              onChange={(e) => dispatch(setJobLink(e.target.value))}
             />
           </div>
         </div>
@@ -111,7 +126,9 @@ export default function CreateJobTopForm() {
               <Calendar
                 mode="single"
                 selected={startDate}
-                onSelect={setStartDate}
+                onSelect={(date) =>
+                  dispatch(setStartDate(date ? date.toISOString() : null))
+                }
                 initialFocus
               />
             </PopoverContent>
@@ -137,7 +154,9 @@ export default function CreateJobTopForm() {
               <Calendar
                 mode="single"
                 selected={endDate}
-                onSelect={setEndDate}
+                onSelect={(date) =>
+                  dispatch(setEndDate(date ? date.toISOString() : null))
+                }
                 initialFocus
               />
             </PopoverContent>
