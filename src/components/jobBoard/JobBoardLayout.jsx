@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Banner from "../common/banner/Banner";
 import SideBar from "../common/SideBar";
@@ -5,14 +6,14 @@ import MainContent from "../common/maincontent/MainContent";
 import { IoSearchOutline } from "react-icons/io5";
 import { Input } from "../ui/input";
 import Heading from "../common/heading/Heading";
-
+import { useSelector } from "react-redux";
 function JobBoardLayout() {
-  const isClient = true;
+  const userType = useSelector((state) => state.currentUser.currentUser.type);
   const setTopTalentBannerFreelancer = {
     src: "/jobtender/job_banner.png",
     header: "Explore Top Freelance Opportunities",
     text: "Browse through the latest freelance projects and find your next big opportunity. Whether you're looking to work remotely or collaborate on-site, discover jobs that match your skills and expertise.",
-    buttonName: "Post a Job",
+    buttonName: "",
   };
   const setTopTalentBannerClient = {
     src: "/jobtender/job_banner.png",
@@ -25,27 +26,27 @@ function JobBoardLayout() {
     <div className="max-w-7xl py-6 mx-auto">
       <Banner
         src={
-          isClient
+          userType === "client"
             ? setTopTalentBannerClient.src
             : setTopTalentBannerFreelancer.src
         }
         header={
-          isClient
+          userType === "client"
             ? setTopTalentBannerClient.header
             : setTopTalentBannerFreelancer.header
         }
         text={
-          isClient
+          userType === "client"
             ? setTopTalentBannerClient.text
             : setTopTalentBannerFreelancer.text
         }
         buttonName={
-          isClient
+          userType === "client"
             ? setTopTalentBannerClient.buttonName
             : setTopTalentBannerFreelancer.buttonName
         }
         buttonLink={
-          isClient
+          userType === "client"
             ? setTopTalentBannerClient.buttonLink
             : setTopTalentBannerFreelancer.buttonLink
         }

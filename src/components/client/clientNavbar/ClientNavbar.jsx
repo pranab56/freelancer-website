@@ -41,8 +41,8 @@ function ClientNavBar() {
 
   // Navigation items - only client specific pages
   const navItems = [
-    { label: "Create Job", href: "/create-job-client" },
-    { label: "Create Tender", href: "/create-tender-client" },
+    { label: "Job Board", href: "/job-board" },
+    { label: "Tenders", href: "/tenders" },
     { label: "My Projects", href: "/my-projects" },
     { label: "Invoices", href: "/invoices" },
     { label: "My Subscription", href: "/my-subscription" },

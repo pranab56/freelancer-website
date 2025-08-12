@@ -1,14 +1,14 @@
+"use client";
 import React from "react";
-import JobTenderSidebar from "../common/JobTenderSidebar";
-import JobTenderDetails from "../common/JobTenderDetails";
 import Heading from "../common/heading/Heading";
 import { IoSearchOutline } from "react-icons/io5";
 import { Input } from "../ui/input";
 import SideBar from "../common/SideBar";
 import MainContent from "../common/maincontent/MainContent";
 import Banner from "../common/banner/Banner";
+import { useSelector } from "react-redux";
 function TenderLayout() {
-  const isClient = true;
+  const userType = useSelector((state) => state.currentUser?.currentUser?.type);
   const setTenderBannerFreelancer = {
     src: "/jobtender/tnder_banner.png",
     header: "Start Exploring Tenders Today!",
@@ -27,23 +27,27 @@ function TenderLayout() {
     <div className="max-w-7xl py-6 mx-auto">
       <Banner
         src={
-          isClient ? setTenderBannerClient.src : setTenderBannerFreelancer.src
+          userType === "client"
+            ? setTenderBannerClient.src
+            : setTenderBannerFreelancer.src
         }
         header={
-          isClient
+          userType === "client"
             ? setTenderBannerClient.header
             : setTenderBannerFreelancer.header
         }
         text={
-          isClient ? setTenderBannerClient.text : setTenderBannerFreelancer.text
+          userType === "client"
+            ? setTenderBannerClient.text
+            : setTenderBannerFreelancer.text
         }
         buttonName={
-          isClient
+          userType === "client"
             ? setTenderBannerClient.buttonName
             : setTenderBannerFreelancer.buttonName
         }
         buttonLink={
-          isClient
+          userType === "client"
             ? setTenderBannerClient.buttonLink
             : setTenderBannerFreelancer.buttonLink
         }

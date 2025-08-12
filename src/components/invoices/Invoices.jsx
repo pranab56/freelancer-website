@@ -11,12 +11,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, FileText, Plus, Calendar, Truck } from "lucide-react";
+import {
+  Search,
+  FileText,
+  Plus,
+  Calendar,
+  Truck,
+  CreditCard,
+} from "lucide-react";
 import CreateInvoicesDialog from "./CreateInvoicesDialog";
 import ViewInvoiceDetailsDialog from "./ViewInvoiceDetailsDialog";
 import ProjectCompleteDialog from "./ProjectCompleteDialog";
-
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 function Invoices() {
+  const router = useRouter();
+  const userType = useSelector((state) => state.currentUser?.currentUser?.type);
   const [isCreateInvoicesDialogOpen, setIsCreateInvoicesDialogOpen] =
     useState(false);
   const [isViewInvoiceDetailsDialogOpen, setIsViewInvoiceDetailsDialogOpen] =
@@ -42,29 +52,45 @@ function Invoices() {
     <div className="w-full bg-white py-4 md:py-6 max-w-7xl mx-auto px-4 md:px-6 2xl:px-0">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4 md:mb-6 gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold h2-gradient-text mb-2">
+        <div
+          className={`w-full  ${
+            userType === "freelancer"
+              ? "flex flex-col items-start"
+              : "flex flex-col items-center"
+          }`}
+        >
+          <h1
+            className={`text-2xl md:text-3xl font-bold h2-gradient-text mb-2 ${
+              userType === "freelancer" ? "text-left" : "text-center"
+            }`}
+          >
             Invoices
           </h1>
-          <p className="text-gray-600 max-w-2xl text-sm md:text-base">
+          <p
+            className={`text-gray-600 max-w-2xl text-sm md:text-base ${
+              userType === "freelancer" ? "text-left" : "text-center"
+            }`}
+          >
             With our simple invoicing system, managing payments is quick and
             easy for both freelancers and clients. Never miss a payment or
             detail again!
           </p>
         </div>
 
-        <Button
-          className="button-gradient cursor-pointer w-full md:w-auto"
-          onClick={() => setIsCreateInvoicesDialogOpen(true)}
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Create New Invoice
-        </Button>
+        {userType === "freelancer" && (
+          <Button
+            className="button-gradient cursor-pointer w-full md:w-auto"
+            onClick={() => setIsCreateInvoicesDialogOpen(true)}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Create New Invoice
+          </Button>
+        )}
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-4 mb-6 md:mb-8">
-        <div className="relative flex-1">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 md:gap-4 mb-6 md:mb-8">
+        <div className="relative ">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input placeholder="Search" className="pl-10 border-gray-300" />
         </div>
@@ -169,6 +195,17 @@ function Invoices() {
                       <FileText className="w-4 h-4 mr-2" />
                       View Details
                     </Button>
+                    {userType === "client" && (
+                      <Button
+                        className="button-gradient"
+                        onClick={() => {
+                          router.push("/payment");
+                        }}
+                      >
+                        <CreditCard className="w-4 h-4 mr-2" />
+                        Pay Now
+                      </Button>
+                    )}
                   </div>
                 </div>
 
@@ -185,20 +222,22 @@ function Invoices() {
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <Button className="button-gradient">
-                      <Calendar className="w-4 h-4 mr-2" />
-                      Extend Delivery Date
-                    </Button>
+                  {userType === "freelancer" && (
+                    <div className="flex items-center gap-3">
+                      <Button className="button-gradient">
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Extend Delivery Date
+                      </Button>
 
-                    <Button
-                      className="button-gradient"
-                      onClick={() => setIsProjectCompleteDialogOpen(true)}
-                    >
-                      <Truck className="w-4 h-4 mr-2" />
-                      Delivery Now
-                    </Button>
-                  </div>
+                      <Button
+                        className="button-gradient"
+                        onClick={() => setIsProjectCompleteDialogOpen(true)}
+                      >
+                        <Truck className="w-4 h-4 mr-2" />
+                        Delivery Now
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </CardContent>
