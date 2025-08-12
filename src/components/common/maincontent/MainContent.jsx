@@ -4,29 +4,54 @@ import JobTenderCard from "../JobTenderCard";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 import FilterDrawer from "../FilterDrawer";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function MainContent({ type = "tender" }) {
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const [displayedItems, setDisplayedItems] = useState(6);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Mock data for demonstration - in real app this would come from props or API
-  const items = Array.from({ length: 6 }, (_, index) => ({
-    id: index + 1,
-    ...(type === "job"
-      ? {
-          jobImg: "/jobtender/job_tender.png",
-          name: `Company ${index + 1}`,
-          designation: `Senior Position ${index + 1}`,
-          location: ["Austin", "Remote", "New York"][index % 3],
-          jobType: ["Remote", "On-site", "Hybrid"][index % 3],
-        }
-      : {
-          jobImg: "/jobtender/job_tender.png",
-          projectName: `Project ${index + 1}`,
-          projectRole: `Role ${index + 1}`,
-          posted: "03/2023",
-          deadline: "05/2023",
-        }),
-  }));
+  const generateItems = (count) => {
+    return Array.from({ length: count }, (_, index) => ({
+      id: index + 1,
+      ...(type === "job"
+        ? {
+            jobImg: "/jobtender/job_tender.png",
+            name: `Company ${index + 1}`,
+            designation: `Senior Position ${index + 1}`,
+            location: ["Austin", "Remote", "New York"][index % 3],
+            jobType: ["Remote", "On-site", "Hybrid"][index % 3],
+          }
+        : {
+            jobImg: "/jobtender/job_tender.png",
+            projectName: `Project ${index + 1}`,
+            projectRole: `Role ${index + 1}`,
+            posted: "03/2023",
+            deadline: "05/2023",
+          }),
+    }));
+  };
+
+  // Generate more items than we initially display
+  const allItems = generateItems(30); // Generate 30 items total
+  const items = allItems.slice(0, displayedItems);
+
+  const handleLoadMore = async () => {
+    setIsLoading(true);
+
+    // Simulate API call delay
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    setDisplayedItems((prev) => prev + 6);
+    setIsLoading(false);
+  };
 
   return (
     <div className="flex-1">
@@ -59,12 +84,17 @@ function MainContent({ type = "tender" }) {
               Showing {items.length} results
             </span>
 
-            <select className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-              <option value="newest">Newest First</option>
-              <option value="oldest">Oldest First</option>
-              <option value="budget-high">Highest Budget</option>
-              <option value="budget-low">Lowest Budget</option>
-            </select>
+            <Select>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="newest">Newest First</SelectItem>
+                <SelectItem value="oldest">Oldest First</SelectItem>
+                <SelectItem value="budget-high">Highest Budget</SelectItem>
+                <SelectItem value="budget-low">Lowest Budget</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
@@ -115,11 +145,23 @@ function MainContent({ type = "tender" }) {
       )}
 
       {/* Load More Button - For pagination */}
-      {items.length > 0 && items.length >= 6 && (
+      {items.length > 0 && displayedItems < allItems.length && (
         <div className="flex justify-center mt-8">
-          <button className="px-6 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-colors font-medium">
-            Load More {type === "job" ? "Jobs" : "Tenders"}
-          </button>
+          <Button
+            onClick={handleLoadMore}
+            disabled={isLoading}
+            variant="outline"
+            className="px-6 py-3"
+          >
+            {isLoading ? (
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+                Loading...
+              </div>
+            ) : (
+              `Load More ${type === "job" ? "Jobs" : "Tenders"}`
+            )}
+          </Button>
         </div>
       )}
     </div>

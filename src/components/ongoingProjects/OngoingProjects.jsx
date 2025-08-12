@@ -35,7 +35,7 @@ function OngoingProjects() {
   ];
 
   return (
-    <div className="w-full bg-white py-6 max-w-7xl mx-auto px-4 lg:px-6">
+    <div className="w-full  bg-white py-6 max-w-7xl mx-auto px-4 md:px-6 lg:px-6 2xl:px-0">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-4xl font-bold h2-gradient-text mb-2 leading-relaxed">
