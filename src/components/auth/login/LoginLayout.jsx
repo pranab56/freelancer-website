@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Image from "next/image";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "@/redux/features/currentUser/currentuserSlice";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
@@ -19,6 +21,7 @@ const LoginPage = () => {
   });
   const [errors, setErrors] = useState({});
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -69,11 +72,36 @@ const LoginPage = () => {
     }
 
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Login submitted:", formData);
-      setLoading(false);
-    }, 1000);
+
+    // Test accounts logic
+    const testAccounts = {
+      "freelancer@gmail.com": {
+        password: "A123456",
+        type: "freelancer",
+      },
+      "client@gmail.com": {
+        password: "A123456",
+        type: "client",
+      },
+    };
+
+    const account = testAccounts[formData.email];
+
+    if (account && account.password === formData.password) {
+      // Set user type in Redux
+      dispatch(setCurrentUser({ type: account.type }));
+      // Store token (you can use any string for testing)
+      localStorage.setItem("token", "test-token");
+      // Redirect to home page
+      router.push("/");
+    } else {
+      setErrors({
+        email: "Invalid email or password",
+        password: "Invalid email or password",
+      });
+    }
+
+    setLoading(false);
   };
 
   const handleGoogleLogin = () => {

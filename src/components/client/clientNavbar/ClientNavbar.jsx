@@ -23,26 +23,28 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setCurrentUser,
   logout,
+  setCurrentUser,
 } from "@/redux/features/currentUser/currentuserSlice";
-function FreelancerNavBar() {
+
+function ClientNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
   const userType = useSelector((state) => state.currentUser.currentUser.type);
+
   useEffect(() => {
     setMounted(true);
   }, []);
-  // Navigation items - only freelancer specific pages
+
+  // Navigation items - only client specific pages
   const navItems = [
-    { label: "Job Board", href: "/job-board" },
-    { label: "Tenders", href: "/tenders" },
-    { label: "Inbox", href: "/inbox" },
-    { label: "Invoices", href: "/invoices" },
+    { label: "Create Job", href: "/create-job-client" },
+    { label: "Create Tender", href: "/create-tender-client" },
     { label: "My Projects", href: "/my-projects" },
+    { label: "Invoices", href: "/invoices" },
     { label: "My Subscription", href: "/my-subscription" },
   ];
 
@@ -53,8 +55,8 @@ function FreelancerNavBar() {
 
   // Mock user data (in real app, this would come from auth context)
   const user = {
-    name: "Sabbir Ahmed",
-    role: "UI/UX Designer",
+    name: "John Client",
+    role: "Client",
     avatar: "/client/profile/client.png",
   };
 
@@ -62,15 +64,16 @@ function FreelancerNavBar() {
     localStorage.removeItem("token");
     dispatch(logout());
     router.replace("/");
-    console.log("sign out");
   };
-  const showAsFreelancer = () => {
-    if (userType === "client") {
-      dispatch(setCurrentUser({ type: "client" }));
-    } else {
+
+  const showAsClient = () => {
+    if (userType === "freelancer") {
       dispatch(setCurrentUser({ type: "freelancer" }));
+    } else {
+      dispatch(setCurrentUser({ type: "client" }));
     }
   };
+
   if (!mounted) {
     return null;
   }
@@ -101,15 +104,15 @@ function FreelancerNavBar() {
             </Link>
           ))}
         </div>
-        <Button onClick={showAsFreelancer}>View As Freelancer</Button>
+        <Button onClick={showAsClient}>View As Client</Button>
 
         {/* User Profile Section */}
-        <div className="hidden lg:flex items-center  ">
+        <div className="hidden lg:flex items-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="flex items-center space-x-3 shadow-md border hover:bg-gray-50  h-12"
+                className="flex items-center space-x-3 shadow-md border hover:bg-gray-50 h-12"
               >
                 <Image
                   src={user.avatar}
@@ -128,7 +131,10 @@ function FreelancerNavBar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuItem asChild>
-                <Link href="/profile/1" className="w-full cursor-pointer">
+                <Link
+                  href="/client-profile-private/1"
+                  className="w-full cursor-pointer"
+                >
                   View Profile
                 </Link>
               </DropdownMenuItem>
@@ -209,10 +215,10 @@ function FreelancerNavBar() {
                 <div className="pt-4 border-t space-y-2">
                   <Button
                     variant="ghost"
-                    className="w-full justify-start text-red-600"
+                    className="w-full justify-start"
                     asChild
                   >
-                    <Link href="/profile/1">View Profile</Link>
+                    <Link href="/client-profile-private/1">View Profile</Link>
                   </Button>
                   <Button
                     variant="ghost"
@@ -238,6 +244,7 @@ function FreelancerNavBar() {
                   <Button
                     variant="ghost"
                     className="w-full justify-start text-red-600"
+                    onClick={handleSignOut}
                   >
                     Sign Out
                   </Button>
@@ -251,4 +258,4 @@ function FreelancerNavBar() {
   );
 }
 
-export default FreelancerNavBar;
+export default ClientNavBar;
