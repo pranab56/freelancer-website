@@ -1,7 +1,13 @@
 import TipTapEditor from "@/utils/TipTapEditor/TipTapEditor";
+import { useDispatch } from "react-redux";
+import { setPreferredQualifications } from "@/redux/features/createJob/createjobSlice";
 import React from "react";
 
 function PrefferedQualifications() {
+  const dispatch = useDispatch();
+  const handlePreferredQualifications = (qualifications) => {
+    dispatch(setPreferredQualifications(qualifications));
+  };
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 md:px-6 2xl:px-0">
       <div className="space-y-6">
@@ -13,7 +19,9 @@ function PrefferedQualifications() {
           </p>
         </div>
         <div>
-          <TipTapEditor />
+          <TipTapEditor
+            handlePreferredQualifications={handlePreferredQualifications}
+          />
         </div>
       </div>
     </div>

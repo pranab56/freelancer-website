@@ -7,11 +7,15 @@ import PrefferedQualifications from "./PrefferedQualifications";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
+import { useSelector } from "react-redux";
 
 function CreateJobClientLayout() {
   const router = useRouter();
   const { type } = useParams();
+  const createJobData = useSelector((state) => state.createJob);
+
   const handlePostJob = () => {
+    console.log("Job Data to be posted:", createJobData);
     router.push("/thank-you-page?type=job");
   };
   return (
