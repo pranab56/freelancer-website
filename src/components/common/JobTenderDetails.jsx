@@ -1,14 +1,22 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 import { Copy, Share2, CheckCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
-
+import { useSelector } from "react-redux";
+import ShowLoginDialog from "./showLoginDialog/ShowLoginDialog";
+import { DialogDescription, DialogTitle } from "../ui/dialog";
+import { useRouter } from "next/navigation";
 function JobDetailsPage({ jobData }) {
   const pathname = usePathname();
   const isTenderPage = pathname.includes("tenders-details");
+  const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
+  const currentUser = useSelector((state) => state.currentUser.currentUser);
+  const userType = currentUser?.type;
+  const router = useRouter();
   // Default/mock data
   const defaultJobData = {
     title: "Senior Graphic Designer",
@@ -92,8 +100,14 @@ function JobDetailsPage({ jobData }) {
     }
   };
 
+  const handleApplyForThisPosition = () => {
+    if (!isLoggedIn) {
+      setOpenLoginDialog(true);
+    }
+  };
+
   return (
-    <div className="max-w-5xl mx-auto  space-y-6">
+    <div className="max-w-5xl mx-auto  space-y-6 mb-6 2xl:mb-10">
       {/* Header Section */}
       <Card>
         <CardHeader>
@@ -254,14 +268,33 @@ function JobDetailsPage({ jobData }) {
       )}
 
       {/* Action Button */}
-      <div className="flex justify-center pt-6">
-        <Button
-          size="lg"
-          className="button-gradient text-white px-8 py-3 text-base font-medium"
-        >
-          {isTenderPage ? "Respond to Tender" : "Apply For This Position"}
-        </Button>
-      </div>
+      {/* <div className="flex justify-center pt-6 mb-6">
+        {userType !== "client" ? (
+          <Button
+            size="lg"
+            className="button-gradient text-white px-8 py-3 text-base font-medium"
+            onClick={handleApplyForThisPosition}
+          >
+            {isTenderPage ? "Respond to Tender" : "Apply For This Position"}
+          </Button>
+        ) : null}
+      </div> */}
+      <ShowLoginDialog open={openLoginDialog} onOpenChange={setOpenLoginDialog}>
+        <DialogTitle className="text-2xl font-bold">
+          Login to Apply for this Position
+        </DialogTitle>
+        <DialogDescription className="text-sm text-gray-600">
+          Please login to apply for this position
+        </DialogDescription>
+        <div className="flex justify-end">
+          <Button
+            className="button-gradient text-white font-medium w-fit "
+            onClick={() => router.push("/login")}
+          >
+            Login
+          </Button>
+        </div>
+      </ShowLoginDialog>
     </div>
   );
 }

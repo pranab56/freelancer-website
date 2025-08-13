@@ -8,7 +8,8 @@ import { Input } from "../ui/input";
 import Heading from "../common/heading/Heading";
 import { useSelector } from "react-redux";
 function JobBoardLayout() {
-  const userType = useSelector((state) => state.currentUser.currentUser.type);
+  const currentUser = useSelector((state) => state.currentUser.currentUser);
+  const userType = currentUser?.type || "client"; // Default to freelancer view if not logged in
   const setTopTalentBannerFreelancer = {
     src: "/jobtender/job_banner.png",
     header: "Explore Top Freelance Opportunities",

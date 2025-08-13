@@ -1,15 +1,28 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Calendar, Users, Briefcase } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useSelector } from "react-redux";
+import ShowLoginDialog from "./showLoginDialog/ShowLoginDialog";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import { DialogDescription } from "../ui/dialog";
+import { useRouter } from "next/navigation";
+import useToast from "@/utils/showToast/ShowToast";
 function JobTenderSidebar({ jobData }) {
   const pathname = usePathname();
   const isTenderPage = pathname.includes("tenders-details");
-
+  const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
+  const currentUser = useSelector((state) => state.currentUser.currentUser);
+  const userType = currentUser?.type;
+  const router = useRouter();
+  const [respondedToTender, setRespondedToTender] = useState(false);
+  const [respondedToJob, setRespondedToJob] = useState(false);
+  const showToast = useToast();
   // Default/mock data if no jobData is provided
   const defaultData = {
     id: 1,
@@ -26,7 +39,25 @@ function JobTenderSidebar({ jobData }) {
   };
 
   const job = jobData || defaultData;
+  const handleApplyForThisPosition = () => {
+    if (!isLoggedIn) {
+      setOpenLoginDialog(true);
+    }
+  };
 
+  const handleRespondToTender = () => {
+    setRespondedToTender(true);
+    showToast.success("Tender responded successfully", {
+      description: "You can now view your response in the tender page",
+    });
+  };
+
+  const handleRespondToJob = () => {
+    setRespondedToJob(true);
+    showToast.success("Job applied successfully", {
+      description: "You can now view your response in the job page",
+    });
+  };
   return (
     <Card className="w-full max-w-[17rem] mx-auto bg-white shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200">
       <CardHeader className="text-center p-6 pb-4">
@@ -49,14 +80,30 @@ function JobTenderSidebar({ jobData }) {
         {/* Apply Button */}
 
         {isTenderPage ? (
-          <Button className="max-w-60 mx-auto button-gradient text-white font-medium">
-            Respond to Tender
+          userType !== "client" ? (
+            <Button
+              className={`max-w-60 mx-auto hover:bg-gray-400 text-white font-medium ${
+                respondedToTender
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "button-gradient"
+              }`}
+              onClick={handleRespondToTender}
+            >
+              {respondedToTender ? "Responded" : "Respond to Tender"}
+            </Button>
+          ) : null
+        ) : userType !== "client" ? (
+          <Button
+            className={`max-w-60 mx-auto hover:bg-gray-400 text-white font-medium ${
+              respondedToJob
+                ? "bg-gray-500 cursor-not-allowed"
+                : "button-gradient"
+            }`}
+            onClick={handleRespondToJob}
+          >
+            {respondedToJob ? "Applied" : "Apply for this Position"}
           </Button>
-        ) : (
-          <Button className="max-w-60 mx-auto button-gradient text-white font-medium">
-            Apply For This Position
-          </Button>
-        )}
+        ) : null}
         <Separator className="mt-4" />
       </CardHeader>
 
@@ -101,6 +148,22 @@ function JobTenderSidebar({ jobData }) {
           <span className="text-sm text-gray-600">{job.datePosted}</span>
         </div>
       </CardContent>
+      <ShowLoginDialog open={openLoginDialog} onOpenChange={setOpenLoginDialog}>
+        <DialogTitle className="text-2xl font-bold">
+          Login to Apply for this Position
+        </DialogTitle>
+        <DialogDescription className="text-sm text-gray-600">
+          Please login to apply for this position
+        </DialogDescription>
+        <div className="flex justify-end">
+          <Button
+            className="button-gradient text-white font-medium w-fit"
+            onClick={() => router.push("/login")}
+          >
+            Login
+          </Button>
+        </div>
+      </ShowLoginDialog>
     </Card>
   );
 }
