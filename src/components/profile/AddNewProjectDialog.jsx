@@ -23,12 +23,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import useToast from "@/hooks/showToast/ShowToast";
+import Image from "next/image";
 
 export default function AddNewProjectDialog({ isOpen, onClose }) {
   const [thumbnailImage, setThumbnailImage] = useState(null);
   const [showUploadDialog, setShowUploadDialog] = useState(false);
   const fileInputRef = useRef(null);
-
+  const showToast = useToast();
   const {
     register,
     handleSubmit,
@@ -46,7 +48,7 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
   const onSubmit = (data) => {
     console.log("Project data:", data);
     console.log("Thumbnail image:", thumbnailImage);
-    alert("Project saved successfully!");
+    showToast.success("Project saved successfully!");
     onClose?.();
   };
 
@@ -103,12 +105,12 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
                 <div className="relative  rounded-lg px-6 py-4 text-white min-h-42 border-2 border-gray-300 flex flex-col justify-between items-center overflow-hidden">
                   {thumbnailImage ? (
                     <div className="absolute inset-0">
-                      <img
+                      <Image
                         src={thumbnailImage}
                         alt="Project thumbnail"
                         width={250}
                         height={150}
-                        className="w-80 h-42 object-cover rounded-lg"
+                        className="w-full h-42 object-cover rounded-lg"
                       />
                     </div>
                   ) : (

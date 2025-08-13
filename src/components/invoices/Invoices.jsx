@@ -24,6 +24,7 @@ import ViewInvoiceDetailsDialog from "./ViewInvoiceDetailsDialog";
 import ProjectCompleteDialog from "./ProjectCompleteDialog";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+import ExtendDeliveryDialog from "./EntendDeliveryDialog";
 function Invoices() {
   const router = useRouter();
   const userType = useSelector((state) => state.currentUser?.currentUser?.type);
@@ -32,6 +33,8 @@ function Invoices() {
   const [isViewInvoiceDetailsDialogOpen, setIsViewInvoiceDetailsDialogOpen] =
     useState(false);
   const [isProjectCompleteDialogOpen, setIsProjectCompleteDialogOpen] =
+    useState(false);
+  const [isExtendDeliveryDialogOpen, setIsExtendDeliveryDialogOpen] =
     useState(false);
   const invoices = [
     {
@@ -153,7 +156,10 @@ function Invoices() {
                     View Details
                   </Button>
 
-                  <Button className="button-gradient w-full">
+                  <Button
+                    className="button-gradient w-full"
+                    onClick={() => setIsExtendDeliveryDialogOpen(true)}
+                  >
                     <Calendar className="w-4 h-4 mr-2" />
                     Extend Delivery Date
                   </Button>
@@ -224,7 +230,10 @@ function Invoices() {
 
                   {userType === "freelancer" && (
                     <div className="flex items-center gap-3">
-                      <Button className="button-gradient">
+                      <Button
+                        className="button-gradient"
+                        onClick={() => setIsExtendDeliveryDialogOpen(true)}
+                      >
                         <Calendar className="w-4 h-4 mr-2" />
                         Extend Delivery Date
                       </Button>
@@ -266,6 +275,14 @@ function Invoices() {
         <ProjectCompleteDialog
           isOpen={isProjectCompleteDialogOpen}
           onClose={() => setIsProjectCompleteDialogOpen(false)}
+        />
+      )}
+
+      {/* Extend Delivery Dialog */}
+      {isExtendDeliveryDialogOpen && (
+        <ExtendDeliveryDialog
+          isOpen={isExtendDeliveryDialogOpen}
+          onClose={() => setIsExtendDeliveryDialogOpen(false)}
         />
       )}
     </div>

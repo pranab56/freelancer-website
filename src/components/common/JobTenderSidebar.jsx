@@ -11,7 +11,7 @@ import ShowLoginDialog from "./showLoginDialog/ShowLoginDialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { DialogDescription } from "../ui/dialog";
 import { useRouter } from "next/navigation";
-import useToast from "@/utils/showToast/ShowToast";
+import useToast from "@/hooks/showToast/ShowToast";
 function JobTenderSidebar({ jobData }) {
   const pathname = usePathname();
   const isTenderPage = pathname.includes("tenders-details");
@@ -48,17 +48,25 @@ function JobTenderSidebar({ jobData }) {
   };
 
   const handleRespondToTender = () => {
-    setRespondedToTender(true);
-    showToast.success("Tender responded successfully", {
-      description: "You can now view your response in the tender page",
-    });
+    if (respondedToTender) {
+      showToast.error("You have already responded to this tender");
+    } else {
+      setRespondedToTender(true);
+      showToast.success("Tender responded successfully", {
+        description: "You can now view your response in the tender page",
+      });
+    }
   };
 
   const handleRespondToJob = () => {
-    setRespondedToJob(true);
-    showToast.success("Job applied successfully", {
-      description: "You can now view your response in the job page",
-    });
+    if (respondedToJob) {
+      showToast.error("You have already applied for this job");
+    } else {
+      setRespondedToJob(true);
+      showToast.success("Job applied successfully", {
+        description: "You can now view your response in the job page",
+      });
+    }
   };
   return (
     <Card className="w-full max-w-[17rem] mx-auto bg-white shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200">

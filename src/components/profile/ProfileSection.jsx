@@ -23,10 +23,10 @@ import AddNewProjectDialog from "./AddNewProjectDialog";
 import EducationDialogAddEdit from "./EducationDialogAddEdit";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import useCheckUserAndLoggedIn from "@/hooks/checkUserTypeAndLoggedIn/CheckUserAndLoggedIn";
 function ProfileSections() {
-  const currentUser = useSelector((state) => state.currentUser.currentUser);
-  const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
-  const type = currentUser?.type;
+  const { isFreelancerAndLoggedIn, isLoggedIn, userType } =
+    useCheckUserAndLoggedIn();
   const [isAddProjectDialogOpen, setIsAddProjectDialogOpen] = useState(false);
   const [isAddEducationDialogOpen, setIsAddEducationDialogOpen] =
     useState(false);
@@ -49,7 +49,7 @@ function ProfileSections() {
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2 text-lg font-semibold text-blue-600 h2-gradient-text">
               Education & Certifications
-              {isLoggedIn && type && type !== "client" && (
+              {isFreelancerAndLoggedIn && (
                 <>
                   <Plus
                     className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
@@ -97,7 +97,7 @@ function ProfileSections() {
               </Button>
             </Link>
 
-            {isLoggedIn && type && type !== "client" && (
+            {isFreelancerAndLoggedIn && (
               <Button
                 className="button-gradient w-full md:w-auto"
                 onClick={() => setIsAddProjectDialogOpen(true)}

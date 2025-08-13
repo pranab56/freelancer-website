@@ -5,12 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Edit3, Info } from "lucide-react";
 import { GoPlusCircle } from "react-icons/go";
 import SkillsDialogAddEdit from "./SkillsDialogAddEdit";
-import { useSelector } from "react-redux";
+import useCheckUserAndLoggedIn from "@/hooks/checkUserTypeAndLoggedIn/CheckUserAndLoggedIn";
 
 function SkillsSection() {
-  const currentUser = useSelector((state) => state.currentUser.currentUser);
-  const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
-  const type = currentUser?.type;
+  const { isFreelancerAndLoggedIn } = useCheckUserAndLoggedIn();
   const [isAddSkillDialogOpen, setIsAddSkillDialogOpen] = useState(false);
   const [isEditSkillDialogOpen, setIsEditSkillDialogOpen] = useState(false);
 
@@ -43,7 +41,7 @@ function SkillsSection() {
                 Skills
               </CardTitle>
               <div className="flex items-center gap-2">
-                {isLoggedIn && type && type !== "client" && (
+                {isFreelancerAndLoggedIn && (
                   <>
                     <GoPlusCircle
                       className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"

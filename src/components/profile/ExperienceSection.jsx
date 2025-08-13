@@ -3,14 +3,10 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Edit3, Plus } from "lucide-react";
 import ExperienceDialogAddEdit from "./ExperienceDialogAddEdit";
-import { useSelector } from "react-redux";
+import useCheckUserAndLoggedIn from "@/hooks/checkUserTypeAndLoggedIn/CheckUserAndLoggedIn";
 
 function ExperienceSection() {
-  const { type } = useSelector((state) => state.currentUser.currentUser || {});
-  const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
-
-  console.log("isLoggedIn", isLoggedIn);
-  console.log("type", type);
+  const { isFreelancerAndLoggedIn } = useCheckUserAndLoggedIn();
 
   const [isAddExperienceDialogOpen, setIsAddExperienceDialogOpen] =
     useState(false);
@@ -46,11 +42,7 @@ function ExperienceSection() {
               Experience
             </CardTitle>
             <div className="flex items-center gap-4">
-              {/* <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium">
-                <Plus className="w-4 h-4" />
-                Add Functional Skills
-              </button> */}
-              {type !== "client" && isLoggedIn && (
+              {isFreelancerAndLoggedIn && (
                 <button
                   className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium"
                   onClick={() => setIsAddExperienceDialogOpen(true)}
@@ -59,7 +51,7 @@ function ExperienceSection() {
                   Add Experience
                 </button>
               )}
-              {type !== "client" && isLoggedIn && (
+              {isFreelancerAndLoggedIn && (
                 <button
                   className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium"
                   onClick={() => setIsEditExperienceDialogOpen(true)}
@@ -122,7 +114,7 @@ function ExperienceSection() {
         <ExperienceDialogAddEdit
           isOpen={isEditExperienceDialogOpen}
           mode="edit"
-          initialData={experiences[0]} // You can modify this to pass the specific experience to edit
+          initialData={experiences[0]}
           onClose={() => setIsEditExperienceDialogOpen(false)}
         />
       )}
