@@ -3,8 +3,15 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Edit3, Plus } from "lucide-react";
 import ExperienceDialogAddEdit from "./ExperienceDialogAddEdit";
+import { useSelector } from "react-redux";
 
 function ExperienceSection() {
+  const { type } = useSelector((state) => state.currentUser.currentUser || {});
+  const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
+
+  console.log("isLoggedIn", isLoggedIn);
+  console.log("type", type);
+
   const [isAddExperienceDialogOpen, setIsAddExperienceDialogOpen] =
     useState(false);
   const [isEditExperienceDialogOpen, setIsEditExperienceDialogOpen] =
@@ -43,20 +50,24 @@ function ExperienceSection() {
                 <Plus className="w-4 h-4" />
                 Add Functional Skills
               </button> */}
-              <button
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium"
-                onClick={() => setIsAddExperienceDialogOpen(true)}
-              >
-                <Plus className="w-4 h-4" />
-                Add Experience
-              </button>
-              <button
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium"
-                onClick={() => setIsEditExperienceDialogOpen(true)}
-              >
-                <Edit3 className="w-4 h-4" />
-                Edit
-              </button>
+              {type !== "client" && isLoggedIn && (
+                <button
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium"
+                  onClick={() => setIsAddExperienceDialogOpen(true)}
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Experience
+                </button>
+              )}
+              {type !== "client" && isLoggedIn && (
+                <button
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium"
+                  onClick={() => setIsEditExperienceDialogOpen(true)}
+                >
+                  <Edit3 className="w-4 h-4" />
+                  Edit
+                </button>
+              )}
             </div>
           </div>
         </CardHeader>

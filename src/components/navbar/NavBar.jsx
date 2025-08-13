@@ -31,10 +31,7 @@ function NavBar() {
   const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
 
   const toggleUserType = () => {
-    const newType = userType === "freelancer" ? "client" : "freelancer";
-    setUserType(newType);
-    localStorage.setItem("accountType", newType);
-    dispatch(setCurrentUser({ type: newType }));
+    setUserType(userType === "freelancer" ? "client" : "freelancer");
   };
   // Services dropdown items
   const serviceItems = [
@@ -150,7 +147,7 @@ function NavBar() {
               {/* User Type Toggle */}
               <Button
                 variant="outline"
-                className="flex items-center"
+                className="flex items-center h-10"
                 onClick={toggleUserType}
               >
                 {userType === "freelancer" ? (

@@ -5,8 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Edit3, Info } from "lucide-react";
 import { GoPlusCircle } from "react-icons/go";
 import SkillsDialogAddEdit from "./SkillsDialogAddEdit";
+import { useSelector } from "react-redux";
 
 function SkillsSection() {
+  const currentUser = useSelector((state) => state.currentUser.currentUser);
+  const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
+  const type = currentUser?.type;
   const [isAddSkillDialogOpen, setIsAddSkillDialogOpen] = useState(false);
   const [isEditSkillDialogOpen, setIsEditSkillDialogOpen] = useState(false);
 
@@ -39,14 +43,18 @@ function SkillsSection() {
                 Skills
               </CardTitle>
               <div className="flex items-center gap-2">
-                <GoPlusCircle
-                  className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
-                  onClick={() => setIsAddSkillDialogOpen(true)}
-                />
-                <Edit3
-                  className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
-                  onClick={() => setIsEditSkillDialogOpen(true)}
-                />
+                {isLoggedIn && type && type !== "client" && (
+                  <>
+                    <GoPlusCircle
+                      className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
+                      onClick={() => setIsAddSkillDialogOpen(true)}
+                    />
+                    <Edit3
+                      className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
+                      onClick={() => setIsEditSkillDialogOpen(true)}
+                    />
+                  </>
+                )}
               </div>
             </div>
           </CardHeader>

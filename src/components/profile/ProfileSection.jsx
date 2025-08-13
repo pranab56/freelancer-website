@@ -22,7 +22,11 @@ import {
 import AddNewProjectDialog from "./AddNewProjectDialog";
 import EducationDialogAddEdit from "./EducationDialogAddEdit";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 function ProfileSections() {
+  const currentUser = useSelector((state) => state.currentUser.currentUser);
+  const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
+  const type = currentUser?.type;
   const [isAddProjectDialogOpen, setIsAddProjectDialogOpen] = useState(false);
   const [isAddEducationDialogOpen, setIsAddEducationDialogOpen] =
     useState(false);
@@ -45,14 +49,18 @@ function ProfileSections() {
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2 text-lg font-semibold text-blue-600 h2-gradient-text">
               Education & Certifications
-              <Plus
-                className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
-                onClick={() => setIsAddEducationDialogOpen(true)}
-              />
-              <Edit3
-                className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
-                onClick={() => setIsAddEducationDialogOpen(true)}
-              />
+              {isLoggedIn && type && type !== "client" && (
+                <>
+                  <Plus
+                    className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
+                    onClick={() => setIsAddEducationDialogOpen(true)}
+                  />
+                  <Edit3
+                    className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
+                    onClick={() => setIsAddEducationDialogOpen(true)}
+                  />
+                </>
+              )}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -89,13 +97,15 @@ function ProfileSections() {
               </Button>
             </Link>
 
-            <Button
-              className="button-gradient w-full md:w-auto"
-              onClick={() => setIsAddProjectDialogOpen(true)}
-            >
-              <FaPlus className="w-4 h-4 mr-2" />
-              Add new project
-            </Button>
+            {isLoggedIn && type && type !== "client" && (
+              <Button
+                className="button-gradient w-full md:w-auto"
+                onClick={() => setIsAddProjectDialogOpen(true)}
+              >
+                <FaPlus className="w-4 h-4 mr-2" />
+                Add new project
+              </Button>
+            )}
           </CardContent>
         </Card>
 

@@ -21,8 +21,13 @@ import {
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
 import Image from "next/image";
+import { useSelector } from "react-redux";
 
 function ProfileHeader() {
+  const currentUser = useSelector((state) => state.currentUser.currentUser);
+  const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
+  const type = currentUser?.type;
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [profileImage, setProfileImage] = useState(
     "/client/profile/client.png"
@@ -108,10 +113,12 @@ function ProfileHeader() {
       <div className="flex items-center justify-end">
         <Dialog open={isDialogOpen} onOpenChange={handleDialogOpen}>
           <DialogTrigger asChild>
-            <Button size="sm" className="button-gradient">
-              Edit
-              <Edit className="w-4 h-4 ml-2" />
-            </Button>
+            {isLoggedIn && type && type !== "client" && (
+              <Button size="sm" className="button-gradient">
+                Edit
+                <Edit className="w-4 h-4 ml-2" />
+              </Button>
+            )}
           </DialogTrigger>
           <DialogContent className="md:min-w-3xl lg:min-w-5xl max-h-[90vh] overflow-y-auto">
             <DialogHeader className="flex flex-row items-center justify-between pb-4">
