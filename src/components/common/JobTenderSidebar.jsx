@@ -24,6 +24,8 @@ function JobTenderSidebar({ jobData }) {
   const [respondedToJob, setRespondedToJob] = useState(false);
   const showToast = useToast();
   // Default/mock data if no jobData is provided
+
+  console.log("isLoggedIn", isLoggedIn);
   const defaultData = {
     id: 1,
     company: {
@@ -87,7 +89,9 @@ function JobTenderSidebar({ jobData }) {
                   ? "bg-gray-500 cursor-not-allowed"
                   : "button-gradient"
               }`}
-              onClick={handleRespondToTender}
+              onClick={
+                isLoggedIn ? handleRespondToTender : handleApplyForThisPosition
+              }
             >
               {respondedToTender ? "Responded" : "Respond to Tender"}
             </Button>
@@ -99,7 +103,9 @@ function JobTenderSidebar({ jobData }) {
                 ? "bg-gray-500 cursor-not-allowed"
                 : "button-gradient"
             }`}
-            onClick={handleRespondToJob}
+            onClick={
+              isLoggedIn ? handleRespondToJob : handleApplyForThisPosition
+            }
           >
             {respondedToJob ? "Applied" : "Apply for this Position"}
           </Button>
