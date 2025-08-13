@@ -33,7 +33,7 @@ function ChatListSidebar() {
   const displayChatList = searchQuery.trim() ? filteredChatList : chatList;
 
   return (
-    <div className="w-[30rem] bg-white flex flex-col md:h-screen">
+    <div className="lg:w-[30rem] bg-white flex flex-col ">
       {/* Mobile Header with Search */}
       <div className="p-4 border-b border-gray-200">
         <SearchBar
@@ -43,7 +43,7 @@ function ChatListSidebar() {
       </div>
 
       {/* Mobile: Horizontal Scrollable Chat List */}
-      <div className="flex-1 md:hidden">
+      <div className="flex-1 lg:hidden">
         <ScrollArea className="w-full h-full">
           <HorizontalChatList
             chats={displayChatList}
@@ -56,13 +56,15 @@ function ChatListSidebar() {
       </div>
 
       {/* Desktop: Vertical Chat List */}
-      <div className="flex-1 overflow-y-auto hidden md:block">
-        <ChatList
-          chats={displayChatList}
-          selectedChat={selectedChat}
-          onChatSelect={handleChatSelect}
-          isLoading={isLoading}
-        />
+      <div className="flex-1 overflow-y-auto hidden lg:block">
+        <ScrollArea className="h-full">
+          <ChatList
+            chats={displayChatList}
+            selectedChat={selectedChat}
+            onChatSelect={handleChatSelect}
+            isLoading={isLoading}
+          />
+        </ScrollArea>
       </div>
     </div>
   );
@@ -124,7 +126,10 @@ function HorizontalChatList({ chats, selectedChat, onChatSelect, isLoading }) {
 
   return (
     <div className="p-4">
-      <div className="flex space-x-4 pb-2" style={{ minWidth: "max-content" }}>
+      <div
+        className="flex space-x-4 sm:pb-2"
+        style={{ minWidth: "max-content" }}
+      >
         {chats.map((chat) => (
           <div
             key={chat.id}
@@ -138,7 +143,7 @@ function HorizontalChatList({ chats, selectedChat, onChatSelect, isLoading }) {
                 alt={chat.name}
                 width={64}
                 height={64}
-                className={`w-16 h-16 rounded-full object-cover ${
+                className={`w-12 h-12 md:w-16 md:h-16 rounded-full object-cover ${
                   selectedChat?.id === chat.id
                     ? "ring-3 ring-offset-2 ring-blue-500"
                     : ""
