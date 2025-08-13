@@ -81,7 +81,12 @@ const ChatInterface = () => {
   const currentUser = "user2"; // Current user identifier
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
   };
 
   // Fetch messages when chat is selected
@@ -92,7 +97,9 @@ const ChatInterface = () => {
   }, [selectedChat, dispatch]);
 
   useEffect(() => {
-    scrollToBottom();
+    // Add a small delay to ensure DOM is updated
+    const timeoutId = setTimeout(scrollToBottom, 100);
+    return () => clearTimeout(timeoutId);
   }, [currentMessages]);
 
   const handleSendMessage = async () => {
@@ -185,7 +192,7 @@ const ChatInterface = () => {
   return (
     <div className="flex flex-col w-full  bg-gray-50">
       {/* Chat Header */}
-      <div className="bg-white border-b border-gray-200 px-2 md:px-6 shadow-sm flex justify-between">
+      <div className="bg-white border-b border-gray-200 px-2 md:px-6 shadow-sm flex justify-between ">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-content-center text-white font-semibold">
             <Image
@@ -277,7 +284,7 @@ const ChatInterface = () => {
       {/* </div> */}
 
       {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4  max-h-[90vh] md:max-h-[calc(100vh-17rem)]">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[calc(100vh-17rem)] bg-gray-50 ">
         {!selectedChat ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
@@ -359,7 +366,7 @@ const ChatInterface = () => {
         )}
 
         {selectedChat && typingUsers[selectedChat.id] && (
-          <div className="flex justify-start">
+          <div className="flex justify-start  -mt-10">
             <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm mr-3">
               👨‍💼
             </div>
@@ -378,7 +385,6 @@ const ChatInterface = () => {
             </div>
           </div>
         )}
-
         <div ref={messagesEndRef} />
       </div>
 
