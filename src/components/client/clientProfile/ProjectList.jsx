@@ -1,3 +1,4 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,6 +8,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 function ProjectList() {
@@ -63,6 +65,10 @@ function ProjectList() {
 export default ProjectList;
 
 function ServiceCard() {
+  const router = useRouter();
+  const handleViewPost = () => {
+    router.push("/job-details/1");
+  };
   return (
     <Card className="max-w-sm border-none">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -87,7 +93,9 @@ function ServiceCard() {
       </CardContent>
 
       <CardFooter className="flex justify-end">
-        <Button className="button-gradient">View Post →</Button>
+        <Button className="button-gradient" onClick={handleViewPost}>
+          View Post →
+        </Button>
       </CardFooter>
     </Card>
   );

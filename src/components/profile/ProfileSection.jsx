@@ -90,7 +90,7 @@ function ProfileSections() {
               Discover my achievements and detailed case studies.
             </p>
 
-            <Link href="/my-projects" className="w-full md:w-auto">
+            <Link href="/showcase-projects" className="w-full md:w-auto">
               <Button className="button-gradient w-full md:w-auto">
                 <Eye className="w-4 h-4 mr-2" />
                 View All Project

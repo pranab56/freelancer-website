@@ -130,7 +130,7 @@ function ServiceCard() {
       </CardContent>
 
       <CardFooter className="flex justify-end">
-        <Button className="button-gradient">View Post →</Button>
+        <Button className="button-gradient">View Posts →</Button>
       </CardFooter>
     </Card>
   );
