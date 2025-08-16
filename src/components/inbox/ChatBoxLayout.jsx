@@ -192,7 +192,7 @@ const ChatInterface = () => {
   return (
     <div className="flex flex-col w-full  bg-gray-50">
       {/* Chat Header */}
-      <div className="bg-white border-b border-gray-200 px-2 md:px-6 shadow-sm flex justify-between hidden">
+      <div className="bg-white border-b border-gray-200 px-2 md:px-6 shadow-sm flex justify-between ">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-content-center text-white font-semibold">
             <Image
