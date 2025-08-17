@@ -18,26 +18,30 @@ src/redux/
 └── README.md             # This documentation
 ```
 
-## Features
+## Featuresd
 
 ### 1. Store Configuration (`store.js`)
+
 - Configured with Redux Toolkit
 - Includes Redux Persist for state persistence
 - Development tools enabled in non-production
 - Proper middleware configuration
 
 ### 2. Authentication Slice (`authSlice.js`)
+
 - User login/logout functionality
 - Async thunks for API calls
 - Loading states and error handling
 - Token management
 
 ### 3. User Slice (`userSlice.js`)
+
 - User profile management
 - Fetch and update user data
 - Profile update tracking
 
 ### 4. Custom Hooks (`hooks.js`)
+
 - `useAuth()` - Access authentication state
 - `useUser()` - Access user state
 - `useAppDispatch()` - Typed dispatch
@@ -48,10 +52,10 @@ src/redux/
 ### Basic Usage in Components
 
 ```jsx
-'use client';
+"use client";
 
-import { useAuth, useAppDispatch } from '../redux/hooks';
-import { loginUser } from '../redux/features/auth/authSlice';
+import { useAuth, useAppDispatch } from "../redux/hooks";
+import { loginUser } from "../redux/features/auth/authSlice";
 
 function MyComponent() {
   const dispatch = useAppDispatch();
@@ -66,7 +70,11 @@ function MyComponent() {
       {isAuthenticated ? (
         <p>Welcome, {user.email}!</p>
       ) : (
-        <button onClick={() => handleLogin({ email: 'test@example.com', password: 'password' })}>
+        <button
+          onClick={() =>
+            handleLogin({ email: "test@example.com", password: "password" })
+          }
+        >
           Login
         </button>
       )}
@@ -81,13 +89,13 @@ function MyComponent() {
 
 ```jsx
 // src/redux/features/project/projectSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchProjects = createAsyncThunk(
-  'project/fetchProjects',
+  "project/fetchProjects",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/projects');
+      const response = await fetch("/api/projects");
       const data = await response.json();
       return data;
     } catch (error) {
@@ -97,7 +105,7 @@ export const fetchProjects = createAsyncThunk(
 );
 
 const projectSlice = createSlice({
-  name: 'project',
+  name: "project",
   initialState: {
     projects: [],
     isLoading: false,
@@ -132,7 +140,7 @@ export default projectSlice.reducer;
 
 ```jsx
 // In store.js
-import projectSlice from '../features/project/projectSlice';
+import projectSlice from "../features/project/projectSlice";
 
 const rootReducer = combineReducers({
   auth: authSlice,
@@ -157,9 +165,9 @@ The store is configured with Redux Persist to automatically save and restore sta
 ```jsx
 // In store.js
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-  whitelist: ['auth', 'user', 'project'], // Add new slices here
+  whitelist: ["auth", "user", "project"], // Add new slices here
 };
 ```
 
@@ -194,14 +202,10 @@ The slices are set up to work with REST APIs. Update the fetch URLs in the async
 When testing components that use Redux, wrap them in the Provider:
 
 ```jsx
-import { Provider } from 'react-redux';
-import { store } from '../redux/store/store';
+import { Provider } from "react-redux";
+import { store } from "../redux/store/store";
 
 function TestWrapper({ children }) {
-  return (
-    <Provider store={store}>
-      {children}
-    </Provider>
-  );
+  return <Provider store={store}>{children}</Provider>;
 }
 ```
