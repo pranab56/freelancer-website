@@ -190,9 +190,9 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="flex flex-col w-full  bg-gray-50">
+    <div className="flex flex-col w-full h-full bg-gray-50 pb-safe">
       {/* Chat Header */}
-      <div className="bg-white border-b border-gray-200 px-2 md:px-6 shadow-sm flex justify-between ">
+      <div className="bg-white border-b border-gray-200 px-2 md:px-6 shadow-sm flex flex-wrap md:flex-nowrap justify-between flex-shrink-0 py-2">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-content-center text-white font-semibold">
             <Image
@@ -214,10 +214,10 @@ const ChatInterface = () => {
             </p>
           </div>
         </div>
-        {/* <div className="flex justify-between items-center "> */}
+
         {/* Left Side - Countdown Timer */}
         <div className="flex flex-col items-center py-2">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 mb-1">
             Delivery Date
           </h3>
           <div className="flex items-center space-x-2 md:space-x-4">
@@ -252,9 +252,9 @@ const ChatInterface = () => {
         </div>
 
         {/* Right Side - Action Buttons */}
-        <div className="flex flex-col md:flex-row justify-center gap-2 items-center space-x-0 md:space-x-4 ">
+        <div className="flex flex-col md:flex-row justify-center gap-2 items-center space-x-0 md:space-x-4">
           <Link href={type === "client" ? `/profile/1` : `/client-profile/1`}>
-            <Button className="px-4 py-2  bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 font-medium transition-colors">
+            <Button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 font-medium transition-colors">
               <span className="hidden md:block">
                 {type === "client" ? "View Profile" : "View Client Profile"}
               </span>
@@ -281,10 +281,12 @@ const ChatInterface = () => {
           </Dialog>
         </div>
       </div>
-      {/* </div> */}
 
       {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4  max-h-[420px] md:min-h-[740px]    lg:max-h-[calc(100vh-10.2rem)] 2xl:max-h-[calc(100vh-10.2rem)] bg-gray-50 border-2 border-red-500">
+      <div
+        className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 min-h-0 
+        max-h-[350px] sm:max-h-[400px] md:max-h-[500px] lg:max-h-[calc(100vh-230px)]"
+      >
         {!selectedChat ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
@@ -389,7 +391,7 @@ const ChatInterface = () => {
       </div>
 
       {/* Input Area */}
-      <div className="bg-white border-t border-gray-200 p-4">
+      <div className="bg-white border-t border-gray-200 p-4 flex-shrink-0">
         <div className="flex items-center space-x-3">
           <button className="text-gray-500 hover:text-gray-700 transition-colors">
             <Paperclip size={20} />

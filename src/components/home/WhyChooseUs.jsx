@@ -22,11 +22,11 @@ function WhyChooseUs() {
   ];
 
   return (
-    <div className="w-full py-16 px-4">
-      <div className="container mx-auto max-w-11/12">
+    <div className="w-full py-16 px-6 2xl:px-0">
+      <div className="container mx-auto max-w-[100rem] 2xl:max-w-10/12">
         <div className="relative ">
           {/* Background decorative element */}
-          <div className="absolute top-0 right-0 ">
+          <div className="absolute top-0 right-0 hidden lg:block">
             <Image
               src={"/auth/chat.png"}
               width={500}

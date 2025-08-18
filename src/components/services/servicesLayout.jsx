@@ -3,6 +3,7 @@ import Banner from "../common/banner/Banner";
 import Heading from "../common/heading/Heading";
 import ServiceCard from "../common/ServiceCard/ServiceCard";
 import ExploreMore from "./ExploreMore";
+import PopularServices from "../home/PopularServices";
 
 function ServicesLayout() {
   const setServiceBanner = {
@@ -33,7 +34,7 @@ function ServicesLayout() {
           <ServiceCard key={index} data={service} />
         ))}
       </div>
-      <ExploreMore />
+      <PopularServices />
     </div>
   );
 }
