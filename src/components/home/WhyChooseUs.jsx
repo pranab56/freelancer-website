@@ -48,8 +48,8 @@ function WhyChooseUs() {
                 {features.map((feature, index) => (
                   <div
                     key={index}
-                    className={`border-2 rounded-lg border-black w-3/4 hover:shadow-md transition-shadow duration-300 flex items-center bg-white/80 backdrop-blur-sm p-2 ${
-                      index % 2 === 1 ? "ml-6" : "mr-6"
+                    className={`border-2 rounded-lg border-black w-10/12 hover:shadow-md transition-shadow duration-300 flex items-center bg-white/80 backdrop-blur-sm p-2 ${
+                      index % 2 === 1 ? "ml-12" : "mr-12"
                     }`}
                   >
                     <CardContent className="p-0">
