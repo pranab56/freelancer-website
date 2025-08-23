@@ -19,6 +19,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import AddNewProjectDialog from "./AddNewProjectDialog";
 import EducationDialogAddEdit from "./EducationDialogAddEdit";
 import Link from "next/link";
@@ -32,13 +37,42 @@ function ProfileSections() {
     useState(false);
 
   const educationCertifications = [
-    "MSc",
-    "Bachelor's",
-    "PhD",
-    "PMP",
-    "CFA Level II",
-    "FRM",
-    "PSPO",
+    {
+      name: "MSc",
+      description: "Master of Science",
+      school: "University of London",
+      year: "2020",
+    },
+    {
+      name: "Bachelor's",
+      description: "Bachelor of Science",
+      school: "University of London",
+      year: "2018",
+    },
+    {
+      name: "PhD",
+      description: "Doctor of Philosophy",
+      school: "University of London",
+      year: "2016",
+    },
+    {
+      name: "CFA Level II",
+      description: "Chartered Financial Analyst Level II",
+      school: "CFA Institute",
+      year: "2015",
+    },
+    {
+      name: "FRM",
+      description: "Financial Risk Manager",
+      school: "GARP",
+      year: "2014",
+    },
+    {
+      name: "PSPO",
+      description: "Professional Scrum Product Owner",
+      school: "Scrum Alliance",
+      year: "2013",
+    },
   ];
 
   return (
@@ -66,13 +100,21 @@ function ProfileSections() {
           <CardContent>
             <div className="flex flex-wrap gap-2">
               {educationCertifications.map((item, index) => (
-                <Badge
-                  key={index}
-                  variant="secondary"
-                  className="bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 px-3 py-1"
-                >
-                  {item}
-                </Badge>
+                <Tooltip key={index}>
+                  <TooltipTrigger>
+                    <Badge
+                      variant="secondary"
+                      className="bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 px-3 py-1"
+                    >
+                      {item.name}
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p> {item.description}</p>
+                    <p>School: {item.school}</p>
+                    <p>Year: {item.year}</p>
+                  </TooltipContent>
+                </Tooltip>
               ))}
             </div>
           </CardContent>

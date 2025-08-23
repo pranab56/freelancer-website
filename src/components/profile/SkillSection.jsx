@@ -11,103 +11,152 @@ function SkillsSection() {
   const { isFreelancerAndLoggedIn } = useCheckUserAndLoggedIn();
   const [isAddSkillDialogOpen, setIsAddSkillDialogOpen] = useState(false);
   const [isEditSkillDialogOpen, setIsEditSkillDialogOpen] = useState(false);
+  const [currentSkillCategory, setCurrentSkillCategory] = useState("");
+
+  const softSkills = [
+    "Communication",
+    "Teamwork",
+    "Problem-Solving",
+    "Emotional Intelligence",
+    "Leadership",
+    "Critical Thinking",
+  ];
 
   const technicalSkills = [
-    "R",
-    "Python",
-    "SQL",
-    "Tableau",
-    "Power BI",
-    "Excel VBA",
+    "Networking",
+    "DevOps",
+    "Web Development",
     "Machine Learning",
-    "Pandas",
-    "NumPy",
+    "Programming Languages",
+    "Data Analysis",
+    "Cloud Computing",
   ];
 
   const functionalSkills = [
-    "Risk Management",
     "Project Management",
-    "Regulatory Reporting",
+    "Customer Service",
+    "Marketing Strategy",
+    "Sales and Negotiation",
   ];
+
+  const handleAddSkill = (category) => {
+    setCurrentSkillCategory(category);
+    setIsAddSkillDialogOpen(true);
+  };
+
+  const handleEditSkill = (category) => {
+    setCurrentSkillCategory(category);
+    setIsEditSkillDialogOpen(true);
+  };
 
   return (
     <div className="w-full py-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 border rounded-xl">
-        {/* Left Skills Card */}
-        <Card className="h-fit border-none shadow-none">
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-4">
-              <CardTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">
-                Skills
+      <h2 className="text-xl font-bold mb-4 h2-gradient-text">Skills</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Soft Skills */}
+        <Card className="max-h-auto">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="h2-gradient-text font-medium text-base">
+                Soft Skills
               </CardTitle>
-              <div className="flex items-center gap-2">
-                {isFreelancerAndLoggedIn && (
-                  <>
-                    <GoPlusCircle
-                      className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
-                      onClick={() => setIsAddSkillDialogOpen(true)}
-                    />
-                    <Edit3
-                      className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
-                      onClick={() => setIsEditSkillDialogOpen(true)}
-                    />
-                  </>
-                )}
-              </div>
+              {isFreelancerAndLoggedIn && (
+                <div className="flex gap-2">
+                  <GoPlusCircle
+                    className="w-5 h-5 text-blue-600 cursor-pointer hover:text-blue-700"
+                    onClick={() => handleAddSkill("soft")}
+                  />
+                  <Edit3
+                    className="w-5 h-5 text-blue-600 cursor-pointer hover:text-blue-700"
+                    onClick={() => handleEditSkill("soft")}
+                  />
+                </div>
+              )}
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Profile indicators */}
-
-            <div>
-              <h3 className="text-blue-600 font-medium mb-3">
-                Technical Skills
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {technicalSkills.map((skill, index) => (
-                  <Badge
-                    key={index}
-                    variant="outline"
-                    className="bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 px-3 py-1 rounded-full"
-                  >
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {softSkills.map((skill, index) => (
+                <Badge
+                  key={index}
+                  variant="outline"
+                  className="bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 px-3 py-1.5 rounded-full"
+                >
+                  {skill}
+                </Badge>
+              ))}
             </div>
           </CardContent>
         </Card>
 
-        {/* Right Skills Card */}
-        <Card className="h-fit border-none shadow-none">
-          <CardHeader className="pb-4">
+        {/* Technical Skills */}
+        <Card className="max-h-auto">
+          <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg font-semibold text-blue-600">
-                {/* Skills */}
+              <CardTitle className="h2-gradient-text font-medium text-base">
+                Technical Skills
               </CardTitle>
-              <div className="flex items-center gap-2">
-                <div className="h-4"></div>
-              </div>
+              {isFreelancerAndLoggedIn && (
+                <div className="flex gap-2">
+                  <GoPlusCircle
+                    className="w-5 h-5 text-blue-600 cursor-pointer hover:text-blue-700"
+                    onClick={() => handleAddSkill("technical")}
+                  />
+                  <Edit3
+                    className="w-5 h-5 text-blue-600 cursor-pointer hover:text-blue-700"
+                    onClick={() => handleEditSkill("technical")}
+                  />
+                </div>
+              )}
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Profile indicators */}
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {technicalSkills.map((skill, index) => (
+                <Badge
+                  key={index}
+                  variant="outline"
+                  className="bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 px-3 py-1.5 rounded-full"
+                >
+                  {skill}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-            <div>
-              <h3 className="text-blue-600 font-medium mb-3">
+        {/* Functional Skills */}
+        <Card className="max-h-auto">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="h2-gradient-text font-medium text-base">
                 Functional Skills
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {functionalSkills.map((skill, index) => (
-                  <Badge
-                    key={index}
-                    variant="outline"
-                    className="bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 px-3 py-1 rounded-full"
-                  >
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
+              </CardTitle>
+              {isFreelancerAndLoggedIn && (
+                <div className="flex gap-2">
+                  <GoPlusCircle
+                    className="w-5 h-5 text-blue-600 cursor-pointer hover:text-blue-700"
+                    onClick={() => handleAddSkill("functional")}
+                  />
+                  <Edit3
+                    className="w-5 h-5 text-blue-600 cursor-pointer hover:text-blue-700"
+                    onClick={() => handleEditSkill("functional")}
+                  />
+                </div>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {functionalSkills.map((skill, index) => (
+                <Badge
+                  key={index}
+                  variant="outline"
+                  className="bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 px-3 py-1.5 rounded-full"
+                >
+                  {skill}
+                </Badge>
+              ))}
             </div>
           </CardContent>
         </Card>

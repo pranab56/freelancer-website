@@ -27,7 +27,7 @@ export default function SkillsDialogAddEdit({
   mode = "add", // "add" or "edit"
   initialData = null,
 }) {
-  const [skillType, setSkillType] = useState("technical");
+  const [skillType, setSkillType] = useState("soft");
 
   const {
     register,
@@ -38,7 +38,7 @@ export default function SkillsDialogAddEdit({
     watch,
   } = useForm({
     defaultValues: {
-      skillType: "technical",
+      skillType: "soft",
       skills: "",
       experience: "",
     },
@@ -103,14 +103,14 @@ export default function SkillsDialogAddEdit({
   // Load initial data for edit mode
   useEffect(() => {
     if (mode === "edit" && initialData) {
-      setSkillType(initialData.skillType || "technical");
-      setValue("skillType", initialData.skillType || "technical");
+      setSkillType(initialData.skillType || "soft");
+      setValue("skillType", initialData.skillType || "soft");
       setValue("skills", initialData.skills || "");
       setValue("experience", initialData.experience || "");
     } else {
       // Reset for add mode
-      setSkillType("technical");
-      setValue("skillType", "technical");
+      setSkillType("soft");
+      setValue("skillType", "soft");
       setValue("skills", "");
       setValue("experience", "");
     }
@@ -124,7 +124,7 @@ export default function SkillsDialogAddEdit({
 
   const onCancel = () => {
     reset();
-    setSkillType("technical");
+    setSkillType("soft");
     onClose?.();
   };
 
@@ -134,8 +134,13 @@ export default function SkillsDialogAddEdit({
     setValue("skills", ""); // Reset skills when type changes
   };
 
+  // Select appropriate skills list based on skill type
   const currentSkills =
-    skillType === "technical" ? technicalSkills : functionalSkills;
+    skillType === "soft"
+      ? functionalSkills
+      : skillType === "technical"
+      ? technicalSkills
+      : functionalSkills;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -144,7 +149,12 @@ export default function SkillsDialogAddEdit({
         <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4 border-b-0">
           <DialogTitle className="text-lg font-semibold text-gray-900">
             {mode === "edit" ? "Edit" : "Add"}{" "}
-            {skillType === "technical" ? "Technical" : "Functional"} Skills
+            {skillType === "soft"
+              ? "Soft"
+              : skillType === "technical"
+              ? "Technical"
+              : "Functional"}{" "}
+            Skills
           </DialogTitle>
         </DialogHeader>
 
@@ -160,6 +170,15 @@ export default function SkillsDialogAddEdit({
               onValueChange={handleSkillTypeChange}
               className="flex space-x-6"
             >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="soft" id="soft" />
+                <Label
+                  htmlFor="soft"
+                  className="text-sm font-normal cursor-pointer"
+                >
+                  Soft Skills
+                </Label>
+              </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="technical" id="technical" />
                 <Label
