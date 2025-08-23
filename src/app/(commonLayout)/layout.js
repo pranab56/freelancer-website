@@ -1,8 +1,6 @@
 "use client";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import NavBar from "@/components/navbar/NavBar";
-import FreelancerNavBar from "@/components/freelancerNavbar/FreelancerNavbar";
 import ClientNavBar from "@/components/client/clientNavbar/ClientNavbar";
 
 export default function CommonLayout({ children }) {

@@ -22,6 +22,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { LiaUserTieSolid } from "react-icons/lia";
+import provideIcon from "@/utils/IconProvider/provideIcon";
 function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
@@ -80,7 +81,7 @@ function NavBar() {
             {/* Logo */}
             <div className="flex items-center">
               <Link href="/" className="text-2xl font-bold text-gray-900">
-                Lunqs
+                {provideIcon({ name: "company_logo" })}
               </Link>
             </div>
 

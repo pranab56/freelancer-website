@@ -26,6 +26,7 @@ import {
   setCurrentUser,
   logout,
 } from "@/redux/features/currentUser/currentuserSlice";
+import provideIcon from "@/utils/IconProvider/provideIcon";
 function FreelancerNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -81,7 +82,7 @@ function FreelancerNavBar() {
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/" className="text-2xl font-bold text-gray-900">
-            Lunq
+            {provideIcon({ name: "company_logo" })}
           </Link>
         </div>
 

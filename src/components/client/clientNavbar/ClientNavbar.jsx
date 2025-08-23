@@ -26,6 +26,7 @@ import {
   logout,
   setCurrentUser,
 } from "@/redux/features/currentUser/currentuserSlice";
+import provideIcon from "@/utils/IconProvider/provideIcon";
 
 function ClientNavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -84,9 +85,7 @@ function ClientNavBar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
-          <Link href="/" className="text-2xl font-bold text-gray-900">
-            Lunq
-          </Link>
+          <Link href="/">{provideIcon({ name: "company_logo" })}</Link>
         </div>
 
         {/* Desktop Navigation Links */}

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import provideIcon from "@/utils/IconProvider/provideIcon";
 
 function Footer() {
   const footerLinks = [
@@ -49,9 +50,7 @@ function Footer() {
           {/* Logo and Description */}
           <div className="col-span-1 sm:col-span-2 lg:col-span-1">
             <div className="mb-4 sm:mb-6">
-              <h2 className="text-3xl sm:text-4xl font-bold text-black">
-                Lunq
-              </h2>
+              {provideIcon({ name: "company_logo" })}
             </div>
             <p className="text-gray-600 text-sm leading-relaxed max-w-xs lg:max-w-none">
               Lunq offers intelligent, fast-response support so you can stay
