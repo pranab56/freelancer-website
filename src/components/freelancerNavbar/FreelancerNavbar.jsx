@@ -1,9 +1,17 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import ReactCountryFlag from "react-country-flag";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +38,7 @@ import provideIcon from "@/utils/IconProvider/provideIcon";
 function FreelancerNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [language, setLanguage] = useState("en");
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -102,7 +111,55 @@ function FreelancerNavBar() {
             </Link>
           ))}
         </div>
-        <Button onClick={showAsFreelancer}>View As Freelancer</Button>
+        <Select value={language} onValueChange={setLanguage}>
+          <SelectTrigger className="w-[130px] !h-10 hidden lg:flex">
+            <div className="flex items-center">
+              {language === "en" ? (
+                <ReactCountryFlag
+                  countryCode="GB"
+                  svg
+                  className="mr-2"
+                  style={{ width: "18px", height: "18px" }}
+                />
+              ) : (
+                <ReactCountryFlag
+                  countryCode="FR"
+                  svg
+                  className="mr-2"
+                  style={{ width: "18px", height: "18px" }}
+                />
+              )}
+              <SelectValue>
+                {language === "en" ? "English" : "Français"}
+              </SelectValue>
+            </div>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="en">
+              <div className="flex items-center">
+                <ReactCountryFlag
+                  countryCode="GB"
+                  svg
+                  className="mr-2"
+                  style={{ width: "18px", height: "18px" }}
+                />
+                English
+              </div>
+            </SelectItem>
+            <SelectItem value="fr">
+              <div className="flex items-center">
+                <ReactCountryFlag
+                  countryCode="FR"
+                  svg
+                  className="mr-2"
+                  style={{ width: "18px", height: "18px" }}
+                />
+                Français
+              </div>
+            </SelectItem>
+          </SelectContent>
+        </Select>
+        {/* <Button onClick={showAsFreelancer}>View As Freelancer</Button> */}
 
         {/* User Profile Section */}
         <div className="hidden lg:flex items-center  ">
@@ -192,6 +249,55 @@ function FreelancerNavBar() {
                 </div>
               </DrawerHeader>
               <div className="px-6 pb-6 space-y-2">
+                {/* Mobile Language Selector */}
+                <Select value={language} onValueChange={setLanguage}>
+                  <SelectTrigger className="w-full mb-2">
+                    <div className="flex items-center">
+                      {language === "en" ? (
+                        <ReactCountryFlag
+                          countryCode="GB"
+                          svg
+                          className="mr-2"
+                          style={{ width: "18px", height: "18px" }}
+                        />
+                      ) : (
+                        <ReactCountryFlag
+                          countryCode="FR"
+                          svg
+                          className="mr-2"
+                          style={{ width: "18px", height: "18px" }}
+                        />
+                      )}
+                      <SelectValue>
+                        {language === "en" ? "English" : "Français"}
+                      </SelectValue>
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">
+                      <div className="flex items-center">
+                        <ReactCountryFlag
+                          countryCode="GB"
+                          svg
+                          className="mr-2"
+                          style={{ width: "18px", height: "18px" }}
+                        />
+                        English
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="fr">
+                      <div className="flex items-center">
+                        <ReactCountryFlag
+                          countryCode="FR"
+                          svg
+                          className="mr-2"
+                          style={{ width: "18px", height: "18px" }}
+                        />
+                        Français
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
                 {/* Mobile Navigation */}
                 {navItems.map((item, index) => (
                   <Button
