@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import Image from "next/image";
 
 export default function ViewInvoiceDetailsDialog({
   isOpen,
@@ -44,7 +45,7 @@ export default function ViewInvoiceDetailsDialog({
         {/* Content */}
         <div className="px-6 pb-6">
           {/* Invoice Details Card */}
-          <div className="border border-gray-200 rounded-lg p-6 bg-gray-50">
+          <div className="border border-gray-200 rounded-lg p-6 bg-gray-50 relative">
             <h3 className="text-lg font-semibold mb-4 h2-gradient-text">
               Invoice Details
             </h3>
@@ -115,6 +116,23 @@ export default function ViewInvoiceDetailsDialog({
                   {invoice.status}
                 </span>
               </div>
+            </div>
+            {/* <div className="absolute w-40 h-40 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20 ">
+              <Image
+                src={"/jobtender/job_tender.png"}
+                alt="Invoice Logo"
+                fill
+                className=" rounded-full"
+              />
+            </div> */}
+            <div className="absolute top-5 right-5">
+              <Image
+                src={"/jobtender/job_tender.png"}
+                alt="Invoice Logo"
+                width={160}
+                height={160}
+                className="w-20 h-20 rounded-full"
+              />
             </div>
           </div>
         </div>

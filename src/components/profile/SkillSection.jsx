@@ -63,11 +63,11 @@ function SkillsSection() {
               {isFreelancerAndLoggedIn && (
                 <div className="flex gap-2">
                   <GoPlusCircle
-                    className="w-5 h-5 text-blue-600 cursor-pointer hover:text-blue-700"
+                    className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
                     onClick={() => handleAddSkill("soft")}
                   />
                   <Edit3
-                    className="w-5 h-5 text-blue-600 cursor-pointer hover:text-blue-700"
+                    className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
                     onClick={() => handleEditSkill("soft")}
                   />
                 </div>
@@ -99,11 +99,11 @@ function SkillsSection() {
               {isFreelancerAndLoggedIn && (
                 <div className="flex gap-2">
                   <GoPlusCircle
-                    className="w-5 h-5 text-blue-600 cursor-pointer hover:text-blue-700"
+                    className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
                     onClick={() => handleAddSkill("technical")}
                   />
                   <Edit3
-                    className="w-5 h-5 text-blue-600 cursor-pointer hover:text-blue-700"
+                    className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
                     onClick={() => handleEditSkill("technical")}
                   />
                 </div>
@@ -135,11 +135,11 @@ function SkillsSection() {
               {isFreelancerAndLoggedIn && (
                 <div className="flex gap-2">
                   <GoPlusCircle
-                    className="w-5 h-5 text-blue-600 cursor-pointer hover:text-blue-700"
+                    className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
                     onClick={() => handleAddSkill("functional")}
                   />
                   <Edit3
-                    className="w-5 h-5 text-blue-600 cursor-pointer hover:text-blue-700"
+                    className="w-4 h-4 text-blue-600 cursor-pointer hover:text-blue-700"
                     onClick={() => handleEditSkill("functional")}
                   />
                 </div>

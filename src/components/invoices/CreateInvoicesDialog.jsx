@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
-import { X, Calendar as CalendarIcon } from "lucide-react";
+import { X, Upload } from "lucide-react";
+import { IoCalendarOutline } from "react-icons/io5";
 import {
   Dialog,
   DialogContent,
@@ -25,11 +25,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import useToast from "@/hooks/showToast/ShowToast";
 
 export default function CreateInvoicesDialog({ isOpen, onClose }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-
+  const [logoImage, setLogoImage] = useState(null);
+  const [logoPreview, setLogoPreview] = useState(null);
+  const fileInputRef = useRef(null);
+  const { success, error } = useToast();
   const {
     register,
     handleSubmit,
@@ -78,19 +82,38 @@ export default function CreateInvoicesDialog({ isOpen, onClose }) {
     "Performance Optimization",
   ];
 
+  const handleLogoUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setLogoImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setLogoPreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleLogoClick = () => {
+    fileInputRef.current?.click();
+  };
+
   const onSubmit = (data) => {
     const invoiceData = {
       ...data,
       day: selectedDate ? selectedDate.toISOString().split("T")[0] : "",
+      logo: logoImage,
     };
     console.log("Invoice data:", invoiceData);
-    alert("Invoice created successfully!");
+    success("Invoice created successfully!");
     onClose?.();
   };
 
   const onCancel = () => {
     reset();
     setSelectedDate(null);
+    setLogoImage(null);
+    setLogoPreview(null);
     onClose?.();
   };
 
@@ -122,6 +145,39 @@ export default function CreateInvoicesDialog({ isOpen, onClose }) {
 
         {/* Content */}
         <div className="px-6 pb-6 space-y-6">
+          {/* Logo Upload Section */}
+          <div className="flex justify-center">
+            <div
+              className="relative w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-700 transition-colors"
+              onClick={handleLogoClick}
+            >
+              {logoPreview ? (
+                <img
+                  src={logoPreview}
+                  alt="Company Logo"
+                  className="w-full h-full object-cover rounded-full"
+                />
+              ) : (
+                <div className="text-white text-center">
+                  <div className="text-xs font-bold tracking-wider">
+                    CONLINE
+                  </div>
+                  <div className="text-[10px] opacity-80">LOGO</div>
+                </div>
+              )}
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
+                <Upload className="w-3 h-3 text-white" />
+              </div>
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleLogoUpload}
+              className="hidden"
+            />
+          </div>
+
           {/* Client Field */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-gray-900">Client</Label>
@@ -206,7 +262,7 @@ export default function CreateInvoicesDialog({ isOpen, onClose }) {
                       ? formatDate(selectedDate)
                       : "enter your working day"}
                   </span>
-                  <CalendarIcon className="ml-auto h-4 w-4 text-gray-400" />
+                  <IoCalendarOutline className="ml-auto h-4 w-4 text-gray-400" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
