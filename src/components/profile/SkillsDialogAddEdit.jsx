@@ -26,8 +26,9 @@ export default function SkillsDialogAddEdit({
   onClose,
   mode = "add", // "add" or "edit"
   initialData = null,
+  skillCategory = "soft", // New prop to specify initial skill category
 }) {
-  const [skillType, setSkillType] = useState("soft");
+  const [skillType, setSkillType] = useState(skillCategory);
 
   const {
     register,
@@ -38,7 +39,7 @@ export default function SkillsDialogAddEdit({
     watch,
   } = useForm({
     defaultValues: {
-      skillType: "soft",
+      skillType: skillCategory,
       skills: "",
       experience: "",
     },
@@ -103,18 +104,18 @@ export default function SkillsDialogAddEdit({
   // Load initial data for edit mode
   useEffect(() => {
     if (mode === "edit" && initialData) {
-      setSkillType(initialData.skillType || "soft");
-      setValue("skillType", initialData.skillType || "soft");
+      setSkillType(initialData.skillType || skillCategory);
+      setValue("skillType", initialData.skillType || skillCategory);
       setValue("skills", initialData.skills || "");
       setValue("experience", initialData.experience || "");
     } else {
       // Reset for add mode
-      setSkillType("soft");
-      setValue("skillType", "soft");
+      setSkillType(skillCategory);
+      setValue("skillType", skillCategory);
       setValue("skills", "");
       setValue("experience", "");
     }
-  }, [mode, initialData, setValue]);
+  }, [mode, initialData, setValue, skillCategory]);
 
   const onSubmit = (data) => {
     console.log("Skills data:", { ...data, skillType });
@@ -124,7 +125,7 @@ export default function SkillsDialogAddEdit({
 
   const onCancel = () => {
     reset();
-    setSkillType("soft");
+    setSkillType(skillCategory);
     onClose?.();
   };
 

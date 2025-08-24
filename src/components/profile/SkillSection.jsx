@@ -168,6 +168,7 @@ function SkillsSection() {
           isOpen={isAddSkillDialogOpen}
           onClose={() => setIsAddSkillDialogOpen(false)}
           mode="add"
+          skillCategory={currentSkillCategory}
         />
       )}
 
@@ -178,10 +179,11 @@ function SkillsSection() {
           onClose={() => setIsEditSkillDialogOpen(false)}
           mode="edit"
           initialData={{
-            skillType: "technical",
-            skills: "JavaScript",
-            experience: "Advanced (3-5 years)",
+            skillType: currentSkillCategory,
+            skills: "", // You might want to pass the actual skill being edited
+            experience: "", // You might want to pass the actual experience level
           }}
+          skillCategory={currentSkillCategory}
         />
       )}
     </div>
