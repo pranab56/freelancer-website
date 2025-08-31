@@ -9,11 +9,13 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Image from "next/image";
 import Link from "next/link";
+import { useLocale } from "next-intl";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "@/redux/features/currentUser/currentuserSlice";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
+  const locale = useLocale();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -93,7 +95,7 @@ const LoginPage = () => {
       // Store token (you can use any string for testing)
       localStorage.setItem("token", "test-token");
       // Redirect to home page
-      router.push("/");
+      router.push(`/${locale}`);
     } else {
       setErrors({
         email: "Invalid email or password",
@@ -197,7 +199,7 @@ const LoginPage = () => {
         </div>
 
         <div className="text-right">
-          <Link href="/forgot-password">
+          <Link href={`/${locale}/auth/forgot-password`}>
             <Button
               variant="link"
               className="p-0 h-auto text-xs md:text-sm text-gray-600 hover:text-gray-800"

@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Lightbulb } from "lucide-react";
@@ -8,16 +9,18 @@ import provideIcon from "@/utils/IconProvider/provideIcon";
 
 function TalentCategories() {
   const swiperRef = useRef(null);
+  const locale = useLocale();
+  const t = useTranslations("home.slider");
 
   const categories = [
-    { id: 1, name: "Graphics & Design", icon: Lightbulb },
-    { id: 2, name: "Digital Marketing", icon: Lightbulb },
-    { id: 3, name: "Writing & Translation", icon: Lightbulb },
-    { id: 4, name: "Video & Animation", icon: Lightbulb },
-    { id: 5, name: "Music & Audio", icon: Lightbulb },
-    { id: 6, name: "Programming & Tech", icon: Lightbulb },
-    { id: 7, name: "Business", icon: Lightbulb },
-    { id: 8, name: "AI Services", icon: Lightbulb },
+    { id: 1, name: t("categories.graphicsDesign"), icon: Lightbulb },
+    { id: 2, name: t("categories.digitalMarketing"), icon: Lightbulb },
+    { id: 3, name: t("categories.writingTranslation"), icon: Lightbulb },
+    { id: 4, name: t("categories.videoAnimation"), icon: Lightbulb },
+    { id: 5, name: t("categories.musicAudio"), icon: Lightbulb },
+    { id: 6, name: t("categories.programmingTech"), icon: Lightbulb },
+    { id: 7, name: t("categories.business"), icon: Lightbulb },
+    { id: 8, name: t("categories.aiServices"), icon: Lightbulb },
   ];
 
   useEffect(() => {
@@ -81,15 +84,15 @@ function TalentCategories() {
         {/* Header */}
         <div className="flex justify-between items-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold h2-gradient-text leading-tight">
-            Browse our best talent by category
+            {t("title")}
           </h2>
           <Button
             variant="ghost"
             className="text-blue-600 hover:text-blue-700"
             asChild
           >
-            <Link href="/categories" className="flex items-center">
-              View All Category
+            <Link href={`/${locale}/categories`} className="flex items-center">
+              {t("viewAllCategory")}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

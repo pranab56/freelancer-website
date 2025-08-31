@@ -4,47 +4,49 @@ import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 function PopularServices() {
   const pathname = usePathname();
+  const t = useTranslations("home.popularServices");
   const popularCategories = [
     {
       id: 1,
-      label: "Graphic&Design",
+      label: t("services.graphicDesign"),
       src: "/popular_categories/graphics_design.png",
     },
     {
       id: 2,
-      label: "Cartoon Animation",
+      label: t("services.cartoonAnimation"),
       src: "/popular_categories/cartoon_animation.png",
     },
     {
       id: 3,
-      label: "Illustration",
+      label: t("services.illustration"),
       src: "/popular_categories/illustration.png",
     },
     {
       id: 4,
-      label: "Flyers & Vouchers",
+      label: t("services.flyersVouchers"),
       src: "/popular_categories/flyers.png",
     },
     {
       id: 5,
-      label: "Logo Design",
+      label: t("services.logoDesign"),
       src: "/popular_categories/logo_design.png",
     },
     {
       id: 6,
-      label: "Social graphics",
+      label: t("services.socialGraphics"),
       src: "/popular_categories/social.png",
     },
     {
       id: 7,
-      label: "Article writing",
+      label: t("services.articleWriting"),
       src: "/popular_categories/article.png",
     },
     {
       id: 8,
-      label: "Video Editing",
+      label: t("services.videoEditing"),
       src: "/popular_categories/video_editing.png",
     },
   ];
@@ -52,9 +54,7 @@ function PopularServices() {
   return (
     <div className="w-full lg:w-10/12 px-6 mx-auto my-12 flex flex-col justify-center">
       <h2 className="text-4xl h2-gradient-text leading-14 font-bold text-center">
-        {pathname === "/services"
-          ? "Explore More Design Services"
-          : "Our Popular services"}
+        {pathname === "/services" ? t("exploreMoreTitle") : t("title")}
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-8 my-12">
         {popularCategories.map((category, index) => (
@@ -85,7 +85,7 @@ function PopularServices() {
         ))}
       </div>
       <Button className="w-60 button-gradient mx-auto">
-        See All Categories
+        {t("seeAllCategories")}
       </Button>
     </div>
   );

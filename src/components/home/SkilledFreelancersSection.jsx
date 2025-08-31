@@ -1,8 +1,12 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import { useTranslations, useLocale } from "next-intl";
 
 function SkilledFreelancersSection() {
+  const t = useTranslations("home.skilledFreelancers");
+  const locale = useLocale();
+
   return (
     <section className="py-10 2xl:py-16 px-6 bg-white ">
       <div className="max-w-7xl mx-auto">
@@ -26,7 +30,7 @@ function SkilledFreelancersSection() {
                   500+
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600">
-                  Freelancers
+                  {t("stats.freelancers")}
                 </div>
               </CardContent>
             </Card>
@@ -37,7 +41,7 @@ function SkilledFreelancersSection() {
                   300+
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600">
-                  Freelance Work Posted
+                  {t("stats.freelanceWorkPosted")}
                 </div>
               </CardContent>
             </Card>
@@ -46,19 +50,13 @@ function SkilledFreelancersSection() {
           {/* Right Side - Content */}
           <div className="space-y-6 text-left">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-              <span className="text-blue-600">Skilled Freelancers.</span>
+              <span className="text-blue-600">{t("title")}</span>
               <br />
-              <span className="text-blue-600">Zero Hassle.</span>
+              <span className="text-blue-600">{t("subtitle")}</span>
             </h2>
 
             <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-              Get access to top-rated freelancers without the stress of endless
-              searching or high commission fees. Our platform connects you
-              directly with skilled professionals in design, development,
-              writing, marketing, and more. Whether you're starting a new
-              project or need expert support, we make it easy to find, hire, and
-              collaborate — hassle-free. Enjoy secure payments, direct
-              contracts, and full control over your workflow.
+              {t("description")}
             </p>
           </div>
         </div>

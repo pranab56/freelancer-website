@@ -27,11 +27,13 @@ import {
 import AddNewProjectDialog from "./AddNewProjectDialog";
 import EducationDialogAddEdit from "./EducationDialogAddEdit";
 import Link from "next/link";
+import { useLocale } from "next-intl";
 import { useSelector } from "react-redux";
 import useCheckUserAndLoggedIn from "@/hooks/checkUserTypeAndLoggedIn/CheckUserAndLoggedIn";
 function ProfileSections() {
   const { isFreelancerAndLoggedIn, isLoggedIn, userType } =
     useCheckUserAndLoggedIn();
+  const locale = useLocale();
   const [isAddProjectDialogOpen, setIsAddProjectDialogOpen] = useState(false);
   const [isAddEducationDialogOpen, setIsAddEducationDialogOpen] =
     useState(false);
@@ -132,7 +134,10 @@ function ProfileSections() {
               Discover my achievements and detailed case studies.
             </p>
 
-            <Link href="/showcase-projects" className="w-full md:w-auto">
+            <Link
+              href={`/${locale}/showcase-projects`}
+              className="w-full md:w-auto"
+            >
               <Button className="button-gradient w-full md:w-auto">
                 <Eye className="w-4 h-4 mr-2" />
                 View All Project

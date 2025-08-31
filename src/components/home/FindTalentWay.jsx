@@ -2,27 +2,23 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { useTranslations } from "next-intl";
 
 // Separate Glassmorphism Card Component
 function TalentCard() {
+  const t = useTranslations("home.findTalentWay");
+
   return (
     <Card className="bg-white/10 backdrop-blur-md border border-white/30 shadow-2xl w-full max-w-2xl h-[30rem] md:h-[32rem] mx-auto">
       <CardContent className="p-6 sm:p-8 text-center sm:text-left">
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-          Find talent
+          {t("title")}
           <br />
-          <span className="text-white">your way</span>
+          <span className="text-white">{t("subtitle")}</span>
         </h2>
 
         <p className="text-white/90 text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
-          Tap into a global network of skilled independent professionals ready
-          to help you move faster and smarter. Whether you need a quick solution
-          or a complete business overhaul, our freelancers bring the expertise
-          and flexibility to get the job done right. From small tasks to
-          large-scale transformations, you'll find the perfect match for your
-          goals—all in one place. Collaborate directly, manage projects with
-          ease, and experience the freedom of working with top-tier talent on
-          your terms.
+          {t("description")}
         </p>
 
         <div className="flex justify-center items-center">
@@ -30,7 +26,7 @@ function TalentCard() {
             className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white h-12
          px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg w-full sm:w-auto"
           >
-            Find a freelancer
+            {t("findFreelancer")}
           </Button>
         </div>
       </CardContent>

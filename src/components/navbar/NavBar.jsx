@@ -2,7 +2,9 @@
 import React, { useState, useEffect } from "react";
 import ReactCountryFlag from "react-country-flag";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
+import { locales } from "@/i18n/routing";
 import { Search, User, Menu, X, ChevronDown, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,12 +33,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LiaUserTieSolid } from "react-icons/lia";
 import provideIcon from "@/utils/IconProvider/provideIcon";
+import { useTranslations } from "next-intl";
+
 function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const [userType, setUserType] = useState("freelancer");
-  const [language, setLanguage] = useState("en");
   const pathname = usePathname();
+  const router = useRouter();
+  const localeFromHook = useLocale();
+  const t = useTranslations("navigation");
+  const tCommon = useTranslations("common");
+
+  // Extract locale from pathname as fallback
+  const pathnameLocale = pathname.split("/")[1];
+  const locale = locales.includes(pathnameLocale)
+    ? pathnameLocale
+    : localeFromHook;
+
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
 
@@ -46,21 +60,21 @@ function NavBar() {
   // Services dropdown items
   const serviceItems = [
     {
-      label: "Hire Top Talent",
-      href: "/find-top-talent",
+      label: t("hireTopTalent"),
+      href: `/${locale}/find-top-talent`,
     },
     // Add more service items here as needed
     {
-      label: "See Our Services",
-      href: "/services",
+      label: t("seeOurServices"),
+      href: `/${locale}/services`,
     },
   ];
 
   // Navigation items based on user type
   const publicNavItems = [
-    // { label: "Home", href: "/" },
-    { label: "About Us", href: "/about-us" },
-    { label: "Contact Us", href: "/contact-us" },
+    // { label: t('home'), href: `/${locale}` },
+    { label: t("aboutUs"), href: `/${locale}/about-us` },
+    { label: t("contactUs"), href: `/${locale}/contact-us` },
   ];
 
   // Get navigation items based on user type
@@ -89,7 +103,10 @@ function NavBar() {
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
-              <Link href="/" className="text-2xl font-bold text-gray-900">
+              <Link
+                href={`/${locale}`}
+                className="text-2xl font-bold text-gray-900"
+              >
                 {provideIcon({ name: "company_logo" })}
               </Link>
             </div>
@@ -121,7 +138,7 @@ function NavBar() {
                         : "text-gray-700 hover:text-gray-900"
                     }`}
                   >
-                    Services
+                    {t("services")}
                     <ChevronDown className="ml-1 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -145,10 +162,20 @@ function NavBar() {
             {/* Right Side - Search, Dropdown, Auth */}
             <div className="hidden md:flex items-center space-x-4">
               {/* Language Selector */}
-              <Select value={language} onValueChange={setLanguage}>
+              <Select
+                value={locale}
+                onValueChange={(newLocale) => {
+                  // Remove the current locale from the pathname
+                  const pathWithoutLocale = pathname.replace(`/${locale}`, "");
+                  // If the path is empty (just "/"), use "/" instead of ""
+                  const newPath =
+                    pathWithoutLocale === "" ? "/" : pathWithoutLocale;
+                  router.push(`/${newLocale}${newPath}`);
+                }}
+              >
                 <SelectTrigger className="w-[130px] !h-10">
                   <div className="flex items-center">
-                    {language === "en" ? (
+                    {locale === "en" ? (
                       <ReactCountryFlag
                         countryCode="GB"
                         svg
@@ -164,7 +191,7 @@ function NavBar() {
                       />
                     )}
                     <SelectValue>
-                      {language === "en" ? "English" : "Français"}
+                      {locale === "en" ? "English" : "Français"}
                     </SelectValue>
                   </div>
                 </SelectTrigger>
@@ -198,7 +225,7 @@ function NavBar() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <input
                   type="text"
-                  placeholder="Search"
+                  placeholder={tCommon("search")}
                   className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
                 />
               </div>
@@ -215,17 +242,20 @@ function NavBar() {
                   <LiaUserTieSolid className="mr-2 h-4 w-4" />
                 )}
 
-                {userType === "freelancer" ? "Freelancer" : "Client"}
+                {userType === "freelancer" ? t("freelancer") : t("client")}
               </Button>
 
               {/* Auth Buttons */}
               <div className="flex items-center space-x-3">
                 <Button variant="ghost" asChild>
-                  <Link href="/login">Login</Link>
+                  <Link href={`/${locale}/auth/login`}>{t("login")}</Link>
                 </Button>
                 <Button asChild className="button-gradient">
-                  <Link href="/sign-up" className="flex items-center">
-                    Sign Up
+                  <Link
+                    href={`/${locale}/auth/sign-up`}
+                    className="flex items-center"
+                  >
+                    {t("signUp")}
                     <svg
                       className="ml-2 h-4 w-4"
                       fill="none"
@@ -271,16 +301,29 @@ function NavBar() {
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                       <input
                         type="text"
-                        placeholder="Search"
+                        placeholder={tCommon("search")}
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
 
                     {/* Mobile Language Selector */}
-                    <Select value={language} onValueChange={setLanguage}>
+                    <Select
+                      value={locale}
+                      onValueChange={(newLocale) => {
+                        // Remove the current locale from the pathname
+                        const pathWithoutLocale = pathname.replace(
+                          `/${locale}`,
+                          ""
+                        );
+                        // If the path is empty (just "/"), use "/" instead of ""
+                        const newPath =
+                          pathWithoutLocale === "" ? "/" : pathWithoutLocale;
+                        router.push(`/${newLocale}${newPath}`);
+                      }}
+                    >
                       <SelectTrigger className="w-full mb-2">
                         <div className="flex items-center">
-                          {language === "en" ? (
+                          {locale === "en" ? (
                             <ReactCountryFlag
                               countryCode="GB"
                               svg
@@ -296,7 +339,7 @@ function NavBar() {
                             />
                           )}
                           <SelectValue>
-                            {language === "en" ? "English" : "Français"}
+                            {locale === "en" ? "English" : "Français"}
                           </SelectValue>
                         </div>
                       </SelectTrigger>
@@ -354,7 +397,7 @@ function NavBar() {
                             setIsMobileServicesOpen(!isMobileServicesOpen)
                           }
                         >
-                          Services
+                          {t("services")}
                           <ChevronDown
                             className={`ml-auto h-4 w-4 transition-transform ${
                               isMobileServicesOpen ? "rotate-180" : ""
@@ -389,20 +432,22 @@ function NavBar() {
                       onClick={toggleUserType}
                     >
                       <User className="mr-2 h-4 w-4" />
-                      {userType === "freelancer" ? "Freelancer" : "Client"}
+                      {userType === "freelancer"
+                        ? t("freelancer")
+                        : t("client")}
                     </Button>
 
                     {/* Mobile Auth */}
                     <div className="space-y-2 pt-4 border-t">
                       <Button variant="ghost" className="w-full" asChild>
-                        <Link href="/login">Login</Link>
+                        <Link href={`/${locale}/auth/login`}>{t("login")}</Link>
                       </Button>
                       <Button className="w-full" asChild>
                         <Link
-                          href="/sign-up"
+                          href={`/${locale}/auth/sign-up`}
                           className="flex items-center justify-center"
                         >
-                          Sign Up
+                          {t("signUp")}
                           <svg
                             className="ml-2 h-4 w-4"
                             fill="none"

@@ -1,0 +1,279 @@
+{
+  "navigation": {
+    "home": "Accueil",
+    "aboutUs": "À propos de nous",
+    "contactUs": "Contactez-nous",
+    "services": "Services",
+    "hireTopTalent": "Embaucher des talents",
+    "seeOurServices": "Voir nos services",
+    "login": "Connexion",
+    "signUp": "S'inscrire",
+    "freelancer": "Freelance",
+    "client": "Client"
+  },
+  "common": {
+    "search": "Rechercher",
+    "language": "Langue"
+  },
+  "subscriptionPlan": {
+    "badge": "Plans tarifaires",
+    "title": "Des plans pour tous les besoins",
+    "description": "Une tarification simple et transparente qui évolue avec vous. Essayez n'importe quel plan gratuitement pendant 30 jours.",
+    "currency": "€",
+    "duration": {
+      "month": "mois",
+      "year": "an"
+    },
+    "status": {
+      "running": "En cours",
+      "upgrade": "Mettre à niveau"
+    },
+    "freelancer": {
+      "starterPlan": {
+        "title": "Plan de démarrage",
+        "features": {
+          "1": "Candidater à 10 appels d'offres /mois",
+          "2": "Profil visible",
+          "3": "Accès au tableau de bord",
+          "4": "Suggestions intelligentes",
+          "5": "Messagerie client limitée",
+          "6": "Calendrier de disponibilité",
+          "7": "Générateur de contrat (brouillon pré-rempli de base)"
+        }
+      },
+      "proPlan": {
+        "title": "Plan Pro",
+        "features": {
+          "1": "Liste de profil prioritaire",
+          "2": "Toutes les fonctionnalités de démarrage",
+          "3": "Candidatures illimitées",
+          "4": "Accès complet à l'interaction client",
+          "5": "Correspondance intelligente des appels d'offres",
+          "6": "Générateur de contrat personnalisé",
+          "7": "Analytique des vues de profil",
+          "8": "Support prioritaire + badge"
+        }
+      }
+    },
+    "client": {
+      "businessPlan": {
+        "title": "Plan Business",
+        "features": {
+          "1": "5 appels d'offres/mois",
+          "2": "Candidatures illimitées",
+          "3": "Brouillon de contrat pré-rempli (exportable)",
+          "4": "Suivi interne des missions",
+          "5": "Export des factures de freelances",
+          "6": "Moteur de suggestion par IA"
+        }
+      },
+      "enterprisePlan": {
+        "title": "Plan Entreprise",
+        "features": {
+          "1": "Appels d'offres illimités",
+          "2": "Toutes les fonctionnalités Business",
+          "3": "Correspondance de freelances premium par IA",
+          "4": "Édition et signature de contrat intégrées",
+          "5": "Gestion en masse des freelances",
+          "6": "Tableau de bord comptable",
+          "7": "Autorisations d'équipe"
+        }
+      }
+    }
+  },
+  "footer": {
+    "description": "Lunq offre un support intelligent et rapide pour vous permettre de rester concentré sur votre travail, pendant que nous gérons le reste.",
+    "forClients": {
+      "title": "Pour les Clients",
+      "links": {
+        "findFreelancers": "Trouver des Freelances",
+        "postProject": "Publier un Projet",
+        "refundPolicy": "Politique de Remboursement",
+        "privacyPolicy": "Politique de Confidentialité"
+      }
+    },
+    "forFreelancers": {
+      "title": "Pour les Freelances",
+      "links": {
+        "findWork": "Trouver du Travail",
+        "createAccount": "Créer un Compte"
+      }
+    },
+    "subscribe": {
+      "title": "S'abonner",
+      "description": "Inscrivez-vous pour des offres exclusives et plus encore.",
+      "emailPlaceholder": "Votre e-mail"
+    },
+    "copyright": "2025 Lunq Tous droits réservés"
+  },
+  "contactUs": {
+    "banner": {
+      "header": "Contactez-nous",
+      "text": "Nous serions ravis d'avoir de vos nouvelles ! Que vous ayez des questions, ayez besoin de support ou souhaitiez partager des commentaires, notre équipe est là pour vous aider. Nous nous engageons à vous offrir une expérience fluide et agréable. N'hésitez pas à nous contacter, que ce soit pour obtenir de l'aide sur un projet, des renseignements sur nos services ou des suggestions pour améliorer votre expérience. Notre équipe de support dédié est prête à vous assurer l'aide dont vous avez besoin, quand vous en avez besoin. Votre satisfaction est notre priorité, et nous avons hâte de vous rencontrer."
+    },
+    "heading": {
+      "main": "Entrer en contact",
+      "subheading": "De même, une variété d'activités enrichit la vie, mêlant vigueur et équilibre. Le résultat est un style de vie non seulement dynamique, mais aussi profondément gratifiant."
+    },
+    "form": {
+      "firstName": {
+        "label": "Prénom*",
+        "placeholder": "Prénom*"
+      },
+      "lastName": {
+        "label": "Nom de famille*",
+        "placeholder": "Nom de famille*"
+      },
+      "email": {
+        "label": "E-mail*",
+        "placeholder": "E-mail*"
+      },
+      "phone": {
+        "label": "Téléphone*",
+        "placeholder": "Téléphone"
+      },
+      "message": {
+        "placeholder": "Message"
+      },
+      "submit": "Envoyer un message",
+      "contactDetails": {
+        "title": "Coordonnées",
+        "description": "De même, une variété d'activités enrichit la vie, mêlant vigueur et équilibre. Le résultat est un style de vie non seulement dynamique, mais aussi profondément gratifiant.",
+        "address": {
+          "title": "Adresse",
+          "text": "123 Rue Queensberry, North Melbourne VIC3051, Australie."
+        },
+        "email": {
+          "title": "E-mail",
+          "text": "ali@boxcars.com"
+        }
+      }
+    }
+  },
+  "aboutUs": {
+    "title": "À propos de nous - Lunq",
+    "subtitle": "Lunq",
+    "description": "Chez Lunq, nous connectons les entreprises avec les meilleurs talents freelances dans divers secteurs. Notre plateforme assure une expérience fluide pour les clients et les freelances, répondant à leurs besoins spécifiques. Que vous soyez une entreprise ou une organisation, Lunq vous aide à réussir avec des solutions de performance recommandées.",
+    "hireFreelancers": "Embaucher des freelances →",
+    "detailedDescription": "Chez Lunq, nous sommes passionnés par la connexion des entreprises avec les meilleurs freelances du monde entier. Notre plateforme réunit les meilleurs talents et clients, garantissant que chaque projet respecte les plus hauts standards. Nous prospérons grâce à la qualité, l'innovation et la collaboration. Lunq permet aux entreprises de trouver les freelances parfaits et les aide à atteindre leurs objectifs efficacement. Que vous cherchiez du développement web, du design, de la création de contenu ou tout autre service, nous assurons une expérience fluide du début à la fin. Notre mission est de créer des opportunités, favoriser la créativité et livrer des résultats exceptionnels qui aident les entreprises à grandir et réussir.",
+    "beliefStatement": "Nous croyons au pouvoir de la connexion. Nous fournissons aux entreprises un accès à un riche écosystème de talents dans toutes les catégories de services professionnels. Que ce soit petit ou grand, notre plateforme et notre réseau vérifié offrent opportunité et excellence pour toutes les échelles.",
+    "stats": {
+      "verifiedClients": "Clients Vérifiés",
+      "verifiedFreelancers": "Freelances Vérifiés",
+      "ordersCompleted": "Commandes Terminées",
+      "reviews": "Avis"
+    },
+    "ourDream": {
+      "title": "Notre Rêve",
+      "description": "Notre rêve est de construire un monde où les entreprises et les freelances collaborent de manière transparente pour créer des solutions innovantes. Nous imaginons une plateforme qui donne aux organisations les meilleurs talents, tout en offrant aux freelances des opportunités de montrer leurs compétences et de grandir en favorisant une communauté de créativité, d'expertise et de confiance, nous visons à révolutionner la façon dont le travail est fait, rendant le succès commercial accessible à tous."
+    },
+    "ourMission": {
+      "title": "Notre Mission",
+      "description": "Notre mission est de combler le fossé entre les entreprises et les freelances qualifiés, offrant un accès aux meilleurs talents dans divers secteurs. Nous nous engageons à fournir des services de haute qualité qui assurent le succès et livrent des résultats exceptionnels. Notre plateforme est conçue pour être fluide et fiable, assurant une expérience douce du début à la fin du projet. En connectant les entreprises avec des professionnels de premier plan, nous permettons aux organisations d'atteindre leurs objectifs efficacement et efficacement. Avec un accent sur le talent, l'innovation et la satisfaction client, nous visons à être la plateforme de référence pour les entreprises cherchant des freelances qualifiés pour donner vie à leurs idées."
+    },
+    "ourVision": {
+      "title": "Notre Vision",
+      "description": "Notre vision est de devenir la plateforme leader qui connecte les entreprises avec des freelances exceptionnels, stimulant l'innovation et le succès dans tous les secteurs. Nous visons à créer un monde où le talent et l'opportunité se rencontrent de manière transparente, permettant aux clients et aux freelances d'exceller. Grâce à notre engagement envers la qualité, la fiabilité et la collaboration, nous nous efforçons de façonner l'avenir du travail, permettant aux entreprises et aux freelances d'atteindre leur plein potentiel."
+    }
+  },
+  "search": "Rechercher",
+  "home": {
+    "banner": {
+      "title": "L'Avenir du Freelance.",
+      "subtitle1": "Contrats Directs.",
+      "subtitle2": "Zéro Commission.",
+      "description": "Les clients se connectent avec des freelances hautement qualifiés. Les freelances gardent 100% de ce qu'ils gagnent — pas de commissions, pas d'intermédiaires. Juste une collaboration pure et directe avec une transparence totale.",
+      "findTalent": "Trouver des Talents Freelances",
+      "forClients": "(Pour les Clients)",
+      "applyToJoin": "Postuler pour Rejoindre",
+      "forFreelancers": "(Pour les Freelances)"
+    },
+    "slider": {
+      "title": "Parcourez nos meilleurs talents par catégorie",
+      "viewAllCategory": "Voir Toutes les Catégories",
+      "categories": {
+        "graphicsDesign": "Graphisme & Design",
+        "digitalMarketing": "Marketing Digital",
+        "writingTranslation": "Rédaction & Traduction",
+        "videoAnimation": "Vidéo & Animation",
+        "musicAudio": "Musique & Audio",
+        "programmingTech": "Programmation & Tech",
+        "business": "Business",
+        "aiServices": "Services IA"
+      }
+    },
+
+    "popularServices": {
+      "title": "Nos Services Populaires",
+      "exploreMoreTitle": "Explorer Plus de Services de Design",
+      "seeAllCategories": "Voir Toutes les Catégories",
+      "services": {
+        "graphicDesign": "Graphisme&Design",
+        "cartoonAnimation": "Animation Cartoon",
+        "illustration": "Illustration",
+        "flyersVouchers": "Flyers & Bons",
+        "logoDesign": "Design de Logo",
+        "socialGraphics": "Graphiques sociaux",
+        "articleWriting": "Rédaction d'articles",
+        "videoEditing": "Montage Vidéo"
+      }
+    },
+    "whyChooseUs": {
+      "title": "Pourquoi Nous Choisir",
+      "features": {
+        "topVetted": {
+          "title": "Freelances Hautement Qualifiés",
+          "description": "Travaillez avec des experts sélectionnés qui répondent aux plus hauts standards de compétence, d'expérience et de fiabilité."
+        },
+        "zeroCommission": {
+          "title": "Zéro Frais de Commission",
+          "description": "Tarification transparente garantie — payez ou gagnez exactement ce qui est convenu sans frais cachés."
+        },
+        "flexibleScalable": {
+          "title": "Talents Flexibles & Évolutifs",
+          "description": "Embauchez pour de petites tâches ou des projets à grande échelle — tout ce dont vous avez besoin, quand vous en avez besoin."
+        }
+      }
+    },
+    "findTalentWay": {
+      "title": "Trouvez des talents",
+      "subtitle": "à votre façon",
+      "description": "Accédez à un réseau mondial de professionnels indépendants qualifiés prêts à vous aider à avancer plus vite et plus intelligemment. Que vous ayez besoin d'une solution rapide ou d'une refonte complète de votre entreprise, nos freelances apportent l'expertise et la flexibilité pour faire le travail correctement. Des petites tâches aux transformations à grande échelle, vous trouverez la correspondance parfaite pour vos objectifs — le tout en un seul endroit. Collaborez directement, gérez les projets facilement et expérimentez la liberté de travailler avec des talents de premier ordre selon vos conditions.",
+      "findFreelancer": "Trouver un freelance"
+    },
+    "skilledFreelancers": {
+      "title": "Freelances Qualifiés.",
+      "subtitle": "Zéro Tracas.",
+      "description": "Accédez à des freelances hautement notés sans le stress d'une recherche interminable ou de frais de commission élevés. Notre plateforme vous connecte directement avec des professionnels qualifiés en design, développement, rédaction, marketing et plus encore. Que vous commenciez un nouveau projet ou ayez besoin d'un soutien expert, nous facilitons la recherche, l'embauche et la collaboration — sans tracas. Profitez de paiements sécurisés, de contrats directs et d'un contrôle total sur votre flux de travail.",
+      "stats": {
+        "freelancers": "Freelances",
+        "freelanceWorkPosted": "Travail Freelance Publié"
+      }
+    },
+    "testimonial": {
+      "title": "Ce que disent nos Clients",
+      "seeMore": "Voir plus",
+      "seeLess": "Voir moins",
+      "testimonials": {
+        "smoothProcess": {
+          "title": "Processus Fluide",
+          "comment": "Le processus d'achat de voiture était incroyablement fluide et sans tracas ! J'ai trouvé ma voiture de rêve en quelques minutes, et l'équipe m'a guidé à chaque étape. Très recommandé pour quiconque cherche à acheter ou vendre une voiture !",
+          "name": "John Doe",
+          "intention": "Client Heureux"
+        },
+        "amazingSupport": {
+          "title": "Support Incroyable",
+          "comment": "Excellent service client ! La plateforme a facilité la comparaison des options et la recherche des meilleures offres. L'équipe de support a répondu à toutes mes questions et assuré une expérience sans faille.",
+          "name": "Sarah Johnson",
+          "intention": "Premier Acheteur"
+        },
+        "trustedPlatform": {
+          "title": "Plateforme de Confiance",
+          "comment": "Cette plateforme révolutionne l'expérience des passionnés de voitures. La transparence et la fiabilité m'ont donné confiance lors de l'achat. J'ai aussi vendu mon ancienne voiture ici, et le processus était rapide et efficace !",
+          "name": "Mike Brown",
+          "intention": "Passionné de Voitures"
+        }
+      }
+    }
+  }
+}

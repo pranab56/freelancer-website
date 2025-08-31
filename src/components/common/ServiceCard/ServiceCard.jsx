@@ -30,8 +30,8 @@ function ServiceCard() {
             </div>
           </div>
           <div className="text-right">
-            <p className="text-xs text-muted-foreground">Work Completed: 30</p>
-            <p className="text-lg h2-gradient-text font-bold">
+            <p className="text-xs text-muted-foreground">Job Completed: 30</p>
+            <p className="text-normal h2-gradient-text font-bold">
               Daily Rate: $50
             </p>
           </div>

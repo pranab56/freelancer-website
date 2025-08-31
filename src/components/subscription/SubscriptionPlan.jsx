@@ -1,18 +1,23 @@
 "use client";
 import React from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { useSelector } from "react-redux";
+
 function SubscriptionPlan() {
+  const t = useTranslations("subscriptionPlan");
+  const locale = useLocale();
   const userType = useSelector((state) => state.currentUser?.currentUser?.type);
+
   const subscriptionPlansFreelancer = [
     {
       id: 1,
-      title: "Starter plan",
+      title: t("freelancer.starterPlan.title"),
       icon: "👤",
       fee: 9,
-      duration: "mo",
+      duration: t("duration.month"),
       features: [
         "Apply to 10 tenders /mo",
         "Profile visible",
@@ -26,10 +31,10 @@ function SubscriptionPlan() {
     },
     {
       id: 2,
-      title: "Starter plan",
+      title: t("freelancer.starterPlan.title"),
       icon: "👤",
       fee: 90,
-      duration: "year",
+      duration: t("duration.year"),
       features: [
         "Apply to 10 tenders /mo",
         "Profile visible",
@@ -43,10 +48,10 @@ function SubscriptionPlan() {
     },
     {
       id: 3,
-      title: "Pro plan",
+      title: t("freelancer.proPlan.title"),
       icon: "⭐",
       fee: 12,
-      duration: "mo",
+      duration: t("duration.month"),
       features: [
         "Priority profile listing",
         "All Starter features",
@@ -61,10 +66,10 @@ function SubscriptionPlan() {
     },
     {
       id: 4,
-      title: "Pro plan",
+      title: t("freelancer.proPlan.title"),
       icon: "⭐",
       fee: 120,
-      duration: "year",
+      duration: t("duration.year"),
       features: [
         "Priority profile listing",
         "All Starter features",
@@ -82,66 +87,66 @@ function SubscriptionPlan() {
   const subscriptionPlansClient = [
     {
       id: 1,
-      title: "Business plan",
+      title: t("client.businessPlan.title"),
       icon: "👤",
       fee: 49,
-      duration: "mo",
+      duration: t("duration.month"),
       features: [
-        " 5 tenders/month",
-        " Unlimited applications",
-        " Pre-filled contract draft (can  export)",
-        " Internal tracking of missions",
-        " Export of freelancer invoices",
-        " AI suggestion engine",
+        "5 tenders/month",
+        "Unlimited applications",
+        "Pre-filled contract draft (can export)",
+        "Internal tracking of missions",
+        "Export of freelancer invoices",
+        "AI suggestion engine",
       ],
       isActive: true,
     },
     {
       id: 2,
-      title: "Business plan",
+      title: t("client.businessPlan.title"),
       icon: "👤",
       fee: 490,
-      duration: "year",
+      duration: t("duration.year"),
       features: [
-        " 5 tenders/month",
-        " Unlimited applications",
-        " Pre-filled contract draft (can  export)",
-        " Internal tracking of missions",
-        " Export of freelancer invoices",
-        " AI suggestion engine",
+        "5 tenders/month",
+        "Unlimited applications",
+        "Pre-filled contract draft (can export)",
+        "Internal tracking of missions",
+        "Export of freelancer invoices",
+        "AI suggestion engine",
       ],
       isActive: false,
     },
     {
       id: 3,
-      title: "Enterprise plan",
+      title: t("client.enterprisePlan.title"),
       icon: "⭐",
       fee: 12,
-      duration: "mo",
+      duration: t("duration.month"),
       features: [
-        " Unlimited tenders",
-        " All Business features",
-        " Premium freelancer matching  by AI",
-        " Built-in contract editing and  signature",
-        " Bulk management of  freelancers",
-        " Accounting dashboard",
+        "Unlimited tenders",
+        "All Business features",
+        "Premium freelancer matching by AI",
+        "Built-in contract editing and signature",
+        "Bulk management of freelancers",
+        "Accounting dashboard",
         "Team permissions",
       ],
       isActive: false,
     },
     {
       id: 4,
-      title: "Enterprise plan",
+      title: t("client.enterprisePlan.title"),
       icon: "⭐",
       fee: 120,
-      duration: "year",
+      duration: t("duration.year"),
       features: [
-        " Unlimited tenders",
-        " All Business features",
-        " Premium freelancer matching  by AI",
-        " Built-in contract editing and  signature",
-        " Bulk management of  freelancers",
-        " Accounting dashboard",
+        "Unlimited tenders",
+        "All Business features",
+        "Premium freelancer matching by AI",
+        "Built-in contract editing and signature",
+        "Bulk management of freelancers",
+        "Accounting dashboard",
         "Team permissions",
       ],
       isActive: false,
@@ -154,14 +159,13 @@ function SubscriptionPlan() {
         {/* Header Section */}
         <div className="text-center mb-12">
           <Badge className="mb-6 px-4 py-2 text-sm font-medium rounded-full gradient">
-            Pricing plans
+            {t("badge")}
           </Badge>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Plans for all sizes
+            {t("title")}
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Simple, transparent pricing that grows with you. Try any plan free
-            for 30 days.
+            {t("description")}
           </p>
         </div>
 
@@ -195,7 +199,7 @@ function SubscriptionPlan() {
                           {plan.fee}
                         </span>
                         <span className="text-lg text-gray-600 ml-1">
-                          €/{plan.duration}
+                          {t("currency")}/{plan.duration}
                         </span>
                       </div>
                     </div>
@@ -216,7 +220,9 @@ function SubscriptionPlan() {
 
                     {/* Button */}
                     <Button className="w-full font-medium button-gradient ">
-                      {plan.isActive ? "Running" : "Upgrade"}
+                      {plan.isActive
+                        ? t("status.running")
+                        : t("status.upgrade")}
                     </Button>
                   </div>
                 </Card>
@@ -244,7 +250,7 @@ function SubscriptionPlan() {
                           {plan.fee}
                         </span>
                         <span className="text-lg text-gray-600 ml-1">
-                          €/{plan.duration}
+                          {t("currency")}/{plan.duration}
                         </span>
                       </div>
                     </div>
@@ -261,7 +267,9 @@ function SubscriptionPlan() {
                       ))}
                     </div>
                     <Button className="w-full font-medium button-gradient ">
-                      {plan.isActive ? "Running" : "Upgrade"}
+                      {plan.isActive
+                        ? t("status.running")
+                        : t("status.upgrade")}
                     </Button>
                   </div>
                 </Card>

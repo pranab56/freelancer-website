@@ -221,8 +221,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useTranslations } from "next-intl";
 
 function Testimonial() {
+  const t = useTranslations("home.testimonial");
   const swiperRef = useRef(null);
   const [expandedComments, setExpandedComments] = useState({});
   const [truncateLength, setTruncateLength] = useState(120); // default for desktop
@@ -230,39 +232,35 @@ function Testimonial() {
   const testimonials = [
     {
       id: 1,
-      title: "Smooth Process",
-      comment:
-        "The car-buying process was incredibly smooth and hassle-free! I found my dream car within minutes, and the team guided me through every step. Highly recommended for anyone looking to buy or sell a car!",
+      title: t("testimonials.smoothProcess.title"),
+      comment: t("testimonials.smoothProcess.comment"),
       avatar: "/home/john_doe.png",
-      name: "John Doe",
-      intention: "Happy Customer",
+      name: t("testimonials.smoothProcess.name"),
+      intention: t("testimonials.smoothProcess.intention"),
     },
     {
       id: 2,
-      title: "Amazing Support",
-      comment:
-        "Excellent customer service! The platform made it easy to compare options and find the best deals. The support team answered all my questions and ensured a seamless experience.",
+      title: t("testimonials.amazingSupport.title"),
+      comment: t("testimonials.amazingSupport.comment"),
       avatar: "/home/sara.png",
-      name: "Sarah Johnson",
-      intention: "First-Time Buyer",
+      name: t("testimonials.amazingSupport.name"),
+      intention: t("testimonials.amazingSupport.intention"),
     },
     {
       id: 3,
-      title: "Trusted Platform",
-      comment:
-        "This platform is a game-changer for car enthusiasts. The transparency and reliability gave me confidence while purchasing. I sold my old car here too, and the process was quick and efficient!",
+      title: t("testimonials.trustedPlatform.title"),
+      comment: t("testimonials.trustedPlatform.comment"),
       avatar: "/home/mike.png",
-      name: "Mike Brown",
-      intention: "Car Enthusiast",
+      name: t("testimonials.trustedPlatform.name"),
+      intention: t("testimonials.trustedPlatform.intention"),
     },
     {
       id: 4,
-      title: "Trusted Platform",
-      comment:
-        "This platform is a game-changer for car enthusiasts. The transparency and reliability gave me confidence while purchasing. I sold my old car here too, and the process was quick and efficient!",
+      title: t("testimonials.trustedPlatform.title"),
+      comment: t("testimonials.trustedPlatform.comment"),
       avatar: "/home/mike.png",
-      name: "Mike Brown",
-      intention: "Car Enthusiast",
+      name: t("testimonials.trustedPlatform.name"),
+      intention: t("testimonials.trustedPlatform.intention"),
     },
   ];
 
@@ -348,7 +346,7 @@ function Testimonial() {
         {/* Header */}
         <div className="flex justify-between items-center mb-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold h2-gradient-text leading-tight">
-            What our Clients say
+            {t("title")}
           </h2>
         </div>
 
@@ -381,7 +379,7 @@ function Testimonial() {
                               onClick={() => toggleComment(testimonial.id)}
                               className="text-blue-600 hover:text-blue-800 text-sm font-medium mt-2 transition-colors focus:outline-none focus:underline"
                             >
-                              {isExpanded ? "See less" : "See more"}
+                              {isExpanded ? t("seeLess") : t("seeMore")}
                             </button>
                           )}
                         </div>

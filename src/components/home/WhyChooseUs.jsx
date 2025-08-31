@@ -1,23 +1,23 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 function WhyChooseUs() {
+  const t = useTranslations("home.whyChooseUs");
+
   const features = [
     {
-      title: "Top-Vetted Freelancers",
-      description:
-        "Work with handpicked experts who meet the highest standards for skill, experience, and reliability.",
+      title: t("features.topVetted.title"),
+      description: t("features.topVetted.description"),
     },
     {
-      title: "Zero Commission Fees",
-      description:
-        "Transparent pricing guaranteed—pay or earn exactly what's agreed with no hidden fees.",
+      title: t("features.zeroCommission.title"),
+      description: t("features.zeroCommission.description"),
     },
     {
-      title: "Flexible & Scalable Talent",
-      description:
-        "Hire for small tasks or full-scale projects—whatever you need, whenever you need it.",
+      title: t("features.flexibleScalable.title"),
+      description: t("features.flexibleScalable.description"),
     },
   ];
 
@@ -43,7 +43,7 @@ function WhyChooseUs() {
               {/* Feature Cards */}
               <Card className="p-6 space-y-4 flex flex-col items-center justify-center ">
                 <h2 className="text-4xl lg:text-5xl font-bold h2-gradient-text leading-tight">
-                  Why Choose Us
+                  {t("title")}
                 </h2>
                 {features.map((feature, index) => (
                   <div
