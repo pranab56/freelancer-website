@@ -3,8 +3,7 @@ import React, { useState, useEffect } from "react";
 import ReactCountryFlag from "react-country-flag";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLocale } from "next-intl";
-import { locales } from "@/i18n/routing";
+
 import { Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,20 +36,19 @@ import {
   setCurrentUser,
 } from "@/redux/features/currentUser/currentuserSlice";
 import provideIcon from "@/utils/IconProvider/provideIcon";
+import LanguageSelector from "@/components/common/LanguageSelector";
+import { useLocale } from "@/components/common/TranslationWrapper";
 
 function ClientNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const localeFromHook = useLocale();
   const dispatch = useDispatch();
+  const localeFromHook = useLocale();
 
-  // Extract locale from pathname as fallback
-  const pathnameLocale = pathname.split("/")[1];
-  const locale = locales.includes(pathnameLocale)
-    ? pathnameLocale
-    : localeFromHook;
+  // Use only Redux state for locale
+  const locale = localeFromHook;
   const userType = useSelector((state) => state.currentUser.currentUser.type);
 
   useEffect(() => {
@@ -59,12 +57,12 @@ function ClientNavBar() {
 
   // Navigation items - only client specific pages
   const navItems = [
-    { label: "Job Board", href: `/${locale}/job-board` },
-    { label: "Tenders", href: `/${locale}/tenders` },
-    { label: "My Projects", href: `/${locale}/my-projects` },
-    { label: "Invoices", href: `/${locale}/invoices` },
-    { label: "Inbox", href: `/${locale}/inbox` },
-    { label: "My Subscription", href: `/${locale}/my-subscription` },
+    { label: "Job Board", href: `/job-board` },
+    { label: "Tenders", href: `/tenders` },
+    { label: "My Projects", href: `/my-projects` },
+    { label: "Invoices", href: `/invoices` },
+    { label: "Inbox", href: `/inbox` },
+    { label: "My Subscription", href: `/my-subscription` },
   ];
 
   // Helper function to determine if link is active
@@ -102,9 +100,7 @@ function ClientNavBar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
-          <Link href={`/${locale}`}>
-            {provideIcon({ name: "company_logo" })}
-          </Link>
+          <Link href={`/`}>{provideIcon({ name: "company_logo" })}</Link>
         </div>
         {/* Desktop Navigation Links */}
         <div className="hidden lg:flex items-center space-x-8">
@@ -124,63 +120,7 @@ function ClientNavBar() {
             </Link>
           ))}
         </div>{" "}
-        <Select
-          value={locale}
-          onValueChange={(newLocale) => {
-            // Remove the current locale from the pathname
-            const pathWithoutLocale = pathname.replace(`/${locale}`, "");
-            // If the path is empty (just "/"), use "/" instead of ""
-            const newPath = pathWithoutLocale === "" ? "/" : pathWithoutLocale;
-            router.push(`/${newLocale}${newPath}`);
-          }}
-        >
-          <SelectTrigger className="w-[130px] !h-10 hidden lg:flex">
-            <div className="flex items-center">
-              {locale === "en" ? (
-                <ReactCountryFlag
-                  countryCode="GB"
-                  svg
-                  className="mr-2"
-                  style={{ width: "18px", height: "18px" }}
-                />
-              ) : (
-                <ReactCountryFlag
-                  countryCode="FR"
-                  svg
-                  className="mr-2"
-                  style={{ width: "18px", height: "18px" }}
-                />
-              )}
-              <SelectValue>
-                {locale === "en" ? "English" : "Français"}
-              </SelectValue>
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="en">
-              <div className="flex items-center">
-                <ReactCountryFlag
-                  countryCode="GB"
-                  svg
-                  className="mr-2"
-                  style={{ width: "18px", height: "18px" }}
-                />
-                English
-              </div>
-            </SelectItem>
-            <SelectItem value="fr">
-              <div className="flex items-center">
-                <ReactCountryFlag
-                  countryCode="FR"
-                  svg
-                  className="mr-2"
-                  style={{ width: "18px", height: "18px" }}
-                />
-                Français
-              </div>
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <LanguageSelector className="hidden lg:flex" />
         {/* <Button onClick={showAsClient}>View As Client</Button> */}
         {/* User Profile Section */}
         <div className="hidden lg:flex items-center">
@@ -208,34 +148,25 @@ function ClientNavBar() {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuItem asChild>
                 <Link
-                  href={`/${locale}/client-profile-private/1`}
+                  href={`/client-profile-private/1`}
                   className="w-full cursor-pointer"
                 >
                   View Profile
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link
-                  href={`/${locale}/settings`}
-                  className="w-full cursor-pointer"
-                >
+                <Link href={`/settings`} className="w-full cursor-pointer">
                   Account Settings
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link
-                  href={`/${locale}/billing`}
-                  className="w-full cursor-pointer"
-                >
+                <Link href={`/billing`} className="w-full cursor-pointer">
                   Billing & Plans
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link
-                  href={`/${locale}/help`}
-                  className="w-full cursor-pointer"
-                >
+                <Link href={`/help`} className="w-full cursor-pointer">
                   Help & Support
                 </Link>
               </DropdownMenuItem>
@@ -282,67 +213,7 @@ function ClientNavBar() {
               </DrawerHeader>
               <div className="px-6 pb-6 space-y-2">
                 {/* Mobile Language Selector */}
-                <Select
-                  value={locale}
-                  onValueChange={(newLocale) => {
-                    // Remove the current locale from the pathname
-                    const pathWithoutLocale = pathname.replace(
-                      `/${locale}`,
-                      ""
-                    );
-                    // If the path is empty (just "/"), use "/" instead of ""
-                    const newPath =
-                      pathWithoutLocale === "" ? "/" : pathWithoutLocale;
-                    router.push(`/${newLocale}${newPath}`);
-                  }}
-                >
-                  <SelectTrigger className="w-full mb-2">
-                    <div className="flex items-center">
-                      {locale === "en" ? (
-                        <ReactCountryFlag
-                          countryCode="GB"
-                          svg
-                          className="mr-2"
-                          style={{ width: "18px", height: "18px" }}
-                        />
-                      ) : (
-                        <ReactCountryFlag
-                          countryCode="FR"
-                          svg
-                          className="mr-2"
-                          style={{ width: "18px", height: "18px" }}
-                        />
-                      )}
-                      <SelectValue>
-                        {locale === "en" ? "English" : "Français"}
-                      </SelectValue>
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="en">
-                      <div className="flex items-center">
-                        <ReactCountryFlag
-                          countryCode="GB"
-                          svg
-                          className="mr-2"
-                          style={{ width: "18px", height: "18px" }}
-                        />
-                        English
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="fr">
-                      <div className="flex items-center">
-                        <ReactCountryFlag
-                          countryCode="FR"
-                          svg
-                          className="mr-2"
-                          style={{ width: "18px", height: "18px" }}
-                        />
-                        Français
-                      </div>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                <LanguageSelector className="w-full mb-2" />
                 {/* Mobile Navigation */}
                 {navItems.map((item, index) => (
                   <Button
@@ -364,30 +235,28 @@ function ClientNavBar() {
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/${locale}/client-profile-private/1`}>
-                      View Profile
-                    </Link>
+                    <Link href={`/client-profile-private/1`}>View Profile</Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/${locale}/settings`}>Account Settings</Link>
+                    <Link href={`/settings`}>Account Settings</Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/${locale}/billing`}>Billing & Plans</Link>
+                    <Link href={`/billing`}>Billing & Plans</Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/${locale}/help`}>Help & Support</Link>
+                    <Link href={`/help`}>Help & Support</Link>
                   </Button>
                   <Button
                     variant="ghost"

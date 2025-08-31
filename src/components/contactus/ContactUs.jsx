@@ -1,17 +1,20 @@
 "use client";
 import React from "react";
-import { useTranslations } from "next-intl";
+import { useSelector } from "react-redux";
 import Banner from "../common/banner/Banner";
 import Heading from "../common/heading/Heading";
 import ContactForm from "./ContactForm";
 
 function ContactUs() {
-  const t = useTranslations("contactUs");
+  const messages = useSelector((state) => state.language.messages);
+  const contactUsTranslations = messages?.contactUs || {};
 
   const contactUsBanner = {
     src: "/contact/contact_1.png",
-    header: t("banner.header"),
-    text: t("banner.text"),
+    header: contactUsTranslations.banner?.header || "Contact Us",
+    text:
+      contactUsTranslations.banner?.text ||
+      "We'd love to hear from you! Whether you have questions, need support, or want to share feedback, our team is here to assist you.",
   };
 
   return (
@@ -23,8 +26,11 @@ function ContactUs() {
       />
       <div className="px-4 sm:px-6 2xl:px-0">
         <Heading
-          heading={t("heading.main")}
-          subheading={t("heading.subheading")}
+          heading={contactUsTranslations.heading?.main || "Get In Touch"}
+          subheading={
+            contactUsTranslations.heading?.subheading ||
+            "Likewise, a range of activities enriches life, blending vigor with balance. The result is a lifestyle that's not only dynamic but also deeply rewarding."
+          }
         />
         <ContactForm />
       </div>

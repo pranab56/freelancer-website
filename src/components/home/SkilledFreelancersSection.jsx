@@ -1,11 +1,13 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import { useTranslations, useLocale } from "next-intl";
+import { useSelector } from "react-redux";
 
 function SkilledFreelancersSection() {
-  const t = useTranslations("home.skilledFreelancers");
-  const locale = useLocale();
+  const messages = useSelector((state) => state.language.messages);
+  const locale = useSelector((state) => state.language.currentLocale);
+  const skilledFreelancersTranslations =
+    messages?.home?.skilledFreelancers || {};
 
   return (
     <section className="py-10 2xl:py-16 px-6 bg-white ">
@@ -30,7 +32,7 @@ function SkilledFreelancersSection() {
                   500+
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600">
-                  {t("stats.freelancers")}
+                  {skilledFreelancersTranslations.stats?.freelancers}
                 </div>
               </CardContent>
             </Card>
@@ -41,7 +43,7 @@ function SkilledFreelancersSection() {
                   300+
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600">
-                  {t("stats.freelanceWorkPosted")}
+                  {skilledFreelancersTranslations.stats?.freelanceWorkPosted}
                 </div>
               </CardContent>
             </Card>
@@ -50,13 +52,17 @@ function SkilledFreelancersSection() {
           {/* Right Side - Content */}
           <div className="space-y-6 text-left">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-              <span className="text-blue-600">{t("title")}</span>
+              <span className="text-blue-600">
+                {skilledFreelancersTranslations.title}
+              </span>
               <br />
-              <span className="text-blue-600">{t("subtitle")}</span>
+              <span className="text-blue-600">
+                {skilledFreelancersTranslations.subtitle}
+              </span>
             </h2>
 
             <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-              {t("description")}
+              {skilledFreelancersTranslations.description}
             </p>
           </div>
         </div>

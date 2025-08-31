@@ -2,11 +2,20 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
-import { useTranslations } from "next-intl";
 
 function HomeBanner() {
-  const t = useTranslations("home.banner");
+  const locale = useSelector((state) => state.language.currentLocale);
   const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
+  const messages = useSelector((state) => state.language.messages);
+
+  // Get banner translations directly from Redux state
+  const bannerTranslations = messages?.home?.banner || {};
+
+  // Debug logging
+  console.log("HomeBanner - Locale:", locale);
+  console.log("HomeBanner - Messages:", messages);
+  console.log("HomeBanner - Banner translations:", bannerTranslations);
+
   return (
     <section className="relative h-screen w-full overflow-hidden">
       {/* Background Video */}
@@ -30,13 +39,14 @@ function HomeBanner() {
         <div className="text-center  lg:min-w-7xl  mx-auto">
           {/* Main Heading */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            {t("title")} <span className="inline">{t("subtitle1")}</span>
-            <span className="block">{t("subtitle2")}</span>
+            {bannerTranslations.title}{" "}
+            <span className="inline">{bannerTranslations.subtitle1}</span>
+            <span className="block">{bannerTranslations.subtitle2}</span>
           </h1>
 
           {/* Subheading */}
           <p className="text-lg md:text-xl text-gray-200 mb-12 max-w-3xl mx-auto leading-relaxed">
-            {t("description")}
+            {bannerTranslations.description}
           </p>
 
           {/* Call to Action Buttons */}
@@ -46,9 +56,9 @@ function HomeBanner() {
                 size="lg"
                 className="bg-white text-black hover:bg-gray-100 font-semibold px-8 py-4 text-lg rounded-full min-w-[250px] w-full md:w-auto h-12"
               >
-                {t("findTalent")}
+                {bannerTranslations.findTalent}
                 <span className="ml-2 text-sm text-gray-600">
-                  {t("forClients")}
+                  {bannerTranslations.forClients}
                 </span>
               </Button>
 
@@ -57,9 +67,9 @@ function HomeBanner() {
                 variant="outline"
                 className="border-white text-white hover:bg-white hover:text-black font-semibold px-8 py-4 text-lg rounded-full min-w-[250px] w-full md:w-auto bg-transparent h-12"
               >
-                {t("applyToJoin")}
+                {bannerTranslations.applyToJoin}
                 <span className="ml-2 text-sm opacity-80">
-                  {t("forFreelancers")}
+                  {bannerTranslations.forFreelancers}
                 </span>
               </Button>
             </div>

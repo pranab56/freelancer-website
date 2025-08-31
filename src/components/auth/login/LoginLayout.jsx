@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,13 +9,13 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Image from "next/image";
 import Link from "next/link";
-import { useLocale } from "next-intl";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "@/redux/features/currentUser/currentuserSlice";
+import { toast } from "sonner";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
-  const locale = useLocale();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -24,6 +24,18 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const router = useRouter();
   const dispatch = useDispatch();
+
+  // Check if user is already logged in
+  const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
+  const currentUser = useSelector((state) => state.currentUser.currentUser);
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (isLoggedIn && currentUser) {
+      toast.success(`Welcome back, ${currentUser.type}!`);
+      router.push("/");
+    }
+  }, [isLoggedIn, currentUser, router]);
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -34,7 +46,7 @@ const LoginPage = () => {
     const newErrors = {};
 
     // Email validation
-    if (!formData.email) {
+    if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!validateEmail(formData.email)) {
       newErrors.email = "Please enter a valid email address";
@@ -74,40 +86,93 @@ const LoginPage = () => {
     }
 
     setLoading(true);
+    setErrors({});
 
-    // Test accounts logic
-    const testAccounts = {
-      "freelancer@gmail.com": {
-        password: "A123456",
-        type: "freelancer",
-      },
-      "client@gmail.com": {
-        password: "A123456",
-        type: "client",
-      },
-    };
+    try {
+      // Simulate API call delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const account = testAccounts[formData.email];
+      // Test accounts logic (in real app, this would be an API call)
+      const testAccounts = {
+        "freelancer@gmail.com": {
+          password: "A123456",
+          type: "freelancer",
+          name: "John Freelancer",
+          email: "freelancer@gmail.com",
+        },
+        "client@gmail.com": {
+          password: "A123456",
+          type: "client",
+          name: "Jane Client",
+          email: "client@gmail.com",
+        },
+      };
 
-    if (account && account.password === formData.password) {
-      // Set user type in Redux
-      dispatch(setCurrentUser({ type: account.type }));
-      // Store token (you can use any string for testing)
-      localStorage.setItem("token", "test-token");
-      // Redirect to home page
-      router.push(`/${locale}`);
-    } else {
+      const account = testAccounts[formData.email.toLowerCase()];
+
+      if (account && account.password === formData.password) {
+        // Set user data in Redux
+        dispatch(
+          setCurrentUser({
+            type: account.type,
+            name: account.name,
+            email: account.email,
+            id: `user_${Date.now()}`,
+          })
+        );
+
+        // Store token and user data
+        localStorage.setItem("token", `token_${Date.now()}`);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            type: account.type,
+            name: account.name,
+            email: account.email,
+          })
+        );
+
+        // Show success message
+        toast.success(`Welcome back, ${account.name}!`);
+
+        // Redirect to home page
+        router.push("/");
+      } else {
+        setErrors({
+          email: "Invalid email or password",
+          password: "Invalid email or password",
+        });
+        toast.error("Invalid email or password");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
       setErrors({
-        email: "Invalid email or password",
-        password: "Invalid email or password",
+        email: "An error occurred during login",
+        password: "An error occurred during login",
       });
+      toast.error("An error occurred during login");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  const handleGoogleLogin = () => {
-    console.log("Google login clicked");
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    try {
+      // Simulate Google OAuth
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      toast.info("Google login functionality coming soon!");
+    } catch (error) {
+      toast.error("Google login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      onFinish(e);
+    }
   };
 
   return (
@@ -115,7 +180,7 @@ const LoginPage = () => {
       {/* Logo */}
       <div className="flex flex-col gap-4 md:gap-8">
         <div className="w-full flex justify-center items-center">
-          <div className="w-40 h-20 md:w-48 lg:w-56  rounded-lg flex items-center justify-center">
+          <div className="w-40 h-20 md:w-48 lg:w-56 rounded-lg flex items-center justify-center">
             <Image
               src={"/auth/lunaq.png"}
               width={150}
@@ -144,9 +209,11 @@ const LoginPage = () => {
             placeholder="Enter your email"
             value={formData.email}
             onChange={(e) => handleInputChange("email", e.target.value)}
+            onKeyPress={handleKeyPress}
             className={`rounded-full h-12 px-4 ${
-              errors.email ? "border-red-500" : ""
+              errors.email ? "border-red-500 focus:border-red-500" : ""
             }`}
+            disabled={loading}
           />
           {errors.email && (
             <Alert variant="destructive" className="py-2">
@@ -171,9 +238,11 @@ const LoginPage = () => {
               placeholder="••••••••"
               value={formData.password}
               onChange={(e) => handleInputChange("password", e.target.value)}
+              onKeyPress={handleKeyPress}
               className={`rounded-full h-12 px-4 pr-12 ${
-                errors.password ? "border-red-500" : ""
+                errors.password ? "border-red-500 focus:border-red-500" : ""
               }`}
+              disabled={loading}
             />
             <Button
               type="button"
@@ -181,6 +250,7 @@ const LoginPage = () => {
               size="sm"
               className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
               onClick={() => setShowPassword(!showPassword)}
+              disabled={loading}
             >
               {showPassword ? (
                 <EyeOff className="h-4 w-4 text-gray-500" />
@@ -199,10 +269,11 @@ const LoginPage = () => {
         </div>
 
         <div className="text-right">
-          <Link href={`/${locale}/auth/forgot-password`}>
+          <Link href={`/auth/forgot-password`}>
             <Button
               variant="link"
               className="p-0 h-auto text-xs md:text-sm text-gray-600 hover:text-gray-800"
+              disabled={loading}
             >
               Forgot password
             </Button>
@@ -213,9 +284,16 @@ const LoginPage = () => {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 rounded-full h-12 font-semibold text-base"
+            className="w-full bg-blue-600 hover:bg-blue-700 rounded-full h-12 font-semibold text-base disabled:opacity-50"
           >
-            {loading ? "Signing In..." : "Sign In"}
+            {loading ? (
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Signing In...
+              </div>
+            ) : (
+              "Sign In"
+            )}
           </Button>
         </div>
 
@@ -224,7 +302,8 @@ const LoginPage = () => {
             type="button"
             variant="outline"
             onClick={handleGoogleLogin}
-            className="w-full border-gray-300 hover:border-gray-400 rounded-full h-12 flex items-center justify-center gap-2"
+            disabled={loading}
+            className="w-full border-gray-300 hover:border-gray-400 rounded-full h-12 flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -255,12 +334,28 @@ const LoginPage = () => {
           Don't have an account?{" "}
           <Button
             variant="link"
-            onClick={() => router.push("/sign-up")}
+            onClick={() => router.push(`/auth/sign-up`)}
             className="p-0 h-auto text-blue-600 hover:text-blue-800 font-semibold"
+            disabled={loading}
           >
             Sign up
           </Button>
         </p>
+      </div>
+
+      {/* Demo accounts info */}
+      <div className="mt-8 p-4 bg-gray-50 rounded-lg">
+        <h4 className="text-sm font-semibold text-gray-700 mb-2">
+          Demo Accounts:
+        </h4>
+        <div className="text-xs text-gray-600 space-y-1">
+          <p>
+            <strong>Freelancer:</strong> freelancer@gmail.com / A123456
+          </p>
+          <p>
+            <strong>Client:</strong> client@gmail.com / A123456
+          </p>
+        </div>
       </div>
     </div>
   );

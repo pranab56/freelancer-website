@@ -10,6 +10,7 @@ import chatSlice from "../features/chat/chatSlice";
 import currentUserSlice from "../features/currentUser/currentuserSlice";
 import createJobSlice from "../features/createJob/createjobSlice";
 import createTenderSlice from "../features/createTender/createtenderSlice";
+import languageSlice from "../features/languageSlice";
 // import projectSlice from '../features/project/projectSlice';
 
 // Root reducer
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   currentUser: currentUserSlice,
   createJob: createJobSlice,
   createTender: createTenderSlice,
+  language: languageSlice,
   // project: projectSlice,
 });
 
@@ -34,6 +36,7 @@ const persistConfig = {
     "currentUser",
     "createJob",
     "createTender",
+    "language",
   ], // Only persist these reducers
 };
 

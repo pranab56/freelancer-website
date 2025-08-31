@@ -1,23 +1,26 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useSelector } from "react-redux";
 
 function WhyChooseUs() {
-  const t = useTranslations("home.whyChooseUs");
+  const messages = useSelector((state) => state.language.messages);
+  const whyChooseUsTranslations = messages?.home?.whyChooseUs || {};
 
   const features = [
     {
-      title: t("features.topVetted.title"),
-      description: t("features.topVetted.description"),
+      title: whyChooseUsTranslations.features?.topVetted?.title,
+      description: whyChooseUsTranslations.features?.topVetted?.description,
     },
     {
-      title: t("features.zeroCommission.title"),
-      description: t("features.zeroCommission.description"),
+      title: whyChooseUsTranslations.features?.zeroCommission?.title,
+      description:
+        whyChooseUsTranslations.features?.zeroCommission?.description,
     },
     {
-      title: t("features.flexibleScalable.title"),
-      description: t("features.flexibleScalable.description"),
+      title: whyChooseUsTranslations.features?.flexibleScalable?.title,
+      description:
+        whyChooseUsTranslations.features?.flexibleScalable?.description,
     },
   ];
 
@@ -43,7 +46,7 @@ function WhyChooseUs() {
               {/* Feature Cards */}
               <Card className="p-6 space-y-4 flex flex-col items-center justify-center ">
                 <h2 className="text-4xl lg:text-5xl font-bold h2-gradient-text leading-tight">
-                  {t("title")}
+                  {whyChooseUsTranslations.title}
                 </h2>
                 {features.map((feature, index) => (
                   <div

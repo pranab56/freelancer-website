@@ -4,49 +4,52 @@ import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useSelector } from "react-redux";
+
 function PopularServices() {
   const pathname = usePathname();
-  const t = useTranslations("home.popularServices");
+  const messages = useSelector((state) => state.language.messages);
+  const popularServicesTranslations = messages?.home?.popularServices || {};
+
   const popularCategories = [
     {
       id: 1,
-      label: t("services.graphicDesign"),
+      label: popularServicesTranslations.services?.graphicDesign,
       src: "/popular_categories/graphics_design.png",
     },
     {
       id: 2,
-      label: t("services.cartoonAnimation"),
+      label: popularServicesTranslations.services?.cartoonAnimation,
       src: "/popular_categories/cartoon_animation.png",
     },
     {
       id: 3,
-      label: t("services.illustration"),
+      label: popularServicesTranslations.services?.illustration,
       src: "/popular_categories/illustration.png",
     },
     {
       id: 4,
-      label: t("services.flyersVouchers"),
+      label: popularServicesTranslations.services?.flyersVouchers,
       src: "/popular_categories/flyers.png",
     },
     {
       id: 5,
-      label: t("services.logoDesign"),
+      label: popularServicesTranslations.services?.logoDesign,
       src: "/popular_categories/logo_design.png",
     },
     {
       id: 6,
-      label: t("services.socialGraphics"),
+      label: popularServicesTranslations.services?.socialGraphics,
       src: "/popular_categories/social.png",
     },
     {
       id: 7,
-      label: t("services.articleWriting"),
+      label: popularServicesTranslations.services?.articleWriting,
       src: "/popular_categories/article.png",
     },
     {
       id: 8,
-      label: t("services.videoEditing"),
+      label: popularServicesTranslations.services?.videoEditing,
       src: "/popular_categories/video_editing.png",
     },
   ];
@@ -54,7 +57,9 @@ function PopularServices() {
   return (
     <div className="w-full lg:w-10/12 px-6 mx-auto my-12 flex flex-col justify-center">
       <h2 className="text-4xl h2-gradient-text leading-14 font-bold text-center">
-        {pathname === "/services" ? t("exploreMoreTitle") : t("title")}
+        {pathname === "/services"
+          ? popularServicesTranslations.exploreMoreTitle
+          : popularServicesTranslations.title}
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-8 my-12">
         {popularCategories.map((category, index) => (
@@ -85,7 +90,7 @@ function PopularServices() {
         ))}
       </div>
       <Button className="w-60 button-gradient mx-auto">
-        {t("seeAllCategories")}
+        {popularServicesTranslations.seeAllCategories}
       </Button>
     </div>
   );

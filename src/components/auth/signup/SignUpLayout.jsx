@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Image from "next/image";
 import AccountTypeDialog from "../clientOrFreelancer/ClientOrFreelancer";
+import { useSelector } from "react-redux";
 
 const SignUpPage = () => {
   const [showAccountTypeDialog, setShowAccountTypeDialog] = useState(true);
@@ -23,7 +24,7 @@ const SignUpPage = () => {
   });
   const [errors, setErrors] = useState({});
   const router = useRouter();
-
+  const locale = useSelector((state) => state.language.currentLocale);
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -310,7 +311,7 @@ const SignUpPage = () => {
             Already have an account?{" "}
             <Button
               variant="link"
-              onClick={() => router.push("/login")}
+              onClick={() => router.push(`/auth/login`)}
               className="p-0 h-auto text-blue-600 hover:text-blue-800 font-semibold"
             >
               Log in

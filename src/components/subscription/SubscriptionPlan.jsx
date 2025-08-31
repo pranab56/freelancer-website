@@ -1,84 +1,119 @@
 "use client";
 import React from "react";
-import { useTranslations, useLocale } from "next-intl";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { useSelector } from "react-redux";
 
 function SubscriptionPlan() {
-  const t = useTranslations("subscriptionPlan");
-  const locale = useLocale();
   const userType = useSelector((state) => state.currentUser?.currentUser?.type);
+  const messages = useSelector((state) => state.language.messages);
+  const subscriptionPlanTranslations = messages?.subscriptionPlan || {};
 
   const subscriptionPlansFreelancer = [
     {
       id: 1,
-      title: t("freelancer.starterPlan.title"),
+      title:
+        subscriptionPlanTranslations.freelancer?.starterPlan?.title ||
+        "Starter plan",
       icon: "👤",
       fee: 9,
-      duration: t("duration.month"),
+      duration: subscriptionPlanTranslations.duration?.month || "mo",
       features: [
-        "Apply to 10 tenders /mo",
-        "Profile visible",
-        "Access to dashboard",
-        "Smart suggestions",
-        "Limited client messaging",
-        "Booking calendar with availability",
-        "Contract generator (basic prefilled draft)",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["1"] ||
+          "Apply to 10 tenders /mo",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["2"] ||
+          "Profile visible",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["3"] ||
+          "Access to dashboard",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["4"] ||
+          "Smart suggestions",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["5"] ||
+          "Limited client messaging",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["6"] ||
+          "Booking calendar with availability",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["7"] ||
+          "Contract generator (basic prefilled draft)",
       ],
       isActive: true,
     },
     {
       id: 2,
-      title: t("freelancer.starterPlan.title"),
+      title:
+        subscriptionPlanTranslations.freelancer?.starterPlan?.title ||
+        "Starter plan",
       icon: "👤",
       fee: 90,
-      duration: t("duration.year"),
+      duration: subscriptionPlanTranslations.duration?.year || "year",
       features: [
-        "Apply to 10 tenders /mo",
-        "Profile visible",
-        "Access to dashboard",
-        "Smart suggestions",
-        "Limited client messaging",
-        "Booking calendar with availability",
-        "Contract generator (basic prefilled draft)",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["1"] ||
+          "Apply to 10 tenders /mo",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["2"] ||
+          "Profile visible",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["3"] ||
+          "Access to dashboard",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["4"] ||
+          "Smart suggestions",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["5"] ||
+          "Limited client messaging",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["6"] ||
+          "Booking calendar with availability",
+        subscriptionPlanTranslations.freelancer?.starterPlan?.features?.["7"] ||
+          "Contract generator (basic prefilled draft)",
       ],
       isActive: false,
     },
     {
       id: 3,
-      title: t("freelancer.proPlan.title"),
+      title:
+        subscriptionPlanTranslations.freelancer?.proPlan?.title || "Pro plan",
       icon: "⭐",
       fee: 12,
-      duration: t("duration.month"),
+      duration: subscriptionPlanTranslations.duration?.month || "mo",
       features: [
-        "Priority profile listing",
-        "All Starter features",
-        "Unlimited applications",
-        "Full access to client interaction",
-        "Smart tender matching",
-        "Custom contract generator",
-        "Analytics of profile views",
-        "Support priority + badge",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["1"] ||
+          "Priority profile listing",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["2"] ||
+          "All Starter features",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["3"] ||
+          "Unlimited applications",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["4"] ||
+          "Full access to client interaction",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["5"] ||
+          "Smart tender matching",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["6"] ||
+          "Custom contract generator",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["7"] ||
+          "Analytics of profile views",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["8"] ||
+          "Support priority + badge",
       ],
       isActive: false,
     },
     {
       id: 4,
-      title: t("freelancer.proPlan.title"),
+      title:
+        subscriptionPlanTranslations.freelancer?.proPlan?.title || "Pro plan",
       icon: "⭐",
       fee: 120,
-      duration: t("duration.year"),
+      duration: subscriptionPlanTranslations.duration?.year || "year",
       features: [
-        "Priority profile listing",
-        "All Starter features",
-        "Unlimited applications",
-        "Full access to client interaction",
-        "Smart tender matching",
-        "Custom contract generator",
-        "Analytics of profile views",
-        "Support priority + badge",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["1"] ||
+          "Priority profile listing",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["2"] ||
+          "All Starter features",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["3"] ||
+          "Unlimited applications",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["4"] ||
+          "Full access to client interaction",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["5"] ||
+          "Smart tender matching",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["6"] ||
+          "Custom contract generator",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["7"] ||
+          "Analytics of profile views",
+        subscriptionPlanTranslations.freelancer?.proPlan?.features?.["8"] ||
+          "Support priority + badge",
       ],
       isActive: false,
     },
@@ -87,67 +122,101 @@ function SubscriptionPlan() {
   const subscriptionPlansClient = [
     {
       id: 1,
-      title: t("client.businessPlan.title"),
+      title:
+        subscriptionPlanTranslations.client?.businessPlan?.title ||
+        "Business plan",
       icon: "👤",
       fee: 49,
-      duration: t("duration.month"),
+      duration: subscriptionPlanTranslations.duration?.month || "mo",
       features: [
-        "5 tenders/month",
-        "Unlimited applications",
-        "Pre-filled contract draft (can export)",
-        "Internal tracking of missions",
-        "Export of freelancer invoices",
-        "AI suggestion engine",
+        subscriptionPlanTranslations.client?.businessPlan?.features?.["1"] ||
+          "5 tenders/month",
+        subscriptionPlanTranslations.client?.businessPlan?.features?.["2"] ||
+          "Unlimited applications",
+        subscriptionPlanTranslations.client?.businessPlan?.features?.["3"] ||
+          "Pre-filled contract draft (can export)",
+        subscriptionPlanTranslations.client?.businessPlan?.features?.["4"] ||
+          "Internal tracking of missions",
+        subscriptionPlanTranslations.client?.businessPlan?.features?.["5"] ||
+          "Export of freelancer invoices",
+        subscriptionPlanTranslations.client?.businessPlan?.features?.["6"] ||
+          "AI suggestion engine",
       ],
       isActive: true,
     },
     {
       id: 2,
-      title: t("client.businessPlan.title"),
+      title:
+        subscriptionPlanTranslations.client?.businessPlan?.title ||
+        "Business plan",
       icon: "👤",
       fee: 490,
-      duration: t("duration.year"),
+      duration: subscriptionPlanTranslations.duration?.year || "year",
       features: [
-        "5 tenders/month",
-        "Unlimited applications",
-        "Pre-filled contract draft (can export)",
-        "Internal tracking of missions",
-        "Export of freelancer invoices",
-        "AI suggestion engine",
+        subscriptionPlanTranslations.client?.businessPlan?.features?.["1"] ||
+          "5 tenders/month",
+        subscriptionPlanTranslations.client?.businessPlan?.features?.["2"] ||
+          "Unlimited applications",
+        subscriptionPlanTranslations.client?.businessPlan?.features?.["3"] ||
+          "Pre-filled contract draft (can export)",
+        subscriptionPlanTranslations.client?.businessPlan?.features?.["4"] ||
+          "Internal tracking of missions",
+        subscriptionPlanTranslations.client?.businessPlan?.features?.["5"] ||
+          "Export of freelancer invoices",
+        subscriptionPlanTranslations.client?.businessPlan?.features?.["6"] ||
+          "AI suggestion engine",
       ],
       isActive: false,
     },
     {
       id: 3,
-      title: t("client.enterprisePlan.title"),
+      title:
+        subscriptionPlanTranslations.client?.enterprisePlan?.title ||
+        "Enterprise plan",
       icon: "⭐",
       fee: 12,
-      duration: t("duration.month"),
+      duration: subscriptionPlanTranslations.duration?.month || "mo",
       features: [
-        "Unlimited tenders",
-        "All Business features",
-        "Premium freelancer matching by AI",
-        "Built-in contract editing and signature",
-        "Bulk management of freelancers",
-        "Accounting dashboard",
-        "Team permissions",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["1"] ||
+          "Unlimited tenders",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["2"] ||
+          "All Business features",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["3"] ||
+          "Premium freelancer matching by AI",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["4"] ||
+          "Built-in contract editing and signature",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["5"] ||
+          "Bulk management of freelancers",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["6"] ||
+          "Accounting dashboard",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["7"] ||
+          "Team permissions",
       ],
       isActive: false,
     },
     {
       id: 4,
-      title: t("client.enterprisePlan.title"),
+      title:
+        subscriptionPlanTranslations.client?.enterprisePlan?.title ||
+        "Enterprise plan",
       icon: "⭐",
       fee: 120,
-      duration: t("duration.year"),
+      duration: subscriptionPlanTranslations.duration?.year || "year",
       features: [
-        "Unlimited tenders",
-        "All Business features",
-        "Premium freelancer matching by AI",
-        "Built-in contract editing and signature",
-        "Bulk management of freelancers",
-        "Accounting dashboard",
-        "Team permissions",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["1"] ||
+          "Unlimited tenders",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["2"] ||
+          "All Business features",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["3"] ||
+          "Premium freelancer matching by AI",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["4"] ||
+          "Built-in contract editing and signature",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["5"] ||
+          "Bulk management of freelancers",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["6"] ||
+          "Accounting dashboard",
+        subscriptionPlanTranslations.client?.enterprisePlan?.features?.["7"] ||
+          "Team permissions",
       ],
       isActive: false,
     },
@@ -159,13 +228,14 @@ function SubscriptionPlan() {
         {/* Header Section */}
         <div className="text-center mb-12">
           <Badge className="mb-6 px-4 py-2 text-sm font-medium rounded-full gradient">
-            {t("badge")}
+            {subscriptionPlanTranslations.badge || "Pricing plans"}
           </Badge>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            {t("title")}
+            {subscriptionPlanTranslations.title || "Plans for all sizes"}
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            {t("description")}
+            {subscriptionPlanTranslations.description ||
+              "Simple, transparent pricing that grows with you. Try any plan free for 30 days."}
           </p>
         </div>
 
@@ -199,7 +269,7 @@ function SubscriptionPlan() {
                           {plan.fee}
                         </span>
                         <span className="text-lg text-gray-600 ml-1">
-                          {t("currency")}/{plan.duration}
+                          €/{plan.duration}
                         </span>
                       </div>
                     </div>
@@ -221,8 +291,10 @@ function SubscriptionPlan() {
                     {/* Button */}
                     <Button className="w-full font-medium button-gradient ">
                       {plan.isActive
-                        ? t("status.running")
-                        : t("status.upgrade")}
+                        ? subscriptionPlanTranslations.status?.running ||
+                          "Running"
+                        : subscriptionPlanTranslations.status?.upgrade ||
+                          "Upgrade"}
                     </Button>
                   </div>
                 </Card>
@@ -250,7 +322,7 @@ function SubscriptionPlan() {
                           {plan.fee}
                         </span>
                         <span className="text-lg text-gray-600 ml-1">
-                          {t("currency")}/{plan.duration}
+                          €/{plan.duration}
                         </span>
                       </div>
                     </div>
@@ -268,8 +340,10 @@ function SubscriptionPlan() {
                     </div>
                     <Button className="w-full font-medium button-gradient ">
                       {plan.isActive
-                        ? t("status.running")
-                        : t("status.upgrade")}
+                        ? subscriptionPlanTranslations.status?.running ||
+                          "Running"
+                        : subscriptionPlanTranslations.status?.upgrade ||
+                          "Upgrade"}
                     </Button>
                   </div>
                 </Card>

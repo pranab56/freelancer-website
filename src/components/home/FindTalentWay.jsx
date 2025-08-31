@@ -2,23 +2,26 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { useTranslations } from "next-intl";
+import { useSelector } from "react-redux";
 
 // Separate Glassmorphism Card Component
 function TalentCard() {
-  const t = useTranslations("home.findTalentWay");
+  const messages = useSelector((state) => state.language.messages);
+  const findTalentWayTranslations = messages?.home?.findTalentWay || {};
 
   return (
     <Card className="bg-white/10 backdrop-blur-md border border-white/30 shadow-2xl w-full max-w-2xl h-[30rem] md:h-[32rem] mx-auto">
       <CardContent className="p-6 sm:p-8 text-center sm:text-left">
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-          {t("title")}
+          {findTalentWayTranslations.title}
           <br />
-          <span className="text-white">{t("subtitle")}</span>
+          <span className="text-white">
+            {findTalentWayTranslations.subtitle}
+          </span>
         </h2>
 
         <p className="text-white/90 text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
-          {t("description")}
+          {findTalentWayTranslations.description}
         </p>
 
         <div className="flex justify-center items-center">
@@ -26,7 +29,7 @@ function TalentCard() {
             className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white h-12
          px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg w-full sm:w-auto"
           >
-            {t("findFreelancer")}
+            {findTalentWayTranslations.findFreelancer}
           </Button>
         </div>
       </CardContent>

@@ -1,6 +1,10 @@
-import { redirect } from "next/navigation";
-import { defaultLocale } from "@/i18n/routing";
+import Homelayout from "@/components/home/Homelayout";
+import CommonLayoutClient from "@/components/layouts/CommonLayoutClient";
 
 export default function RootPage() {
-  redirect(`/${defaultLocale}`);
+  return (
+    <CommonLayoutClient>
+      <Homelayout />
+    </CommonLayoutClient>
+  );
 }

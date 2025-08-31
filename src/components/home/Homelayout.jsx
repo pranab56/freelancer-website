@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import HomeBanner from "./HomeBanner";
 import TalentCategories from "./Slider";
@@ -6,20 +7,17 @@ import Testimonial from "./Testimonial";
 import SkilledFreelancersSectionWrapper from "./SkilledFreelancersSectionWrapper";
 import FindTalentWayWrapper from "./FindTalentWayWrapper";
 import WhyChooseUsWrapper from "./WhyChooseUsWrapper";
-import { useLocale } from "next-intl";
 
 function Homelayout() {
-  const locale = useLocale();
-
   return (
     <>
-      <HomeBanner key={`home-banner-${locale}`} />
-      <TalentCategories key={`talent-categories-${locale}`} />
+      <HomeBanner />
+      <TalentCategories />
       <SkilledFreelancersSectionWrapper />
-      <PopularServices key={`popular-services-${locale}`} />
+      <PopularServices />
       <FindTalentWayWrapper />
       <WhyChooseUsWrapper />
-      <Testimonial key={`testimonial-${locale}`} />
+      <Testimonial />
     </>
   );
 }

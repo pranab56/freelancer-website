@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
-import { useLocale, useTranslations } from "next-intl";
+import { useSelector } from "react-redux";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Lightbulb } from "lucide-react";
@@ -9,18 +9,39 @@ import provideIcon from "@/utils/IconProvider/provideIcon";
 
 function TalentCategories() {
   const swiperRef = useRef(null);
-  const locale = useLocale();
-  const t = useTranslations("home.slider");
+  const locale = useSelector((state) => state.language.currentLocale);
+  const messages = useSelector((state) => state.language.messages);
+  const sliderTranslations = messages?.home?.slider || {};
 
   const categories = [
-    { id: 1, name: t("categories.graphicsDesign"), icon: Lightbulb },
-    { id: 2, name: t("categories.digitalMarketing"), icon: Lightbulb },
-    { id: 3, name: t("categories.writingTranslation"), icon: Lightbulb },
-    { id: 4, name: t("categories.videoAnimation"), icon: Lightbulb },
-    { id: 5, name: t("categories.musicAudio"), icon: Lightbulb },
-    { id: 6, name: t("categories.programmingTech"), icon: Lightbulb },
-    { id: 7, name: t("categories.business"), icon: Lightbulb },
-    { id: 8, name: t("categories.aiServices"), icon: Lightbulb },
+    {
+      id: 1,
+      name: sliderTranslations.categories?.graphicsDesign,
+      icon: Lightbulb,
+    },
+    {
+      id: 2,
+      name: sliderTranslations.categories?.digitalMarketing,
+      icon: Lightbulb,
+    },
+    {
+      id: 3,
+      name: sliderTranslations.categories?.writingTranslation,
+      icon: Lightbulb,
+    },
+    {
+      id: 4,
+      name: sliderTranslations.categories?.videoAnimation,
+      icon: Lightbulb,
+    },
+    { id: 5, name: sliderTranslations.categories?.musicAudio, icon: Lightbulb },
+    {
+      id: 6,
+      name: sliderTranslations.categories?.programmingTech,
+      icon: Lightbulb,
+    },
+    { id: 7, name: sliderTranslations.categories?.business, icon: Lightbulb },
+    { id: 8, name: sliderTranslations.categories?.aiServices, icon: Lightbulb },
   ];
 
   useEffect(() => {
@@ -84,15 +105,15 @@ function TalentCategories() {
         {/* Header */}
         <div className="flex justify-between items-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold h2-gradient-text leading-tight">
-            {t("title")}
+            {sliderTranslations.title}
           </h2>
           <Button
             variant="ghost"
             className="text-blue-600 hover:text-blue-700"
             asChild
           >
-            <Link href={`/${locale}/categories`} className="flex items-center">
-              {t("viewAllCategory")}
+            <Link href={`/categories`} className="flex items-center">
+              {sliderTranslations.viewAllCategory}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

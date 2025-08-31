@@ -1,56 +1,51 @@
 "use client";
 import React from "react";
-import { useTranslations, useLocale } from "next-intl";
+import Link from "next/link";
+import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import provideIcon from "@/utils/IconProvider/provideIcon";
 
 function Footer() {
-  const t = useTranslations("footer");
-  const locale = useLocale();
+  const locale = useSelector((state) => state.language.currentLocale);
+  const messages = useSelector((state) => state.language.messages);
+  const footerTranslations = messages?.footer || {};
 
-  const footerLinks = [
+  const forClientsLinks = [
     {
-      title: t("forClients.title"),
-      links: [
-        {
-          label: t("forClients.links.findFreelancers"),
-          href: `/${locale}/find-top-talent`,
-          key: "find-freelancers",
-        },
-        {
-          label: t("forClients.links.postProject"),
-          href: `/${locale}/job-board`,
-          key: "post-project",
-        },
-        {
-          label: t("forClients.links.refundPolicy"),
-          href: `/${locale}/refund-policy`,
-          key: "refund-policy",
-        },
-        {
-          label: t("forClients.links.privacyPolicy"),
-          href: `/${locale}/privacy-policy`,
-          key: "privacy-policy",
-        },
-      ],
+      label:
+        footerTranslations.forClients?.links?.findFreelancers ||
+        "Find Freelancers",
+      href: `/find-top-talent`,
     },
     {
-      title: t("forFreelancers.title"),
-      links: [
-        {
-          label: t("forFreelancers.links.findWork"),
-          href: `/${locale}/job-board`,
-          key: "find-work",
-        },
-        {
-          label: t("forFreelancers.links.createAccount"),
-          href: `/${locale}/auth/sign-up`,
-          key: "create-account",
-        },
-      ],
+      label:
+        footerTranslations.forClients?.links?.postProject || "Post Project",
+      href: `/job-board`,
+    },
+    {
+      label:
+        footerTranslations.forClients?.links?.refundPolicy || "Refund Policy",
+      href: `/refund-policy`,
+    },
+    {
+      label:
+        footerTranslations.forClients?.links?.privacyPolicy || "Privacy Policy",
+      href: `/privacy-policy`,
+    },
+  ];
+
+  const forFreelancersLinks = [
+    {
+      label: footerTranslations.forFreelancers?.links?.findWork || "Find Work",
+      href: `/job-board`,
+    },
+    {
+      label:
+        footerTranslations.forFreelancers?.links?.createAccount ||
+        "Create Account",
+      href: `/auth/sign-up`,
     },
   ];
 
@@ -62,22 +57,21 @@ function Footer() {
             {/* Logo and Description */}
             <div className="col-span-1 sm:col-span-2 lg:col-span-1">
               <div className="mb-4 sm:mb-6">
-                <Link href={`/${locale}`}>
-                  {provideIcon({ name: "company_logo" })}
-                </Link>
+                <Link href={`/`}>{provideIcon({ name: "company_logo" })}</Link>
               </div>
               <p className="text-gray-600 text-sm leading-relaxed max-w-xs lg:max-w-none">
-                {t("description")}
+                {footerTranslations.description ||
+                  "Find the best freelancers for your projects"}
               </p>
             </div>
             {/* For Clients */}
             <div className="col-span-1">
               <h3 className="text-base sm:text-lg font-semibold text-black mb-4 sm:mb-6">
-                {footerLinks[0].title}
+                {footerTranslations.forClients?.title || "For Clients"}
               </h3>
               <ul className="space-y-2 ">
-                {footerLinks[0].links.map((link) => (
-                  <li key={link.key}>
+                {forClientsLinks.map((link) => (
+                  <li key={link.href}>
                     <Link
                       href={link.href}
                       className="text-gray-600 text-sm hover:text-black transition-colors block py-1"
@@ -91,11 +85,11 @@ function Footer() {
             {/* For Freelancers */}
             <div className="col-span-1">
               <h3 className="text-base sm:text-lg font-semibold text-black mb-4 sm:mb-6">
-                {footerLinks[1].title}
+                {footerTranslations.forFreelancers?.title || "For Freelancers"}
               </h3>
               <ul className="space-y-2 ">
-                {footerLinks[1].links.map((link) => (
-                  <li key={link.key}>
+                {forFreelancersLinks.map((link) => (
+                  <li key={link.href}>
                     <Link
                       href={link.href}
                       className="text-gray-600 text-sm hover:text-black transition-colors block py-1"
@@ -110,15 +104,19 @@ function Footer() {
             {/* Subscribe */}
             <div className="col-span-1 sm:col-span-2 lg:col-span-1">
               <h3 className="text-base sm:text-lg font-semibold text-black mb-2 sm:mb-3">
-                {t("subscribe.title")}
+                {footerTranslations.subscribe?.title || "Subscribe"}
               </h3>
               <p className="text-gray-600 text-sm mb-4 sm:mb-6">
-                {t("subscribe.description")}
+                {footerTranslations.subscribe?.description ||
+                  "Stay updated with our latest news and offers."}
               </p>
               <div className="flex flex-col sm:flex-row">
                 <Input
                   type="email"
-                  placeholder={t("subscribe.emailPlaceholder")}
+                  placeholder={
+                    footerTranslations.subscribe?.emailPlaceholder ||
+                    "Enter your email"
+                  }
                   className="flex-1 sm:rounded-r-none sm:border-r-0 focus:border-gray-300 mb-2 sm:mb-0"
                 />
                 <Button
@@ -134,7 +132,8 @@ function Footer() {
           {/* Bottom Section */}
           <div className="border-t border-gray-200 mt-12 sm:mt-16 pt-6 sm:pt-8">
             <p className="text-gray-500 text-xs sm:text-sm text-center sm:text-left">
-              {t("copyright")}
+              {footerTranslations.copyright ||
+                "© 2023 Your Company. All rights reserved."}
             </p>
           </div>
         </div>

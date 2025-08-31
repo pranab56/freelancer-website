@@ -1,5 +1,7 @@
 import { getRequestConfig } from "next-intl/server";
-import { locales } from "./routing";
+
+// Define locales directly since we removed the routing file
+const locales = ["en", "fr"];
 
 export default getRequestConfig(async ({ locale }) => {
   // Validate that the incoming `locale` parameter is valid

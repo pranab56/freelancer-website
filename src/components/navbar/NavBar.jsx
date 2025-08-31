@@ -1,21 +1,23 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import ReactCountryFlag from "react-country-flag";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
-import { locales } from "@/i18n/routing";
-import { Search, User, Menu, X, ChevronDown, Globe } from "lucide-react";
+import { usePathname } from "next/navigation";
+import {
+  Search,
+  User,
+  Menu,
+  X,
+  ChevronDown,
+  Globe,
+  Briefcase,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useDispatch, useSelector } from "react-redux";
-import { setCurrentUser } from "@/redux/features/currentUser/currentuserSlice";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Drawer,
   DrawerClose,
@@ -24,57 +26,57 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { LiaUserTieSolid } from "react-icons/lia";
+import { useSelector } from "react-redux";
+import LanguageSelector from "@/components/common/LanguageSelector";
+import Image from "next/image";
 import provideIcon from "@/utils/IconProvider/provideIcon";
-import { useTranslations } from "next-intl";
 
 function NavBar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
-  const [userType, setUserType] = useState("freelancer");
+  const messages = useSelector((state) => state.language.messages);
+  const navigationTranslations = messages?.navigation || {};
+  const commonTranslations = messages?.common || {};
   const pathname = usePathname();
-  const router = useRouter();
-  const localeFromHook = useLocale();
-  const t = useTranslations("navigation");
-  const tCommon = useTranslations("common");
-
-  // Extract locale from pathname as fallback
-  const pathnameLocale = pathname.split("/")[1];
-  const locale = locales.includes(pathnameLocale)
-    ? pathnameLocale
-    : localeFromHook;
-
-  const dispatch = useDispatch();
+  const locale = useSelector((state) => state.language.currentLocale);
   const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
+  const userType = useSelector(
+    (state) => state.currentUser.currentUser?.type || "freelancer"
+  );
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
 
   const toggleUserType = () => {
-    setUserType(userType === "freelancer" ? "client" : "freelancer");
+    // This would dispatch an action to change user type
+    console.log("Toggle user type");
   };
-  // Services dropdown items
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const serviceItems = [
     {
-      label: t("hireTopTalent"),
-      href: `/${locale}/find-top-talent`,
+      label: navigationTranslations.hireTopTalent || "Hire Top Talent",
+      href: `/find-top-talent`,
     },
     // Add more service items here as needed
     {
-      label: t("seeOurServices"),
-      href: `/${locale}/services`,
+      label: navigationTranslations.seeOurServices || "See Our Services",
+      href: `/services`,
     },
   ];
 
-  // Navigation items based on user type
   const publicNavItems = [
-    // { label: t('home'), href: `/${locale}` },
-    { label: t("aboutUs"), href: `/${locale}/about-us` },
-    { label: t("contactUs"), href: `/${locale}/contact-us` },
+    // { label: navigationTranslations.home || 'Home', href: `/` },
+    { label: navigationTranslations.aboutUs || "About Us", href: `/about-us` },
+    {
+      label: navigationTranslations.contactUs || "Contact Us",
+      href: `/contact-us`,
+    },
   ];
 
   // Get navigation items based on user type
@@ -103,10 +105,7 @@ function NavBar() {
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
-              <Link
-                href={`/${locale}`}
-                className="text-2xl font-bold text-gray-900"
-              >
+              <Link href={`/`} className="text-2xl font-bold text-gray-900">
                 {provideIcon({ name: "company_logo" })}
               </Link>
             </div>
@@ -138,7 +137,7 @@ function NavBar() {
                         : "text-gray-700 hover:text-gray-900"
                     }`}
                   >
-                    {t("services")}
+                    {navigationTranslations.services || "Services"}
                     <ChevronDown className="ml-1 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -162,70 +161,13 @@ function NavBar() {
             {/* Right Side - Search, Dropdown, Auth */}
             <div className="hidden md:flex items-center space-x-4">
               {/* Language Selector */}
-              <Select
-                value={locale}
-                onValueChange={(newLocale) => {
-                  // Remove the current locale from the pathname
-                  const pathWithoutLocale = pathname.replace(`/${locale}`, "");
-                  // If the path is empty (just "/"), use "/" instead of ""
-                  const newPath =
-                    pathWithoutLocale === "" ? "/" : pathWithoutLocale;
-                  router.push(`/${newLocale}${newPath}`);
-                }}
-              >
-                <SelectTrigger className="w-[130px] !h-10">
-                  <div className="flex items-center">
-                    {locale === "en" ? (
-                      <ReactCountryFlag
-                        countryCode="GB"
-                        svg
-                        className="mr-2"
-                        style={{ width: "18px", height: "18px" }}
-                      />
-                    ) : (
-                      <ReactCountryFlag
-                        countryCode="FR"
-                        svg
-                        className="mr-2"
-                        style={{ width: "18px", height: "18px" }}
-                      />
-                    )}
-                    <SelectValue>
-                      {locale === "en" ? "English" : "Français"}
-                    </SelectValue>
-                  </div>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">
-                    <div className="flex items-center">
-                      <ReactCountryFlag
-                        countryCode="GB"
-                        svg
-                        className="mr-2"
-                        style={{ width: "18px", height: "18px" }}
-                      />
-                      English
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="fr">
-                    <div className="flex items-center">
-                      <ReactCountryFlag
-                        countryCode="FR"
-                        svg
-                        className="mr-2"
-                        style={{ width: "18px", height: "18px" }}
-                      />
-                      Français
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+              <LanguageSelector />
               {/* Search Bar */}
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <input
                   type="text"
-                  placeholder={tCommon("search")}
+                  placeholder={commonTranslations.search || "Search"}
                   className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
                 />
               </div>
@@ -242,20 +184,21 @@ function NavBar() {
                   <LiaUserTieSolid className="mr-2 h-4 w-4" />
                 )}
 
-                {userType === "freelancer" ? t("freelancer") : t("client")}
+                {userType === "freelancer"
+                  ? navigationTranslations.freelancer || "Freelancer"
+                  : navigationTranslations.client || "Client"}
               </Button>
 
               {/* Auth Buttons */}
               <div className="flex items-center space-x-3">
                 <Button variant="ghost" asChild>
-                  <Link href={`/${locale}/auth/login`}>{t("login")}</Link>
+                  <Link href={`/auth/login`}>
+                    {navigationTranslations.login || "Login"}
+                  </Link>
                 </Button>
                 <Button asChild className="button-gradient">
-                  <Link
-                    href={`/${locale}/auth/sign-up`}
-                    className="flex items-center"
-                  >
-                    {t("signUp")}
+                  <Link href={`/auth/sign-up`} className="flex items-center">
+                    {navigationTranslations.signUp || "Sign Up"}
                     <svg
                       className="ml-2 h-4 w-4"
                       fill="none"
@@ -301,73 +244,13 @@ function NavBar() {
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                       <input
                         type="text"
-                        placeholder={tCommon("search")}
+                        placeholder={commonTranslations.search || "Search"}
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
 
                     {/* Mobile Language Selector */}
-                    <Select
-                      value={locale}
-                      onValueChange={(newLocale) => {
-                        // Remove the current locale from the pathname
-                        const pathWithoutLocale = pathname.replace(
-                          `/${locale}`,
-                          ""
-                        );
-                        // If the path is empty (just "/"), use "/" instead of ""
-                        const newPath =
-                          pathWithoutLocale === "" ? "/" : pathWithoutLocale;
-                        router.push(`/${newLocale}${newPath}`);
-                      }}
-                    >
-                      <SelectTrigger className="w-full mb-2">
-                        <div className="flex items-center">
-                          {locale === "en" ? (
-                            <ReactCountryFlag
-                              countryCode="GB"
-                              svg
-                              className="mr-2"
-                              style={{ width: "18px", height: "18px" }}
-                            />
-                          ) : (
-                            <ReactCountryFlag
-                              countryCode="FR"
-                              svg
-                              className="mr-2"
-                              style={{ width: "18px", height: "18px" }}
-                            />
-                          )}
-                          <SelectValue>
-                            {locale === "en" ? "English" : "Français"}
-                          </SelectValue>
-                        </div>
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="en">
-                          <div className="flex items-center">
-                            <ReactCountryFlag
-                              countryCode="GB"
-                              svg
-                              className="mr-2"
-                              style={{ width: "18px", height: "18px" }}
-                            />
-                            English
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="fr">
-                          <div className="flex items-center">
-                            <ReactCountryFlag
-                              countryCode="FR"
-                              svg
-                              className="mr-2"
-                              style={{ width: "18px", height: "18px" }}
-                            />
-                            Français
-                          </div>
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <LanguageSelector className="w-full mb-2" />
 
                     {/* Mobile Navigation */}
                     <div className="space-y-2">
@@ -397,7 +280,7 @@ function NavBar() {
                             setIsMobileServicesOpen(!isMobileServicesOpen)
                           }
                         >
-                          {t("services")}
+                          {navigationTranslations.services || "Services"}
                           <ChevronDown
                             className={`ml-auto h-4 w-4 transition-transform ${
                               isMobileServicesOpen ? "rotate-180" : ""
@@ -433,21 +316,23 @@ function NavBar() {
                     >
                       <User className="mr-2 h-4 w-4" />
                       {userType === "freelancer"
-                        ? t("freelancer")
-                        : t("client")}
+                        ? navigationTranslations.freelancer || "Freelancer"
+                        : navigationTranslations.client || "Client"}
                     </Button>
 
                     {/* Mobile Auth */}
                     <div className="space-y-2 pt-4 border-t">
                       <Button variant="ghost" className="w-full" asChild>
-                        <Link href={`/${locale}/auth/login`}>{t("login")}</Link>
+                        <Link href={`/auth/login`}>
+                          {navigationTranslations.login || "Login"}
+                        </Link>
                       </Button>
                       <Button className="w-full" asChild>
                         <Link
-                          href={`/${locale}/auth/sign-up`}
+                          href={`/auth/sign-up`}
                           className="flex items-center justify-center"
                         >
-                          {t("signUp")}
+                          {navigationTranslations.signUp || "Sign Up"}
                           <svg
                             className="ml-2 h-4 w-4"
                             fill="none"

@@ -18,7 +18,7 @@ export const metadata = {
   description: "Find the best freelancers for your projects",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
