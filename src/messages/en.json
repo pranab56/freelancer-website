@@ -482,5 +482,286 @@
 
     "ongoingTendersHeading": "Ongoing Tenders",
     "ongoingTendersSubheading": "Find project opportunities that match your expertise."
+  },
+  "ongoingProjects": {
+    "title": "Ongoing Projects",
+    "subtitle": "Stay on top of your work and ensure smooth collaboration until project completion!",
+    "search": "Search",
+    "filter": {
+      "all": "All Projects",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "pending": "Pending"
+    },
+    "projectDetails": {
+      "client": "Client",
+      "deadline": "Deadline",
+      "amount": "Amount",
+      "status": "Status",
+      "viewDetails": "View Details"
+    },
+    "statuses": {
+      "inProgress": "In Progress",
+      "completed": "Completed"
+    }
+  },
+  "profile": {
+    "layout": {
+      "coverPhotoAlt": "Cover Photo"
+    },
+    "header": {
+      "editProfile": "Edit Profile",
+      "viewProfile": "View Profile"
+    },
+    "sections": {
+      "title": "Profile Sections",
+      "description": "Manage and update your professional profile",
+      "educationCertifications": {
+        "title": "Education & Certifications",
+        "addButton": "Add",
+        "editButton": "Edit"
+      },
+      "projects": {
+        "title": "Projects",
+        "subtitle": "Discover my achievements and detailed case studies.",
+        "viewAllButton": "View All Project",
+        "addNewButton": "Add new project"
+      },
+      "contact": {
+        "title": "Contact",
+        "followButton": "Follow",
+        "scheduleMeetingButton": "Schedule Meeting",
+        "messageButton": "Message"
+      }
+    },
+    "skills": {
+      "title": "Skills",
+      "addSkill": "Add Skill",
+      "editSkill": "Edit Skill",
+      "noSkillsMessage": "No skills added yet",
+      "skillLevels": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced",
+        "expert": "Expert"
+      }
+    },
+    "experience": {
+      "title": "Experience",
+      "addButton": "Add Experience",
+      "editButton": "Edit",
+      "noExperienceMessage": "No professional experience added yet",
+      "currentlyWorkingHere": "Currently Working Here"
+    },
+    "experienceDialog": {
+      "addTitle": "Add Experience",
+      "editTitle": "Edit Experience",
+      "companyNameLabel": "Company Name",
+      "companyNamePlaceholder": "Enter Company Name",
+      "projectLabel": "Project",
+      "projectPlaceholder": "Enter Project",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Enter Experience Description",
+      "startDateLabel": "Start Date",
+      "endDateLabel": "End Date",
+      "startDatePlaceholder": "Pick a start date",
+      "endDatePlaceholder": "Pick an end date",
+      "cancelButton": "Cancel",
+      "saveButton": "Save Changes",
+      "validationMessages": {
+        "companyRequired": "Company name is required",
+        "projectRequired": "Project is required",
+        "descriptionRequired": "Description is required",
+        "startDateRequired": "Please select a start date",
+        "endDateRequired": "Please select an end date"
+      }
+    },
+    "profileEditDialog": {
+      "title": "Edit Profile",
+      "nameLabel": "Name",
+      "namePlaceholder": "Enter your full name",
+      "dailyRateLabel": "Daily Rate",
+      "dailyRatePlaceholder": "Enter daily rate",
+      "serviceTypeLabel": "Service Type",
+      "serviceTypePlaceholder": "Select service type",
+      "categoryTypeLabel": "Category Type",
+      "categoryTypePlaceholder": "Select category",
+      "locationLabel": "Location",
+      "locationPlaceholder": "Select location",
+      "languageLabel": "Language",
+      "languagePlaceholder": "Select language",
+      "serviceTypes": {
+        "design": "Design",
+        "development": "Development",
+        "marketing": "Marketing",
+        "writing": "Writing",
+        "consulting": "Consulting"
+      },
+      "categoryTypes": {
+        "uiUxDesigner": "UI/UX Designer",
+        "graphicDesigner": "Graphic Designer",
+        "webDesigner": "Web Designer",
+        "productDesigner": "Product Designer",
+        "frontendDeveloper": "Frontend Developer",
+        "backendDeveloper": "Backend Developer",
+        "fullStackDeveloper": "Full Stack Developer"
+      },
+      "locations": {
+        "bangladesh": "Bangladesh",
+        "india": "India",
+        "pakistan": "Pakistan",
+        "usa": "USA",
+        "uk": "UK",
+        "canada": "Canada",
+        "australia": "Australia"
+      },
+      "languages": {
+        "bengali": "Bengali",
+        "english": "English",
+        "hindi": "Hindi",
+        "urdu": "Urdu",
+        "arabic": "Arabic",
+        "spanish": "Spanish",
+        "french": "French"
+      }
+    },
+    "skillsDialog": {
+      "addTitle": "Add Skills",
+      "editTitle": "Edit Skills",
+      "skillTypeLabel": "Skill Type",
+      "skillTypes": {
+        "soft": "Soft Skills",
+        "technical": "Technical Skills",
+        "functional": "Functional Skills"
+      },
+      "skillsLabel": "Skills",
+      "skillsPlaceholder": "Select Skills",
+      "experienceLabel": "Experience",
+      "experiencePlaceholder": "Enter Experience",
+      "cancelButton": "Cancel",
+      "saveButton": "Save Changes",
+      "experienceLevels": {
+        "beginner": "Beginner (0-1 years)",
+        "intermediate": "Intermediate (1-3 years)",
+        "advanced": "Advanced (3-5 years)",
+        "expert": "Expert (5+ years)"
+      },
+      "technicalSkills": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Node.js",
+        "Python",
+        "Java",
+        "C++",
+        "HTML/CSS",
+        "SQL",
+        "MongoDB",
+        "PostgreSQL",
+        "AWS",
+        "Docker",
+        "Kubernetes",
+        "Git",
+        "REST APIs",
+        "GraphQL",
+        "Machine Learning",
+        "Data Analysis",
+        "Other"
+      ],
+      "functionalSkills": [
+        "Project Management",
+        "Team Leadership",
+        "Communication",
+        "Problem Solving",
+        "Strategic Planning",
+        "Business Analysis",
+        "Quality Assurance",
+        "Risk Management",
+        "Customer Relations",
+        "Sales",
+        "Marketing",
+        "Financial Analysis",
+        "Operations Management",
+        "Human Resources",
+        "Training & Development",
+        "Negotiation",
+        "Time Management",
+        "Critical Thinking",
+        "Decision Making",
+        "Other"
+      ]
+    }
+  },
+  "invoices": {
+    "title": "Invoices",
+    "subtitle": "With our simple invoicing system, managing payments is quick and easy for both freelancers and clients. Never miss a payment or detail again!",
+    "createNewInvoice": "Create New Invoice",
+    "search": "Search",
+    "invoiceFilter": {
+      "all": "All Invoice",
+      "paid": "Paid",
+      "pending": "Pending",
+      "overdue": "Overdue"
+    },
+    "viewDetails": "View Details",
+    "extendDeliveryDate": "Extend Delivery Date",
+    "deliveryNow": "Delivery Now",
+    "payNow": "Pay Now"
+  },
+  "invoiceDialogs": {
+    "createInvoice": {
+      "title": "Create New Invoice",
+      "logoUpload": "LOGO",
+      "clientLabel": "Client",
+      "clientPlaceholder": "Select Client",
+      "serviceTypeLabel": "Service Type",
+      "serviceTypePlaceholder": "Select Service Type",
+      "projectNameLabel": "Project Name",
+      "projectNamePlaceholder": "Select Project Name",
+      "dayLabel": "Day",
+      "dayPlaceholder": "Enter your working day",
+      "cancelButton": "Cancel",
+      "createButton": "Create Invoices"
+    },
+    "extendDelivery": {
+      "title": "Select Date & Add Reason",
+      "dateLabel": "Date",
+      "datePlaceholder": "Pick a date",
+      "reasonLabel": "Add Reason",
+      "reasonPlaceholder": "Enter your reason...",
+      "submitButton": "Submit"
+    },
+    "projectComplete": {
+      "title": "Complete Project",
+      "completeMessageLabel": "Complete Message",
+      "completeMessagePlaceholder": "Write Message",
+      "fileMessageLabel": "File/Message",
+      "fileMessagePlaceholder": "Write Message/ Send Message",
+      "uploadedImagesLabel": "Uploaded Images",
+      "cancelButton": "Cancel",
+      "completeButton": "Mark as Completed"
+    },
+    "viewInvoiceDetails": {
+      "title": "Invoice Details",
+      "clientName": "Client Name",
+      "serviceType": "Service Type",
+      "projectName": "Project Name",
+      "workingDay": "Working Day",
+      "totalAmount": "Total Amount",
+      "status": "Status",
+      "doneButton": "Done"
+    }
+  },
+  "showcaseProject": {
+    "banner": {
+      "header": "Showcase Your Projects",
+      "text": "Highlight your work and attract potential clients by showcasing your completed projects. This section lets you display your best work, providing clients with a glimpse of your skills, expertise, and creativity.",
+      "buttonName": "View All Projects"
+    },
+    "heading": "Discover Projects",
+    "buttons": {
+      "addNewProject": "Add new Project",
+      "edit": "Edit"
+    }
   }
 }

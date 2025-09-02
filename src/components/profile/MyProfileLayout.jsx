@@ -1,17 +1,29 @@
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
 import ProfileHeader from "./ProfileHeader";
 import ProfileSections from "./ProfileSection";
 import SkillsSection from "./SkillSection";
 import ExperienceSection from "./ExperienceSection";
 
 function MyProfileLayout() {
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const translations = useMemo(
+    () =>
+      messages?.profile?.layout || {
+        coverPhotoAlt: "Cover Photo",
+      },
+    [messages]
+  );
+
   return (
     <div className="w-full">
       <div className="relative w-full h-48 sm:h-64 md:h-80 lg:h-96">
         <Image
           src={"/myprofile/cover.png"}
-          alt={"cover photo"}
+          alt={translations.coverPhotoAlt}
           fill
           className="object-cover"
           sizes="100vw"

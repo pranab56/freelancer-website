@@ -483,5 +483,286 @@
 
     "ongoingTendersHeading": "Appels d'offres en cours",
     "ongoingTendersSubheading": "Trouvez des opportunités de projet qui correspondent à votre expertise."
+  },
+  "ongoingProjects": {
+    "title": "Projets en cours",
+    "subtitle": "Restez sur la bonne voie et assurez une collaboration fluide jusqu'à la fin du projet !",
+    "search": "Rechercher",
+    "filter": {
+      "all": "Tous les projets",
+      "inProgress": "En cours",
+      "completed": "Terminés",
+      "pending": "En attente"
+    },
+    "projectDetails": {
+      "client": "Client",
+      "deadline": "Date limite",
+      "amount": "Montant",
+      "status": "Statut",
+      "viewDetails": "Voir les détails"
+    },
+    "statuses": {
+      "inProgress": "En cours",
+      "completed": "Terminé"
+    }
+  },
+  "profile": {
+    "layout": {
+      "coverPhotoAlt": "Photo de couverture"
+    },
+    "header": {
+      "editProfile": "Modifier le profil",
+      "viewProfile": "Voir le profil"
+    },
+    "sections": {
+      "title": "Sections du profil",
+      "description": "Gérez et mettez à jour votre profil professionnel",
+      "educationCertifications": {
+        "title": "Éducation & Certifications",
+        "addButton": "Ajouter",
+        "editButton": "Modifier"
+      },
+      "projects": {
+        "title": "Projets",
+        "subtitle": "Découvrez mes réalisations et études de cas détaillées.",
+        "viewAllButton": "Voir tous les projets",
+        "addNewButton": "Ajouter un nouveau projet"
+      },
+      "contact": {
+        "title": "Contact",
+        "followButton": "Suivre",
+        "scheduleMeetingButton": "Planifier une réunion",
+        "messageButton": "Message"
+      }
+    },
+    "skills": {
+      "title": "Compétences",
+      "addSkill": "Ajouter une compétence",
+      "editSkill": "Modifier une compétence",
+      "noSkillsMessage": "Aucune compétence ajoutée pour le moment",
+      "skillLevels": {
+        "beginner": "Débutant",
+        "intermediate": "Intermédiaire",
+        "advanced": "Avancé",
+        "expert": "Expert"
+      }
+    },
+    "experience": {
+      "title": "Expérience professionnelle",
+      "addExperience": "Ajouter une expérience",
+      "editExperience": "Modifier l'expérience",
+      "noExperienceMessage": "Aucune expérience professionnelle ajoutée pour le moment",
+      "currentlyWorkingHere": "Actuellement en poste"
+    },
+    "experienceDialog": {
+      "addTitle": "Ajouter une expérience",
+      "editTitle": "Modifier l'expérience",
+      "companyNameLabel": "Nom de l'entreprise",
+      "companyNamePlaceholder": "Entrez le nom de l'entreprise",
+      "projectLabel": "Projet",
+      "projectPlaceholder": "Entrez le projet",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Entrez la description de l'expérience",
+      "startDateLabel": "Date de début",
+      "endDateLabel": "Date de fin",
+      "startDatePlaceholder": "Choisissez une date de début",
+      "endDatePlaceholder": "Choisissez une date de fin",
+      "cancelButton": "Annuler",
+      "saveButton": "Enregistrer les modifications",
+      "validationMessages": {
+        "companyRequired": "Le nom de l'entreprise est requis",
+        "projectRequired": "Le projet est requis",
+        "descriptionRequired": "La description est requise",
+        "startDateRequired": "Veuillez sélectionner une date de début",
+        "endDateRequired": "Veuillez sélectionner une date de fin"
+      }
+    },
+    "profileEditDialog": {
+      "title": "Modifier le profil",
+      "nameLabel": "Nom",
+      "namePlaceholder": "Entrez votre nom complet",
+      "dailyRateLabel": "Taux journalier",
+      "dailyRatePlaceholder": "Entrez le taux journalier",
+      "serviceTypeLabel": "Type de service",
+      "serviceTypePlaceholder": "Sélectionnez le type de service",
+      "categoryTypeLabel": "Type de catégorie",
+      "categoryTypePlaceholder": "Sélectionnez la catégorie",
+      "locationLabel": "Emplacement",
+      "locationPlaceholder": "Sélectionnez l'emplacement",
+      "languageLabel": "Langue",
+      "languagePlaceholder": "Sélectionnez la langue",
+      "serviceTypes": {
+        "design": "Design",
+        "development": "Développement",
+        "marketing": "Marketing",
+        "writing": "Rédaction",
+        "consulting": "Conseil"
+      },
+      "categoryTypes": {
+        "uiUxDesigner": "Designer UI/UX",
+        "graphicDesigner": "Designer Graphique",
+        "webDesigner": "Designer Web",
+        "productDesigner": "Designer Produit",
+        "frontendDeveloper": "Développeur Frontend",
+        "backendDeveloper": "Développeur Backend",
+        "fullStackDeveloper": "Développeur Full Stack"
+      },
+      "locations": {
+        "bangladesh": "Bangladesh",
+        "india": "Inde",
+        "pakistan": "Pakistan",
+        "usa": "États-Unis",
+        "uk": "Royaume-Uni",
+        "canada": "Canada",
+        "australia": "Australie"
+      },
+      "languages": {
+        "bengali": "Bengali",
+        "english": "Anglais",
+        "hindi": "Hindi",
+        "urdu": "Ourdou",
+        "arabic": "Arabe",
+        "spanish": "Espagnol",
+        "french": "Français"
+      }
+    },
+    "skillsDialog": {
+      "addTitle": "Ajouter des compétences",
+      "editTitle": "Modifier les compétences",
+      "skillTypeLabel": "Type de compétence",
+      "skillTypes": {
+        "soft": "Compétences interpersonnelles",
+        "technical": "Compétences techniques",
+        "functional": "Compétences fonctionnelles"
+      },
+      "skillsLabel": "Compétences",
+      "skillsPlaceholder": "Sélectionner des compétences",
+      "experienceLabel": "Expérience",
+      "experiencePlaceholder": "Entrez votre expérience",
+      "cancelButton": "Annuler",
+      "saveButton": "Enregistrer les modifications",
+      "experienceLevels": {
+        "beginner": "Débutant (0-1 ans)",
+        "intermediate": "Intermédiaire (1-3 ans)",
+        "advanced": "Avancé (3-5 ans)",
+        "expert": "Expert (5+ ans)"
+      },
+      "technicalSkills": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Node.js",
+        "Python",
+        "Java",
+        "C++",
+        "HTML/CSS",
+        "SQL",
+        "MongoDB",
+        "PostgreSQL",
+        "AWS",
+        "Docker",
+        "Kubernetes",
+        "Git",
+        "REST APIs",
+        "GraphQL",
+        "Apprentissage automatique",
+        "Analyse de données",
+        "Autre"
+      ],
+      "functionalSkills": [
+        "Gestion de projet",
+        "Leadership d'équipe",
+        "Communication",
+        "Résolution de problèmes",
+        "Planification stratégique",
+        "Analyse commerciale",
+        "Assurance qualité",
+        "Gestion des risques",
+        "Relations clients",
+        "Ventes",
+        "Marketing",
+        "Analyse financière",
+        "Gestion des opérations",
+        "Ressources humaines",
+        "Formation et développement",
+        "Négociation",
+        "Gestion du temps",
+        "Pensée critique",
+        "Prise de décision",
+        "Autre"
+      ]
+    }
+  },
+  "invoices": {
+    "title": "Factures",
+    "subtitle": "Avec notre système de facturation simple, la gestion des paiements est rapide et facile pour les freelances et les clients. Ne manquez plus jamais un paiement ou un détail !",
+    "createNewInvoice": "Créer une nouvelle facture",
+    "search": "Rechercher",
+    "invoiceFilter": {
+      "all": "Toutes les factures",
+      "paid": "Payées",
+      "pending": "En attente",
+      "overdue": "En retard"
+    },
+    "viewDetails": "Voir les détails",
+    "extendDeliveryDate": "Prolonger la date de livraison",
+    "deliveryNow": "Livrer maintenant",
+    "payNow": "Payer maintenant"
+  },
+  "invoiceDialogs": {
+    "createInvoice": {
+      "title": "Créer une nouvelle facture",
+      "logoUpload": "LOGO",
+      "clientLabel": "Client",
+      "clientPlaceholder": "Sélectionner un client",
+      "serviceTypeLabel": "Type de service",
+      "serviceTypePlaceholder": "Sélectionner un type de service",
+      "projectNameLabel": "Nom du projet",
+      "projectNamePlaceholder": "Sélectionner un nom de projet",
+      "dayLabel": "Jour",
+      "dayPlaceholder": "Entrez votre jour de travail",
+      "cancelButton": "Annuler",
+      "createButton": "Créer des factures"
+    },
+    "extendDelivery": {
+      "title": "Sélectionner une date et ajouter une raison",
+      "dateLabel": "Date",
+      "datePlaceholder": "Choisir une date",
+      "reasonLabel": "Ajouter une raison",
+      "reasonPlaceholder": "Entrez votre raison...",
+      "submitButton": "Soumettre"
+    },
+    "projectComplete": {
+      "title": "Projet terminé",
+      "completeMessageLabel": "Message de fin",
+      "completeMessagePlaceholder": "Écrire un message",
+      "fileMessageLabel": "Fichier/Message",
+      "fileMessagePlaceholder": "Écrire un message/ Envoyer un message",
+      "uploadedImagesLabel": "Images téléchargées",
+      "cancelButton": "Annuler",
+      "completeButton": "Marquer comme terminé"
+    },
+    "viewInvoiceDetails": {
+      "title": "Détails de la facture",
+      "clientName": "Nom du client",
+      "serviceType": "Type de service",
+      "projectName": "Nom du projet",
+      "workingDay": "Jour de travail",
+      "totalAmount": "Montant total",
+      "status": "Statut",
+      "doneButton": "Terminé"
+    }
+  },
+  "showcaseProject": {
+    "banner": {
+      "header": "Présentez vos projets",
+      "text": "Mettez en valeur votre travail et attirez des clients potentiels en présentant vos projets terminés. Cette section vous permet de présenter vos meilleurs travaux, offrant aux clients un aperçu de vos compétences, de votre expertise et de votre créativité.",
+      "buttonName": "Voir tous les projets"
+    },
+    "heading": "Découvrir des projets",
+    "buttons": {
+      "addNewProject": "Ajouter un nouveau projet",
+      "edit": "Modifier"
+    }
   }
 }

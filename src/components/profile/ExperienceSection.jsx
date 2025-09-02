@@ -1,12 +1,25 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Edit3, Plus } from "lucide-react";
 import ExperienceDialogAddEdit from "./ExperienceDialogAddEdit";
 import useCheckUserAndLoggedIn from "@/hooks/checkUserTypeAndLoggedIn/CheckUserAndLoggedIn";
+import { useSelector } from "react-redux";
 
 function ExperienceSection() {
   const { isFreelancerAndLoggedIn } = useCheckUserAndLoggedIn();
+
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const translations = useMemo(
+    () =>
+      messages?.profile?.experience || {
+        title: "Experience",
+        addButton: "Add Experience",
+        editButton: "Edit",
+      },
+    [messages]
+  );
 
   const [isAddExperienceDialogOpen, setIsAddExperienceDialogOpen] =
     useState(false);
@@ -39,7 +52,7 @@ function ExperienceSection() {
         <CardHeader className="pb-4 px-0">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">
-              Experience
+              {translations.title}
             </CardTitle>
             <div className="flex items-center gap-4">
               {isFreelancerAndLoggedIn && (
@@ -48,7 +61,7 @@ function ExperienceSection() {
                   onClick={() => setIsAddExperienceDialogOpen(true)}
                 >
                   <Plus className="w-4 h-4" />
-                  Add Experience
+                  {translations.addButton}
                 </button>
               )}
               {isFreelancerAndLoggedIn && (
@@ -57,7 +70,7 @@ function ExperienceSection() {
                   onClick={() => setIsEditExperienceDialogOpen(true)}
                 >
                   <Edit3 className="w-4 h-4" />
-                  Edit
+                  {translations.editButton}
                 </button>
               )}
             </div>

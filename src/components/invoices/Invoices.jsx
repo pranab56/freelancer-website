@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -25,9 +25,35 @@ import ProjectCompleteDialog from "./ProjectCompleteDialog";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import ExtendDeliveryDialog from "./EntendDeliveryDialog";
+
 function Invoices() {
   const router = useRouter();
   const userType = useSelector((state) => state.currentUser?.currentUser?.type);
+  const messages = useSelector((state) => state.language.messages);
+
+  // Memoize translations to prevent unnecessary re-renders
+  const invoiceTranslations = useMemo(
+    () =>
+      messages?.invoices || {
+        title: "Invoices",
+        subtitle:
+          "With our simple invoicing system, managing payments is quick and easy for both freelancers and clients. Never miss a payment or detail again!",
+        createNewInvoice: "Create New Invoice",
+        search: "Search",
+        invoiceFilter: {
+          all: "All Invoice",
+          paid: "Paid",
+          pending: "Pending",
+          overdue: "Overdue",
+        },
+        viewDetails: "View Details",
+        extendDeliveryDate: "Extend Delivery Date",
+        deliveryNow: "Delivery Now",
+        payNow: "Pay Now",
+      },
+    [messages]
+  );
+
   const [isCreateInvoicesDialogOpen, setIsCreateInvoicesDialogOpen] =
     useState(false);
   const [isViewInvoiceDetailsDialogOpen, setIsViewInvoiceDetailsDialogOpen] =
@@ -36,6 +62,7 @@ function Invoices() {
     useState(false);
   const [isExtendDeliveryDialogOpen, setIsExtendDeliveryDialogOpen] =
     useState(false);
+
   const invoices = [
     {
       id: "12345",
@@ -67,16 +94,14 @@ function Invoices() {
               userType === "freelancer" ? "text-left" : "text-center"
             }`}
           >
-            Invoices
+            {invoiceTranslations.title}
           </h1>
           <p
             className={`text-gray-600 max-w-2xl text-sm md:text-base ${
               userType === "freelancer" ? "text-left" : "text-center"
             }`}
           >
-            With our simple invoicing system, managing payments is quick and
-            easy for both freelancers and clients. Never miss a payment or
-            detail again!
+            {invoiceTranslations.subtitle}
           </p>
         </div>
 
@@ -86,7 +111,7 @@ function Invoices() {
             onClick={() => setIsCreateInvoicesDialogOpen(true)}
           >
             <Plus className="w-4 h-4 mr-2" />
-            Create New Invoice
+            {invoiceTranslations.createNewInvoice}
           </Button>
         )}
       </div>
@@ -95,7 +120,10 @@ function Invoices() {
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 md:gap-4 mb-6 md:mb-8">
         <div className="relative ">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <Input placeholder="Search" className="pl-10 border-gray-300" />
+          <Input
+            placeholder={invoiceTranslations.search}
+            className="pl-10 border-gray-300"
+          />
         </div>
 
         <Select defaultValue="all-invoice">
@@ -103,10 +131,18 @@ function Invoices() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all-invoice">All Invoice</SelectItem>
-            <SelectItem value="paid">Paid</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="overdue">Overdue</SelectItem>
+            <SelectItem value="all-invoice">
+              {invoiceTranslations.invoiceFilter.all}
+            </SelectItem>
+            <SelectItem value="paid">
+              {invoiceTranslations.invoiceFilter.paid}
+            </SelectItem>
+            <SelectItem value="pending">
+              {invoiceTranslations.invoiceFilter.pending}
+            </SelectItem>
+            <SelectItem value="overdue">
+              {invoiceTranslations.invoiceFilter.overdue}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -153,7 +189,7 @@ function Invoices() {
                     onClick={() => setIsViewInvoiceDetailsDialogOpen(true)}
                   >
                     <FileText className="w-4 h-4 mr-2" />
-                    View Details
+                    {invoiceTranslations.viewDetails}
                   </Button>
 
                   <Button
@@ -161,7 +197,7 @@ function Invoices() {
                     onClick={() => setIsExtendDeliveryDialogOpen(true)}
                   >
                     <Calendar className="w-4 h-4 mr-2" />
-                    Extend Delivery Date
+                    {invoiceTranslations.extendDeliveryDate}
                   </Button>
 
                   <Button
@@ -169,7 +205,7 @@ function Invoices() {
                     onClick={() => setIsProjectCompleteDialogOpen(true)}
                   >
                     <Truck className="w-4 h-4 mr-2" />
-                    Delivery Now
+                    {invoiceTranslations.deliveryNow}
                   </Button>
                 </div>
               </div>
@@ -199,7 +235,7 @@ function Invoices() {
                       onClick={() => setIsViewInvoiceDetailsDialogOpen(true)}
                     >
                       <FileText className="w-4 h-4 mr-2" />
-                      View Details
+                      {invoiceTranslations.viewDetails}
                     </Button>
                     {userType === "client" && (
                       <Button
@@ -209,7 +245,7 @@ function Invoices() {
                         }}
                       >
                         <CreditCard className="w-4 h-4 mr-2" />
-                        Pay Now
+                        {invoiceTranslations.payNow}
                       </Button>
                     )}
                   </div>
@@ -235,7 +271,7 @@ function Invoices() {
                         onClick={() => setIsExtendDeliveryDialogOpen(true)}
                       >
                         <Calendar className="w-4 h-4 mr-2" />
-                        Extend Delivery Date
+                        {invoiceTranslations.extendDeliveryDate}
                       </Button>
 
                       <Button
@@ -243,7 +279,7 @@ function Invoices() {
                         onClick={() => setIsProjectCompleteDialogOpen(true)}
                       >
                         <Truck className="w-4 h-4 mr-2" />
-                        Delivery Now
+                        {invoiceTranslations.deliveryNow}
                       </Button>
                     </div>
                   )}

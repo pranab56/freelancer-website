@@ -1,5 +1,6 @@
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useMemo } from "react";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -10,8 +11,64 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useSelector } from "react-redux";
 
 function ProfileEditDialog() {
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const translations = useMemo(
+    () =>
+      messages?.profile?.profileEditDialog || {
+        title: "Edit Profile",
+        nameLabel: "Name",
+        namePlaceholder: "Enter your full name",
+        dailyRateLabel: "Daily Rate",
+        dailyRatePlaceholder: "Enter daily rate",
+        serviceTypeLabel: "Service Type",
+        serviceTypePlaceholder: "Select service type",
+        categoryTypeLabel: "Category Type",
+        categoryTypePlaceholder: "Select category",
+        locationLabel: "Location",
+        locationPlaceholder: "Select location",
+        languageLabel: "Language",
+        languagePlaceholder: "Select language",
+        serviceTypes: {
+          design: "Design",
+          development: "Development",
+          marketing: "Marketing",
+          writing: "Writing",
+          consulting: "Consulting",
+        },
+        categoryTypes: {
+          uiUxDesigner: "UI/UX Designer",
+          graphicDesigner: "Graphic Designer",
+          webDesigner: "Web Designer",
+          productDesigner: "Product Designer",
+          frontendDeveloper: "Frontend Developer",
+          backendDeveloper: "Backend Developer",
+          fullStackDeveloper: "Full Stack Developer",
+        },
+        locations: {
+          bangladesh: "Bangladesh",
+          india: "India",
+          usa: "USA",
+          uk: "UK",
+          canada: "Canada",
+          australia: "Australia",
+        },
+        languages: {
+          bengali: "Bengali",
+          english: "English",
+          hindi: "Hindi",
+          urdu: "Urdu",
+          arabic: "Arabic",
+          spanish: "Spanish",
+          french: "French",
+        },
+      },
+    [messages]
+  );
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
       {/* Profile & Cover Images */}
@@ -44,65 +101,132 @@ function ProfileEditDialog() {
       {/* Form Fields */}
       <div className="space-y-4">
         <div>
-          <Label>Name</Label>
-          <Input placeholder="Name" defaultValue="Sabbir Ahmed" />
+          <Label>{translations.nameLabel}</Label>
+          <Input
+            placeholder={translations.namePlaceholder}
+            defaultValue="Sabbir Ahmed"
+          />
         </div>
 
         <div>
-          <Label>Daily Rate</Label>
-          <Input placeholder="$500" defaultValue="$500" />
+          <Label>{translations.dailyRateLabel}</Label>
+          <Input
+            placeholder={translations.dailyRatePlaceholder}
+            defaultValue="$500"
+          />
         </div>
 
         <div>
-          <Label>Service Type</Label>
+          <Label>{translations.serviceTypeLabel}</Label>
           <Select defaultValue="Design">
             <SelectTrigger>
-              <SelectValue placeholder="Select service" />
+              <SelectValue placeholder={translations.serviceTypePlaceholder} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Design">Design</SelectItem>
-              <SelectItem value="Development">Development</SelectItem>
-              <SelectItem value="Marketing">Marketing</SelectItem>
+              <SelectItem value="Design">
+                {translations.serviceTypes.design}
+              </SelectItem>
+              <SelectItem value="Development">
+                {translations.serviceTypes.development}
+              </SelectItem>
+              <SelectItem value="Marketing">
+                {translations.serviceTypes.marketing}
+              </SelectItem>
+              <SelectItem value="Writing">
+                {translations.serviceTypes.writing}
+              </SelectItem>
+              <SelectItem value="Consulting">
+                {translations.serviceTypes.consulting}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div>
-          <Label>Category Type</Label>
+          <Label>{translations.categoryTypeLabel}</Label>
           <Select defaultValue="UI/UX Designer">
             <SelectTrigger>
-              <SelectValue placeholder="Select category" />
+              <SelectValue placeholder={translations.categoryTypePlaceholder} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="UI/UX Designer">UI/UX Designer</SelectItem>
-              <SelectItem value="Graphic Designer">Graphic Designer</SelectItem>
+              <SelectItem value="UI/UX Designer">
+                {translations.categoryTypes.uiUxDesigner}
+              </SelectItem>
+              <SelectItem value="Graphic Designer">
+                {translations.categoryTypes.graphicDesigner}
+              </SelectItem>
+              <SelectItem value="Web Designer">
+                {translations.categoryTypes.webDesigner}
+              </SelectItem>
+              <SelectItem value="Product Designer">
+                {translations.categoryTypes.productDesigner}
+              </SelectItem>
+              <SelectItem value="Frontend Developer">
+                {translations.categoryTypes.frontendDeveloper}
+              </SelectItem>
+              <SelectItem value="Backend Developer">
+                {translations.categoryTypes.backendDeveloper}
+              </SelectItem>
+              <SelectItem value="Full Stack Developer">
+                {translations.categoryTypes.fullStackDeveloper}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div>
-          <Label>Location</Label>
+          <Label>{translations.locationLabel}</Label>
           <Select defaultValue="Bangladesh">
             <SelectTrigger>
-              <SelectValue placeholder="Select location" />
+              <SelectValue placeholder={translations.locationPlaceholder} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Bangladesh">Bangladesh</SelectItem>
-              <SelectItem value="USA">USA</SelectItem>
-              <SelectItem value="UK">UK</SelectItem>
+              <SelectItem value="Bangladesh">
+                {translations.locations.bangladesh}
+              </SelectItem>
+              <SelectItem value="India">
+                {translations.locations.india}
+              </SelectItem>
+              <SelectItem value="USA">{translations.locations.usa}</SelectItem>
+              <SelectItem value="UK">{translations.locations.uk}</SelectItem>
+              <SelectItem value="Canada">
+                {translations.locations.canada}
+              </SelectItem>
+              <SelectItem value="Australia">
+                {translations.locations.australia}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div>
-          <Label>Language</Label>
-          <Select defaultValue="Bangladesh">
+          <Label>{translations.languageLabel}</Label>
+          <Select defaultValue="Bengali">
             <SelectTrigger>
-              <SelectValue placeholder="Select language" />
+              <SelectValue placeholder={translations.languagePlaceholder} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Bangladesh">Bangladesh</SelectItem>
-              <SelectItem value="English">English</SelectItem>
+              <SelectItem value="Bengali">
+                {translations.languages.bengali}
+              </SelectItem>
+              <SelectItem value="English">
+                {translations.languages.english}
+              </SelectItem>
+              <SelectItem value="Hindi">
+                {translations.languages.hindi}
+              </SelectItem>
+              <SelectItem value="Urdu">
+                {translations.languages.urdu}
+              </SelectItem>
+              <SelectItem value="Arabic">
+                {translations.languages.arabic}
+              </SelectItem>
+              <SelectItem value="Spanish">
+                {translations.languages.spanish}
+              </SelectItem>
+              <SelectItem value="French">
+                {translations.languages.french}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>

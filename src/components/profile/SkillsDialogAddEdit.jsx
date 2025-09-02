@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSelector } from "react-redux";
 
 export default function SkillsDialogAddEdit({
   isOpen,
@@ -29,6 +30,79 @@ export default function SkillsDialogAddEdit({
   skillCategory = "soft", // New prop to specify initial skill category
 }) {
   const [skillType, setSkillType] = useState(skillCategory);
+
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const translations = useMemo(
+    () =>
+      messages?.profile?.skillsDialog || {
+        addTitle: "Add Skills",
+        editTitle: "Edit Skills",
+        skillTypeLabel: "Skill Type",
+        skillTypes: {
+          soft: "Soft Skills",
+          technical: "Technical Skills",
+          functional: "Functional Skills",
+        },
+        skillsLabel: "Skills",
+        skillsPlaceholder: "Select Skills",
+        experienceLabel: "Experience",
+        experiencePlaceholder: "Enter Experience",
+        cancelButton: "Cancel",
+        saveButton: "Save Changes",
+        experienceLevels: {
+          beginner: "Beginner (0-1 years)",
+          intermediate: "Intermediate (1-3 years)",
+          advanced: "Advanced (3-5 years)",
+          expert: "Expert (5+ years)",
+        },
+        technicalSkills: [
+          "JavaScript",
+          "TypeScript",
+          "React",
+          "Node.js",
+          "Python",
+          "Java",
+          "C++",
+          "HTML/CSS",
+          "SQL",
+          "MongoDB",
+          "PostgreSQL",
+          "AWS",
+          "Docker",
+          "Kubernetes",
+          "Git",
+          "REST APIs",
+          "GraphQL",
+          "Machine Learning",
+          "Data Analysis",
+          "Other",
+        ],
+        functionalSkills: [
+          "Project Management",
+          "Team Leadership",
+          "Communication",
+          "Problem Solving",
+          "Strategic Planning",
+          "Business Analysis",
+          "Quality Assurance",
+          "Risk Management",
+          "Customer Relations",
+          "Sales",
+          "Marketing",
+          "Financial Analysis",
+          "Operations Management",
+          "Human Resources",
+          "Training & Development",
+          "Negotiation",
+          "Time Management",
+          "Critical Thinking",
+          "Decision Making",
+          "Other",
+        ],
+      },
+    [messages]
+  );
 
   const {
     register,
@@ -46,59 +120,17 @@ export default function SkillsDialogAddEdit({
   });
 
   // Technical skills options
-  const technicalSkills = [
-    "JavaScript",
-    "TypeScript",
-    "React",
-    "Node.js",
-    "Python",
-    "Java",
-    "C++",
-    "HTML/CSS",
-    "SQL",
-    "MongoDB",
-    "PostgreSQL",
-    "AWS",
-    "Docker",
-    "Kubernetes",
-    "Git",
-    "REST APIs",
-    "GraphQL",
-    "Machine Learning",
-    "Data Analysis",
-    "Other",
-  ];
+  const technicalSkills = translations.technicalSkills;
 
   // Functional skills options
-  const functionalSkills = [
-    "Project Management",
-    "Team Leadership",
-    "Communication",
-    "Problem Solving",
-    "Strategic Planning",
-    "Business Analysis",
-    "Quality Assurance",
-    "Risk Management",
-    "Customer Relations",
-    "Sales",
-    "Marketing",
-    "Financial Analysis",
-    "Operations Management",
-    "Human Resources",
-    "Training & Development",
-    "Negotiation",
-    "Time Management",
-    "Critical Thinking",
-    "Decision Making",
-    "Other",
-  ];
+  const functionalSkills = translations.functionalSkills;
 
   // Experience levels
   const experienceLevels = [
-    "Beginner (0-1 years)",
-    "Intermediate (1-3 years)",
-    "Advanced (3-5 years)",
-    "Expert (5+ years)",
+    translations.experienceLevels.beginner,
+    translations.experienceLevels.intermediate,
+    translations.experienceLevels.advanced,
+    translations.experienceLevels.expert,
   ];
 
   // Load initial data for edit mode
@@ -149,13 +181,13 @@ export default function SkillsDialogAddEdit({
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4 border-b-0">
           <DialogTitle className="text-lg font-semibold text-gray-900">
-            {mode === "edit" ? "Edit" : "Add"}{" "}
+            {mode === "edit" ? translations.editTitle : translations.addTitle}{" "}
             {skillType === "soft"
-              ? "Soft"
+              ? translations.skillTypes.soft
               : skillType === "technical"
-              ? "Technical"
-              : "Functional"}{" "}
-            Skills
+              ? translations.skillTypes.technical
+              : translations.skillTypes.functional}{" "}
+            {translations.skillsLabel}
           </DialogTitle>
         </DialogHeader>
 
@@ -164,12 +196,12 @@ export default function SkillsDialogAddEdit({
           {/* Skill Type Selection */}
           <div className="space-y-3">
             <Label className="text-sm font-medium text-gray-900">
-              Skill Type
+              {translations.skillTypeLabel}
             </Label>
             <RadioGroup
               value={skillType}
               onValueChange={handleSkillTypeChange}
-              className="flex space-x-6"
+              className="flex flex-col md:flex-row space-x-6"
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="soft" id="soft" />
@@ -177,7 +209,7 @@ export default function SkillsDialogAddEdit({
                   htmlFor="soft"
                   className="text-sm font-normal cursor-pointer"
                 >
-                  Soft Skills
+                  {translations.skillTypes.soft}
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
@@ -186,7 +218,7 @@ export default function SkillsDialogAddEdit({
                   htmlFor="technical"
                   className="text-sm font-normal cursor-pointer"
                 >
-                  Technical Skills
+                  {translations.skillTypes.technical}
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
@@ -195,7 +227,7 @@ export default function SkillsDialogAddEdit({
                   htmlFor="functional"
                   className="text-sm font-normal cursor-pointer"
                 >
-                  Functional Skills
+                  {translations.skillTypes.functional}
                 </Label>
               </div>
             </RadioGroup>
@@ -203,13 +235,15 @@ export default function SkillsDialogAddEdit({
 
           {/* Skills Field */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium text-gray-900">Skills</Label>
+            <Label className="text-sm font-medium text-gray-900">
+              {translations.skillsLabel}
+            </Label>
             <Select
               onValueChange={(value) => setValue("skills", value)}
               value={watch("skills")}
             >
               <SelectTrigger className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500">
-                <SelectValue placeholder="Select Skills" />
+                <SelectValue placeholder={translations.skillsPlaceholder} />
               </SelectTrigger>
               <SelectContent>
                 {currentSkills.map((skill) => (
@@ -227,14 +261,14 @@ export default function SkillsDialogAddEdit({
           {/* Experience Field */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-gray-900">
-              Experience
+              {translations.experienceLabel}
             </Label>
             <Select
               onValueChange={(value) => setValue("experience", value)}
               value={watch("experience")}
             >
               <SelectTrigger className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500">
-                <SelectValue placeholder="Enter Experience" />
+                <SelectValue placeholder={translations.experiencePlaceholder} />
               </SelectTrigger>
               <SelectContent>
                 {experienceLevels.map((level) => (
@@ -260,14 +294,14 @@ export default function SkillsDialogAddEdit({
             onClick={onCancel}
             className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50 w-full md:w-auto"
           >
-            Cancel
+            {translations.cancelButton}
           </Button>
           <Button
             type="submit"
             onClick={handleSubmit(onSubmit)}
             className="px-6 button-gradient py-2 bg-blue-600 hover:bg-blue-700 text-white"
           >
-            Save Changes
+            {translations.saveButton}
           </Button>
         </DialogFooter>
       </DialogContent>

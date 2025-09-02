@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -26,6 +26,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import useToast from "@/hooks/showToast/ShowToast";
+import { useSelector } from "react-redux";
 
 export default function CreateInvoicesDialog({ isOpen, onClose }) {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -34,6 +35,28 @@ export default function CreateInvoicesDialog({ isOpen, onClose }) {
   const [logoPreview, setLogoPreview] = useState(null);
   const fileInputRef = useRef(null);
   const { success, error } = useToast();
+
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const dialogTranslations = useMemo(
+    () =>
+      messages?.invoiceDialogs?.createInvoice || {
+        title: "Create New Invoice",
+        logoUpload: "LOGO",
+        clientLabel: "Client",
+        clientPlaceholder: "Select Client",
+        serviceTypeLabel: "Service Type",
+        serviceTypePlaceholder: "Select Service Type",
+        projectNameLabel: "Project Name",
+        projectNamePlaceholder: "Select Project Name",
+        dayLabel: "Day",
+        dayPlaceholder: "Enter your working day",
+        cancelButton: "Cancel",
+        createButton: "Create Invoices",
+      },
+    [messages]
+  );
+
   const {
     register,
     handleSubmit,
@@ -139,7 +162,7 @@ export default function CreateInvoicesDialog({ isOpen, onClose }) {
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4 border-b-0">
           <DialogTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">
-            Create New Invoice
+            {dialogTranslations.title}
           </DialogTitle>
         </DialogHeader>
 
@@ -162,7 +185,9 @@ export default function CreateInvoicesDialog({ isOpen, onClose }) {
                   <div className="text-xs font-bold tracking-wider">
                     CONLINE
                   </div>
-                  <div className="text-[10px] opacity-80">LOGO</div>
+                  <div className="text-[10px] opacity-80">
+                    {dialogTranslations.logoUpload}
+                  </div>
                 </div>
               )}
               <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
@@ -180,10 +205,14 @@ export default function CreateInvoicesDialog({ isOpen, onClose }) {
 
           {/* Client Field */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium text-gray-900">Client</Label>
+            <Label className="text-sm font-medium text-gray-900">
+              {dialogTranslations.clientLabel}
+            </Label>
             <Select onValueChange={(value) => setValue("client", value)}>
               <SelectTrigger className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500">
-                <SelectValue placeholder="Select Client" />
+                <SelectValue
+                  placeholder={dialogTranslations.clientPlaceholder}
+                />
               </SelectTrigger>
               <SelectContent>
                 {clients.map((client) => (
@@ -201,11 +230,13 @@ export default function CreateInvoicesDialog({ isOpen, onClose }) {
           {/* Service Type Field */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-gray-900">
-              Service Type
+              {dialogTranslations.serviceTypeLabel}
             </Label>
             <Select onValueChange={(value) => setValue("serviceType", value)}>
               <SelectTrigger className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500">
-                <SelectValue placeholder="select Service type" />
+                <SelectValue
+                  placeholder={dialogTranslations.serviceTypePlaceholder}
+                />
               </SelectTrigger>
               <SelectContent>
                 {serviceTypes.map((serviceType) => (
@@ -225,11 +256,13 @@ export default function CreateInvoicesDialog({ isOpen, onClose }) {
           {/* Project Name Field */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-gray-900">
-              Project Name
+              {dialogTranslations.projectNameLabel}
             </Label>
             <Select onValueChange={(value) => setValue("projectName", value)}>
               <SelectTrigger className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500">
-                <SelectValue placeholder="select Service type" />
+                <SelectValue
+                  placeholder={dialogTranslations.projectNamePlaceholder}
+                />
               </SelectTrigger>
               <SelectContent>
                 {projectNames.map((projectName) => (
@@ -248,7 +281,9 @@ export default function CreateInvoicesDialog({ isOpen, onClose }) {
 
           {/* Day Field with Calendar */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium text-gray-900">Day</Label>
+            <Label className="text-sm font-medium text-gray-900">
+              {dialogTranslations.dayLabel}
+            </Label>
             <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
               <PopoverTrigger asChild>
                 <Button
@@ -260,7 +295,7 @@ export default function CreateInvoicesDialog({ isOpen, onClose }) {
                   >
                     {selectedDate
                       ? formatDate(selectedDate)
-                      : "enter your working day"}
+                      : dialogTranslations.dayPlaceholder}
                   </span>
                   <IoCalendarOutline className="ml-auto h-4 w-4 text-gray-400" />
                 </Button>
@@ -288,14 +323,14 @@ export default function CreateInvoicesDialog({ isOpen, onClose }) {
             onClick={onCancel}
             className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50"
           >
-            Cancel
+            {dialogTranslations.cancelButton}
           </Button>
           <Button
             type="submit"
             onClick={handleSubmit(onSubmit)}
             className="px-6 button-gradient py-2 bg-blue-600 hover:bg-blue-700 text-white"
           >
-            Create Invoices
+            {dialogTranslations.createButton}
           </Button>
         </DialogFooter>
       </DialogContent>

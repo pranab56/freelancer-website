@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import {
@@ -10,12 +10,30 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import Image from "next/image";
+import { useSelector } from "react-redux";
 
 export default function ViewInvoiceDetailsDialog({
   isOpen,
   onClose,
   invoiceData = null,
 }) {
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const dialogTranslations = useMemo(
+    () =>
+      messages?.invoiceDialogs?.viewInvoiceDetails || {
+        title: "Invoice Details",
+        clientName: "Client Name",
+        serviceType: "Service Type",
+        projectName: "Project Name",
+        workingDay: "Working Day",
+        totalAmount: "Total Amount",
+        status: "Status",
+        doneButton: "Done",
+      },
+    [messages]
+  );
+
   // Default invoice data if none provided
   const defaultInvoiceData = {
     clientName: "s. jean",
@@ -38,7 +56,7 @@ export default function ViewInvoiceDetailsDialog({
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4 border-b-0">
           <DialogTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">
-            Invoice Details
+            {dialogTranslations.title}
           </DialogTitle>
         </DialogHeader>
 
@@ -47,14 +65,14 @@ export default function ViewInvoiceDetailsDialog({
           {/* Invoice Details Card */}
           <div className="border border-gray-200 rounded-lg p-6 bg-gray-50 relative">
             <h3 className="text-lg font-semibold mb-4 h2-gradient-text">
-              Invoice Details
+              {dialogTranslations.title}
             </h3>
 
             <div className="space-y-3">
               {/* Client Name */}
               <div className="flex items-start">
                 <span className="font-medium text-gray-900 min-w-[120px]">
-                  Client Name:
+                  {dialogTranslations.clientName}:
                 </span>
                 <span className="text-gray-700 ml-2">{invoice.clientName}</span>
               </div>
@@ -62,7 +80,7 @@ export default function ViewInvoiceDetailsDialog({
               {/* Service Type */}
               <div className="flex items-start">
                 <span className="font-medium text-gray-900 min-w-[120px]">
-                  Service Type:
+                  {dialogTranslations.serviceType}:
                 </span>
                 <span className="text-gray-700 ml-2">
                   {invoice.serviceType}
@@ -72,7 +90,7 @@ export default function ViewInvoiceDetailsDialog({
               {/* Project Name */}
               <div className="flex items-start">
                 <span className="font-medium text-gray-900 min-w-[120px]">
-                  Project Name:
+                  {dialogTranslations.projectName}:
                 </span>
                 <span className="text-gray-700 ml-2">
                   {invoice.projectName}
@@ -82,7 +100,7 @@ export default function ViewInvoiceDetailsDialog({
               {/* Working Day */}
               <div className="flex items-start">
                 <span className="font-medium text-gray-900 min-w-[120px]">
-                  Working Day:
+                  {dialogTranslations.workingDay}:
                 </span>
                 <span className="text-gray-700 ml-2">{invoice.workingDay}</span>
               </div>
@@ -90,7 +108,7 @@ export default function ViewInvoiceDetailsDialog({
               {/* Total Amount */}
               <div className="flex items-start">
                 <span className="font-medium text-gray-900 min-w-[120px]">
-                  Total Amount:
+                  {dialogTranslations.totalAmount}:
                 </span>
                 <span className="text-gray-700 ml-2 font-semibold">
                   {invoice.totalAmount}
@@ -100,7 +118,7 @@ export default function ViewInvoiceDetailsDialog({
               {/* Status */}
               <div className="flex items-start">
                 <span className="font-medium text-gray-900 min-w-[120px]">
-                  Status:
+                  {dialogTranslations.status}:
                 </span>
                 <span
                   className={`ml-2 px-2 py-1 rounded-md text-sm font-medium ${
@@ -143,7 +161,7 @@ export default function ViewInvoiceDetailsDialog({
             onClick={handleDone}
             className="px-8 button-gradient py-2 bg-blue-600 hover:bg-blue-700 text-white"
           >
-            Done
+            {dialogTranslations.doneButton}
           </Button>
         </DialogFooter>
       </DialogContent>

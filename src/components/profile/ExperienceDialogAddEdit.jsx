@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useSelector } from "react-redux";
 
 export default function ExperienceDialogAddEdit({
   isOpen,
@@ -29,6 +30,36 @@ export default function ExperienceDialogAddEdit({
 }) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const translations = useMemo(
+    () =>
+      messages?.profile?.experienceDialog || {
+        addTitle: "Add Experience",
+        editTitle: "Edit Experience",
+        companyNameLabel: "Company Name",
+        companyNamePlaceholder: "Enter Company Name",
+        projectLabel: "Project",
+        projectPlaceholder: "Enter Project",
+        descriptionLabel: "Description",
+        descriptionPlaceholder: "Enter Experience Description",
+        startDateLabel: "Start Date",
+        endDateLabel: "End Date",
+        startDatePlaceholder: "Pick a start date",
+        endDatePlaceholder: "Pick an end date",
+        cancelButton: "Cancel",
+        saveButton: "Save Changes",
+        validationMessages: {
+          companyRequired: "Company name is required",
+          projectRequired: "Project is required",
+          descriptionRequired: "Description is required",
+          startDateRequired: "Please select a start date",
+          endDateRequired: "Please select an end date",
+        },
+      },
+    [messages]
+  );
 
   const {
     register,
@@ -77,11 +108,11 @@ export default function ExperienceDialogAddEdit({
   const onSubmit = (data) => {
     // Validate that dates are selected
     if (!startDate) {
-      alert("Please select a start date");
+      alert(translations.validationMessages.startDateRequired);
       return;
     }
     if (!endDate) {
-      alert("Please select an end date");
+      alert(translations.validationMessages.endDateRequired);
       return;
     }
 
@@ -103,7 +134,7 @@ export default function ExperienceDialogAddEdit({
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4 border-b-0">
           <DialogTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">
-            {mode === "edit" ? "Edit Experience" : "Add Experience"}
+            {mode === "edit" ? translations.editTitle : translations.addTitle}
           </DialogTitle>
         </DialogHeader>
 
@@ -115,14 +146,14 @@ export default function ExperienceDialogAddEdit({
               htmlFor="companyName"
               className="text-sm font-medium text-gray-900"
             >
-              Company Name
+              {translations.companyNameLabel}
             </Label>
             <Input
               id="companyName"
-              placeholder="Select Skills"
+              placeholder={translations.companyNamePlaceholder}
               className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500 placeholder:text-gray-400"
               {...register("companyName", {
-                required: "Company name is required",
+                required: translations.validationMessages.companyRequired,
               })}
             />
             {errors.companyName && (
@@ -138,14 +169,14 @@ export default function ExperienceDialogAddEdit({
               htmlFor="project"
               className="text-sm font-medium text-gray-900"
             >
-              Project
+              {translations.projectLabel}
             </Label>
             <Input
               id="project"
-              placeholder="Enter Experience"
+              placeholder={translations.projectPlaceholder}
               className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500 placeholder:text-gray-400"
               {...register("project", {
-                required: "Project is required",
+                required: translations.validationMessages.projectRequired,
               })}
             />
             {errors.project && (
@@ -159,14 +190,14 @@ export default function ExperienceDialogAddEdit({
               htmlFor="description"
               className="text-sm font-medium text-gray-900"
             >
-              Description
+              {translations.descriptionLabel}
             </Label>
             <Textarea
               id="description"
-              placeholder="Enter Experience"
+              placeholder={translations.descriptionPlaceholder}
               className="w-full h-20 resize-none border-gray-200 focus:border-blue-500 focus:ring-blue-500 placeholder:text-gray-400"
               {...register("description", {
-                required: "Description is required",
+                required: translations.validationMessages.descriptionRequired,
               })}
             />
             {errors.description && (
@@ -182,7 +213,7 @@ export default function ExperienceDialogAddEdit({
               htmlFor="startDate"
               className="text-sm font-medium text-gray-900"
             >
-              Start Date
+              {translations.startDateLabel}
             </Label>
             <Popover>
               <PopoverTrigger asChild>
@@ -194,7 +225,9 @@ export default function ExperienceDialogAddEdit({
                   {startDate ? (
                     format(startDate, "PPP")
                   ) : (
-                    <span className="text-gray-400">Pick a date</span>
+                    <span className="text-gray-400">
+                      {translations.startDatePlaceholder}
+                    </span>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -224,7 +257,7 @@ export default function ExperienceDialogAddEdit({
               htmlFor="endDate"
               className="text-sm font-medium text-gray-900"
             >
-              End Date
+              {translations.endDateLabel}
             </Label>
             <Popover>
               <PopoverTrigger asChild>
@@ -236,7 +269,9 @@ export default function ExperienceDialogAddEdit({
                   {endDate ? (
                     format(endDate, "PPP")
                   ) : (
-                    <span className="text-gray-400">Pick a date</span>
+                    <span className="text-gray-400">
+                      {translations.endDatePlaceholder}
+                    </span>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -266,14 +301,14 @@ export default function ExperienceDialogAddEdit({
             onClick={onCancel}
             className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50 w-full md:w-auto"
           >
-            Cancel
+            {translations.cancelButton}
           </Button>
           <Button
             type="submit"
             onClick={handleSubmit(onSubmit)}
             className="px-6 button-gradient py-2 bg-blue-600 hover:bg-blue-700 text-white"
           >
-            Save Changes
+            {translations.saveButton}
           </Button>
         </DialogFooter>
       </DialogContent>

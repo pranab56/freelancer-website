@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,10 +29,38 @@ import EducationDialogAddEdit from "./EducationDialogAddEdit";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import useCheckUserAndLoggedIn from "@/hooks/checkUserTypeAndLoggedIn/CheckUserAndLoggedIn";
+
 function ProfileSections() {
   const { isFreelancerAndLoggedIn, isLoggedIn, userType } =
     useCheckUserAndLoggedIn();
-  const locale = useSelector((state) => state.language.currentLocale);
+
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const translations = useMemo(() => {
+    console.log("Messages in ProfileSections:", messages);
+    const sectionTranslations = messages?.profile?.sections || {
+      educationCertifications: {
+        title: "Education & Certifications",
+        addButton: "Add",
+        editButton: "Edit",
+      },
+      projects: {
+        title: "Projects",
+        subtitle: "Discover my achievements and detailed case studies.",
+        viewAllButton: "View All Project",
+        addNewButton: "Add new project",
+      },
+      contact: {
+        title: "Contact",
+        followButton: "Follow",
+        scheduleMeetingButton: "Schedule Meeting",
+        messageButton: "Message",
+      },
+    };
+    console.log("Section Translations:", sectionTranslations);
+    return sectionTranslations;
+  }, [messages]);
+
   const [isAddProjectDialogOpen, setIsAddProjectDialogOpen] = useState(false);
   const [isAddEducationDialogOpen, setIsAddEducationDialogOpen] =
     useState(false);
@@ -83,7 +111,8 @@ function ProfileSections() {
         <Card className="max-h-60">
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2 text-lg font-semibold text-blue-600 h2-gradient-text">
-              Education & Certifications
+              {translations?.educationCertifications?.title ||
+                "Education & Certifications"}
               {isFreelancerAndLoggedIn && (
                 <>
                   <Plus
@@ -125,18 +154,19 @@ function ProfileSections() {
         <Card className="max-h-auto">
           <CardHeader className="pb-4">
             <CardTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">
-              Projects
+              {translations?.projects?.title || "Projects"}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 flex flex-col items-center">
             <p className="text-gray-600 text-sm leading-tight text-center">
-              Discover my achievements and detailed case studies.
+              {translations?.projects?.subtitle ||
+                "Discover my achievements and detailed case studies."}
             </p>
 
             <Link href={`/showcase-projects`} className="w-full md:w-auto">
               <Button className="button-gradient w-full md:w-auto">
                 <Eye className="w-4 h-4 mr-2" />
-                View All Project
+                {translations?.projects?.viewAllButton || "View All Project"}
               </Button>
             </Link>
 
@@ -146,7 +176,7 @@ function ProfileSections() {
                 onClick={() => setIsAddProjectDialogOpen(true)}
               >
                 <FaPlus className="w-4 h-4 mr-2" />
-                Add new project
+                {translations?.projects?.addNewButton || "Add new project"}
               </Button>
             )}
           </CardContent>
@@ -156,24 +186,25 @@ function ProfileSections() {
         <Card className="max-h-60">
           <CardHeader className="">
             <CardTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">
-              Contact
+              {translations?.contact?.title || "Contact"}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3 flex flex-col items-center">
               <Button className="w-full md:w-40 button-gradient ">
                 <UserPlus className="w-4 h-4 mr-2" />
-                Follow
+                {translations?.contact?.followButton || "Follow"}
               </Button>
 
               <Button className="w-full md:w-40 button-gradient ">
                 <Calendar className="w-4 h-4 mr-2" />
-                Schedule Meeting
+                {translations?.contact?.scheduleMeetingButton ||
+                  "Schedule Meeting"}
               </Button>
 
               <Button className="w-full md:w-40 button-gradient ">
                 <MessageCircle className="w-4 h-4 mr-2" />
-                Message
+                {translations?.contact?.messageButton || "Message"}
               </Button>
             </div>
           </CardContent>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,10 +19,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSelector } from "react-redux";
 
 export default function ProjectCompleteDialog({ isOpen, onClose }) {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const fileInputRef = useRef(null);
+
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const dialogTranslations = useMemo(
+    () =>
+      messages?.invoiceDialogs?.projectComplete || {
+        title: "Complete Project",
+        completeMessageLabel: "Complete Message",
+        completeMessagePlaceholder: "Write Message",
+        fileMessageLabel: "File/Message",
+        fileMessagePlaceholder: "Write Message/ Send Message",
+        uploadedImagesLabel: "Uploaded Images",
+        cancelButton: "Cancel",
+        completeButton: "Mark as Completed",
+      },
+    [messages]
+  );
 
   const {
     register,
@@ -116,7 +134,7 @@ export default function ProjectCompleteDialog({ isOpen, onClose }) {
           {/* Header */}
           <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4 border-b-0">
             <DialogTitle className="text-lg font-semibold text-blue-600 h2-gradient-text">
-              Complete Project
+              {dialogTranslations.title}
             </DialogTitle>
           </DialogHeader>
 
@@ -125,13 +143,15 @@ export default function ProjectCompleteDialog({ isOpen, onClose }) {
             {/* Complete Message Field */}
             <div className="space-y-2">
               <Label className="text-sm font-medium text-gray-900">
-                Complete Message
+                {dialogTranslations.completeMessageLabel}
               </Label>
               <Select
                 onValueChange={(value) => setValue("completeMessage", value)}
               >
                 <SelectTrigger className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500">
-                  <SelectValue placeholder="Write Message" />
+                  <SelectValue
+                    placeholder={dialogTranslations.completeMessagePlaceholder}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {completeMessages.map((message) => (
@@ -151,11 +171,11 @@ export default function ProjectCompleteDialog({ isOpen, onClose }) {
             {/* File/Message Field */}
             <div className="space-y-2">
               <Label className="text-sm font-medium text-gray-900">
-                File/Message
+                {dialogTranslations.fileMessageLabel}
               </Label>
               <div className="relative">
                 <Textarea
-                  placeholder="Write Message/ Send Message"
+                  placeholder={dialogTranslations.fileMessagePlaceholder}
                   className="w-full min-h-[200px] resize-none border-gray-200 focus:border-blue-500 focus:ring-blue-500 placeholder:text-gray-400 pr-12"
                   {...register("fileMessage")}
                 />
@@ -180,7 +200,8 @@ export default function ProjectCompleteDialog({ isOpen, onClose }) {
             {uploadedFiles.length > 0 && (
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-900">
-                  Uploaded Images ({uploadedFiles.length})
+                  {dialogTranslations.uploadedImagesLabel} (
+                  {uploadedFiles.length})
                 </Label>
                 <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
                   {uploadedFiles.map((file) => (
@@ -227,14 +248,14 @@ export default function ProjectCompleteDialog({ isOpen, onClose }) {
               onClick={onCancel}
               className="px-6 py-2 text-gray-700 hover:bg-gray-100"
             >
-              Cancel
+              {dialogTranslations.cancelButton}
             </Button>
             <Button
               type="submit"
               onClick={handleSubmit(onSubmit)}
               className="px-6 button-gradient py-2 bg-blue-600 hover:bg-blue-700 text-white"
             >
-              Mark as Completed
+              {dialogTranslations.completeButton}
             </Button>
           </DialogFooter>
         </DialogContent>

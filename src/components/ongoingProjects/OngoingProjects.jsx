@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,8 +12,39 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search, FileText, ChevronDown } from "lucide-react";
+import { useSelector } from "react-redux";
 
 function OngoingProjects() {
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const translations = useMemo(
+    () =>
+      messages?.ongoingProjects || {
+        title: "Ongoing Projects",
+        subtitle:
+          "Stay on top of your work and ensure smooth collaboration until project completion!",
+        search: "Search",
+        filter: {
+          all: "All Projects",
+          inProgress: "In Progress",
+          completed: "Completed",
+          pending: "Pending",
+        },
+        projectDetails: {
+          client: "Client",
+          deadline: "Deadline",
+          amount: "Amount",
+          status: "Status",
+          viewDetails: "View Details",
+        },
+        statuses: {
+          inProgress: "In Progress",
+          completed: "Completed",
+        },
+      },
+    [messages]
+  );
+
   const projects = [
     {
       id: 1,
@@ -20,7 +52,7 @@ function OngoingProjects() {
       client: "XYZ Corp",
       deadline: "05/2023",
       amount: "$500",
-      status: "In Progress",
+      status: translations.statuses.inProgress,
       statusColor: "bg-blue-600",
     },
     {
@@ -29,7 +61,7 @@ function OngoingProjects() {
       client: "XYZ Corp",
       deadline: "05/2023",
       amount: "$500",
-      status: "Completed",
+      status: translations.statuses.completed,
       statusColor: "bg-blue-600",
     },
   ];
@@ -39,12 +71,9 @@ function OngoingProjects() {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-4xl font-bold h2-gradient-text mb-2 leading-relaxed">
-          Ongoing Projects
+          {translations.title}
         </h1>
-        <p className="text-gray-600">
-          Stay on top of your work and ensure smooth collaboration until project
-          completion!
-        </p>
+        <p className="text-gray-600">{translations.subtitle}</p>
       </div>
 
       {/* Search and Filter Bar */}
@@ -52,7 +81,7 @@ function OngoingProjects() {
         <div className="relative flex-1 w-full md:max-w-md ">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
-            placeholder="Search"
+            placeholder={translations.search}
             className="pl-10 border-gray-300 w-full"
           />
         </div>
@@ -62,10 +91,18 @@ function OngoingProjects() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all-invoice">All Invoice</SelectItem>
-            <SelectItem value="paid">Paid</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="overdue">Overdue</SelectItem>
+            <SelectItem value="all-invoice">
+              {translations.filter.all}
+            </SelectItem>
+            <SelectItem value="in-progress">
+              {translations.filter.inProgress}
+            </SelectItem>
+            <SelectItem value="completed">
+              {translations.filter.completed}
+            </SelectItem>
+            <SelectItem value="pending">
+              {translations.filter.pending}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -87,15 +124,21 @@ function OngoingProjects() {
 
                   <div className="space-y-1 text-sm text-gray-700">
                     <p>
-                      <span className="font-medium">Client:</span>{" "}
+                      <span className="font-medium">
+                        {translations.projectDetails.client}:
+                      </span>{" "}
                       {project.client}
                     </p>
                     <p>
-                      <span className="font-medium">Deadline:</span>{" "}
+                      <span className="font-medium">
+                        {translations.projectDetails.deadline}:
+                      </span>{" "}
                       {project.deadline}
                     </p>
                     <p>
-                      <span className="font-medium">Amount:</span>{" "}
+                      <span className="font-medium">
+                        {translations.projectDetails.amount}:
+                      </span>{" "}
                       {project.amount}
                     </p>
                   </div>
@@ -112,7 +155,7 @@ function OngoingProjects() {
                 <div className="flex items-center gap-4 ">
                   <Button className="button-gradient">
                     <FileText className="w-4 h-4 mr-2" />
-                    View Details
+                    {translations.projectDetails.viewDetails}
                   </Button>
                 </div>
               </div>

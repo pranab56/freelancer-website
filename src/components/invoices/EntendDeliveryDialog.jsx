@@ -20,9 +20,24 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import useToast from "@/hooks/showToast/ShowToast";
+import { useSelector } from "react-redux";
 
 export default function ExtendDeliveryDialog({ isOpen, onClose }) {
   const showToast = useToast();
+  const messages = useSelector((state) => state.language.messages);
+  const dialogTranslations = React.useMemo(
+    () =>
+      messages?.invoiceDialogs?.extendDelivery || {
+        title: "Select Date & Add Reason",
+        dateLabel: "Date",
+        datePlaceholder: "Pick a date",
+        reasonLabel: "Add Reason",
+        reasonPlaceholder: "Enter your reason...",
+        submitButton: "Submit",
+      },
+    [messages]
+  );
+
   React.useEffect(() => {
     setOpen(isOpen);
   }, [isOpen]);
@@ -63,13 +78,13 @@ export default function ExtendDeliveryDialog({ isOpen, onClose }) {
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="sm:max-w-xl">
           <DialogHeader>
-            <DialogTitle>Select Date & Add Reason</DialogTitle>
+            <DialogTitle>{dialogTranslations.title}</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Date Picker */}
             <div className="space-y-2">
-              <Label>Date</Label>
+              <Label>{dialogTranslations.dateLabel}</Label>
               <Controller
                 name="date"
                 control={control}
@@ -88,7 +103,7 @@ export default function ExtendDeliveryDialog({ isOpen, onClose }) {
                         {field.value ? (
                           format(field.value, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>{dialogTranslations.datePlaceholder}</span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -110,10 +125,10 @@ export default function ExtendDeliveryDialog({ isOpen, onClose }) {
 
             {/* Reason Textarea */}
             <div className="space-y-2">
-              <Label htmlFor="reason">Add Reason</Label>
+              <Label htmlFor="reason">{dialogTranslations.reasonLabel}</Label>
               <Textarea
                 id="reason"
-                placeholder="Enter your reason..."
+                placeholder={dialogTranslations.reasonPlaceholder}
                 {...register("reason", { required: "Reason is required" })}
               />
               {errors.reason && (
@@ -127,7 +142,7 @@ export default function ExtendDeliveryDialog({ isOpen, onClose }) {
                 className="button-gradient"
                 onClick={handleSubmit(onSubmit)}
               >
-                Submit
+                {dialogTranslations.submitButton}
               </Button>
             </DialogFooter>
           </form>

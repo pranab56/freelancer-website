@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,11 +21,23 @@ import {
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
 import Image from "next/image";
+import { useSelector } from "react-redux";
 
 import useCheckUserAndLoggedIn from "@/hooks/checkUserTypeAndLoggedIn/CheckUserAndLoggedIn";
 
 function ProfileHeader() {
   const { isLoggedIn, userType } = useCheckUserAndLoggedIn();
+
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const translations = useMemo(
+    () =>
+      messages?.profile?.header || {
+        editProfile: "Edit Profile",
+        viewProfile: "View Profile",
+      },
+    [messages]
+  );
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [profileImage, setProfileImage] = useState(
@@ -114,7 +126,7 @@ function ProfileHeader() {
           <DialogTrigger asChild>
             {isLoggedIn && userType && userType !== "client" && (
               <Button size="sm" className="button-gradient">
-                Edit
+                {translations.editProfile}
                 <Edit className="w-4 h-4 ml-2" />
               </Button>
             )}
@@ -122,7 +134,7 @@ function ProfileHeader() {
           <DialogContent className="md:min-w-3xl lg:min-w-5xl max-h-[90vh] overflow-y-auto">
             <DialogHeader className="flex flex-row items-center justify-between pb-4">
               <DialogTitle className="text-xl font-semibold text-blue-600 h2-gradient-text">
-                Profile Edit
+                {translations.editProfile}
               </DialogTitle>
             </DialogHeader>
 
