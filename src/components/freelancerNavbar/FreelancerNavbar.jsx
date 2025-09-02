@@ -37,17 +37,16 @@ import {
 } from "@/redux/features/currentUser/currentuserSlice";
 import provideIcon from "@/utils/IconProvider/provideIcon";
 import LanguageSelector from "@/components/common/LanguageSelector";
-import { useLocale } from "@/components/common/TranslationWrapper";
 function FreelancerNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
-  const localeFromHook = useLocale();
+  const currentLocale = useSelector((state) => state.language.currentLocale);
 
   // Use only Redux state for locale
-  const locale = localeFromHook;
+  const locale = currentLocale;
   const userType = useSelector((state) => state.currentUser.currentUser.type);
   useEffect(() => {
     setMounted(true);
