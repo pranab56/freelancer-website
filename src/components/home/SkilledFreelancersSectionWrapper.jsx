@@ -1,12 +1,13 @@
 "use client";
-
-import { useSelector } from "react-redux";
+import React from "react";
+import { useLocale } from "@/components/common/TranslationWrapper";
 import SkilledFreelancersSection from "./SkilledFreelancersSection";
 
-const SkilledFreelancersSectionWrapper = () => {
-  const currentLocale = useSelector((state) => state.language.currentLocale);
+function SkilledFreelancersSectionWrapper() {
+  const locale = useLocale();
 
-  return <SkilledFreelancersSection currentLocale={currentLocale} />;
-};
+  // Force complete re-render when locale changes
+  return <SkilledFreelancersSection key={`skilled-freelancers-${locale}`} />;
+}
 
 export default SkilledFreelancersSectionWrapper;

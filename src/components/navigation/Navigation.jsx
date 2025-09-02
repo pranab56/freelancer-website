@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import NavBar from "@/components/navbar/NavBar";
 import Footer from "@/components/common/Footer/Footer";
 import FreelancerNavBar from "@/components/freelancerNavbar/FreelancerNavbar";
+import ClientNavBar from "@/components/client/clientNavbar/ClientNavbar";
 
 export default function Navigation({ children }) {
   const [mounted, setMounted] = useState(false);
@@ -18,7 +19,11 @@ export default function Navigation({ children }) {
     if (!currentUser) {
       return <NavBar />;
     }
-    return currentUser.type === "client" ? <NavBar /> : <FreelancerNavBar />;
+    return currentUser.type === "client" ? (
+      <ClientNavBar />
+    ) : (
+      <FreelancerNavBar />
+    );
   };
 
   if (!mounted) {

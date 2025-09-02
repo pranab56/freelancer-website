@@ -1,12 +1,13 @@
 "use client";
-
-import { useSelector } from "react-redux";
+import React from "react";
+import { useLocale } from "@/components/common/TranslationWrapper";
 import FindTalentWay from "./FindTalentWay";
 
-const FindTalentWayWrapper = () => {
-  const currentLocale = useSelector((state) => state.language.currentLocale);
+function FindTalentWayWrapper() {
+  const locale = useLocale();
 
-  return <FindTalentWay currentLocale={currentLocale} />;
-};
+  // Force complete re-render when locale changes
+  return <FindTalentWay key={`find-talent-way-${locale}`} />;
+}
 
 export default FindTalentWayWrapper;

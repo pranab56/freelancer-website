@@ -1,12 +1,13 @@
 "use client";
-
-import { useSelector } from "react-redux";
+import React from "react";
+import { useLocale } from "@/components/common/TranslationWrapper";
 import WhyChooseUs from "./WhyChooseUs";
 
-const WhyChooseUsWrapper = () => {
-  const currentLocale = useSelector((state) => state.language.currentLocale);
+function WhyChooseUsWrapper() {
+  const locale = useLocale();
 
-  return <WhyChooseUs currentLocale={currentLocale} />;
-};
+  // Force complete re-render when locale changes
+  return <WhyChooseUs key={`why-choose-us-${locale}`} />;
+}
 
 export default WhyChooseUsWrapper;

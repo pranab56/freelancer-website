@@ -37,16 +37,18 @@ import {
 } from "@/redux/features/currentUser/currentuserSlice";
 import provideIcon from "@/utils/IconProvider/provideIcon";
 import LanguageSelector from "@/components/common/LanguageSelector";
+import { useLocale } from "@/components/common/TranslationWrapper";
+
 function ClientNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
-  const currentLocale = useSelector((state) => state.language.currentLocale);
+  const localeFromHook = useLocale();
 
   // Use only Redux state for locale
-  const locale = currentLocale;
+  const locale = localeFromHook;
   const userType = useSelector((state) => state.currentUser.currentUser.type);
 
   useEffect(() => {

@@ -16,6 +16,8 @@ const nextConfig = {
       },
     ],
   },
+  // Ensure proper output for Vercel
+  output: "standalone",
 };
 
 export default nextConfig;
