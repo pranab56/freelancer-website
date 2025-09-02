@@ -3,12 +3,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setLocale, loadMessages } from "../../../redux/features/languageSlice";
 import { Button } from "../../ui/button";
-import { useTranslations } from "../../../hooks/useTranslations";
 
 const LanguageSelector = () => {
   const dispatch = useDispatch();
-  const { currentLocale, loading } = useSelector((state) => state.language);
-  const t = useTranslations("common");
+  const { currentLocale, loading, messages } = useSelector(
+    (state) => state.language
+  );
+
+  // Get translations directly from Redux state
+  const commonTranslations = messages?.common || {};
 
   const handleLanguageChange = async (newLocale) => {
     if (newLocale === currentLocale || loading) return;
@@ -30,7 +33,9 @@ const LanguageSelector = () => {
 
   return (
     <div className="flex items-center space-x-2">
-      <span className="text-sm text-muted-foreground">{t("language")}:</span>
+      <span className="text-sm text-muted-foreground">
+        {commonTranslations.language || "Language"}:
+      </span>
       <div className="flex space-x-1">
         {languages.map((lang) => (
           <Button

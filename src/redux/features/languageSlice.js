@@ -25,10 +25,7 @@ const languageSlice = createSlice({
   },
   reducers: {
     setLocale: (state, action) => {
-      console.log("LanguageSlice - setLocale called with:", action.payload);
-      console.log("LanguageSlice - Previous locale:", state.currentLocale);
       state.currentLocale = action.payload;
-      console.log("LanguageSlice - New locale:", state.currentLocale);
       // Update document language attribute
       if (typeof document !== "undefined") {
         document.documentElement.lang = action.payload;
@@ -40,32 +37,14 @@ const languageSlice = createSlice({
     },
     setMessages: (state, action) => {
       const { locale, messages } = action.payload;
-      console.log("LanguageSlice - setMessages called with:", {
-        locale,
-        messages,
-      });
-      console.log("LanguageSlice - Previous messages:", state.messages);
       state.messages = messages;
       state.allMessages[locale] = messages;
-      console.log("LanguageSlice - New messages:", state.messages);
     },
     initializeLanguage: (state, action) => {
       const { locale, messages } = action.payload;
-      console.log("LanguageSlice - initializeLanguage called with:", {
-        locale,
-        messages,
-      });
-      console.log("LanguageSlice - Previous state:", {
-        currentLocale: state.currentLocale,
-        messages: state.messages,
-      });
       state.currentLocale = locale;
       state.messages = messages;
       state.allMessages[locale] = messages;
-      console.log("LanguageSlice - New state:", {
-        currentLocale: state.currentLocale,
-        messages: state.messages,
-      });
     },
   },
 

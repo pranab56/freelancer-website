@@ -15,6 +15,34 @@
     "search": "Rechercher",
     "language": "Langue"
   },
+  "topTalent": {
+    "banner": {
+      "title": "Trouvez les meilleurs talents",
+      "description": "Sélectionnez des talents de premier ordre qui correspondent aux objectifs et aux besoins de votre organisation. Notre plateforme vous connecte à des professionnels qualifiés qui peuvent stimuler l'innovation, améliorer la productivité et garantir le succès de vos projets, en offrant des résultats exceptionnels à chaque fois.",
+      "buttonText": "Embaucher des Freelances"
+    },
+    "heading": {
+      "title": "Design UX",
+      "subtitle": "Offrez à vos visiteurs une expérience fluide grâce à un design UX solide."
+    },
+    "search": {
+      "placeholder": "Rechercher des talents..."
+    },
+    "select": {
+      "category": "Sélectionner une catégorie",
+      "categoryLabel": "Catégories",
+      "skill": "Sélectionner une compétence",
+      "skillLabel": "Compétences"
+    },
+    "categories": {
+      "design": "Design",
+      "development": "Développement"
+    },
+    "skills": {
+      "ux": "Design UX",
+      "frontend": "Développement Frontend"
+    }
+  },
   "subscriptionPlan": {
     "badge": "Plans tarifaires",
     "title": "Des plans pour tous les besoins",

@@ -15,6 +15,34 @@
     "search": "Search",
     "language": "Language"
   },
+  "topTalent": {
+    "banner": {
+      "title": "Find Top Talent",
+      "description": "Select top-tier talent that aligns with your organization's goals and needs. Our platform connects you with skilled professionals who can drive innovation, improve productivity, and ensure the success of your projects, delivering exceptional results every time.",
+      "buttonText": "Hire Freelancers"
+    },
+    "heading": {
+      "title": "UX Design",
+      "subtitle": "Provide your visitors with a seamless experience through strong UX design."
+    },
+    "search": {
+      "placeholder": "Search talents..."
+    },
+    "select": {
+      "category": "Select Category",
+      "categoryLabel": "Categories",
+      "skill": "Select Skill",
+      "skillLabel": "Skills"
+    },
+    "categories": {
+      "design": "Design",
+      "development": "Development"
+    },
+    "skills": {
+      "ux": "UX Design",
+      "frontend": "Frontend Development"
+    }
+  },
   "subscriptionPlan": {
     "badge": "Pricing plans",
     "title": "Plans for all sizes",
