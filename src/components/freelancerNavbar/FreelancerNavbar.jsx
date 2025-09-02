@@ -37,29 +37,50 @@ import {
 } from "@/redux/features/currentUser/currentuserSlice";
 import provideIcon from "@/utils/IconProvider/provideIcon";
 import LanguageSelector from "@/components/common/LanguageSelector";
-import { useLocale } from "@/components/common/TranslationWrapper";
+
 function FreelancerNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
-  const localeFromHook = useLocale();
 
-  // Use only Redux state for locale
-  const locale = localeFromHook;
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const freelancerNavTranslations = messages?.freelancerNavbar || {};
+  const commonTranslations = messages?.common || {};
+
   const userType = useSelector((state) => state.currentUser.currentUser.type);
   useEffect(() => {
     setMounted(true);
   }, []);
-  // Navigation items - only freelancer specific pages
+
+  // Navigation items with translations
   const navItems = [
-    { label: "Job Board", href: `/job-board` },
-    { label: "Tenders", href: `/tenders` },
-    { label: "Inbox", href: `/inbox` },
-    { label: "Invoices", href: `/invoices` },
-    { label: "My Projects", href: `/my-projects` },
-    { label: "My Subscription", href: `/my-subscription` },
+    {
+      label: freelancerNavTranslations.jobBoard || "Job Board",
+      href: `/job-board`,
+    },
+    {
+      label: freelancerNavTranslations.tenders || "Tenders",
+      href: `/tenders`,
+    },
+    {
+      label: freelancerNavTranslations.inbox || "Inbox",
+      href: `/inbox`,
+    },
+    {
+      label: freelancerNavTranslations.invoices || "Invoices",
+      href: `/invoices`,
+    },
+    {
+      label: freelancerNavTranslations.myProjects || "My Projects",
+      href: `/my-projects`,
+    },
+    {
+      label: freelancerNavTranslations.mySubscription || "My Subscription",
+      href: `/my-subscription`,
+    },
   ];
 
   // Helper function to determine if link is active
@@ -80,6 +101,7 @@ function FreelancerNavBar() {
     router.replace("/");
     console.log("sign out");
   };
+
   const showAsFreelancer = () => {
     if (userType === "client") {
       dispatch(setCurrentUser({ type: "client" }));
@@ -87,6 +109,7 @@ function FreelancerNavBar() {
       dispatch(setCurrentUser({ type: "freelancer" }));
     }
   };
+
   if (!mounted) {
     return null;
   }
@@ -118,7 +141,6 @@ function FreelancerNavBar() {
           ))}
         </div>
         <LanguageSelector className="hidden lg:flex" />
-        {/* <Button onClick={showAsFreelancer}>View As Freelancer</Button> */}
 
         {/* User Profile Section */}
         <div className="hidden lg:flex items-center  ">
@@ -145,36 +167,25 @@ function FreelancerNavBar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuItem asChild>
-                <Link
-                  href={`/${locale}/profile/1`}
-                  className="w-full cursor-pointer"
-                >
-                  View Profile
+                <Link href={`/profile/1`} className="w-full cursor-pointer">
+                  {freelancerNavTranslations.viewProfile || "View Profile"}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link
-                  href={`/${locale}/settings`}
-                  className="w-full cursor-pointer"
-                >
-                  Account Settings
+                <Link href={`/settings`} className="w-full cursor-pointer">
+                  {freelancerNavTranslations.accountSettings ||
+                    "Account Settings"}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link
-                  href={`/${locale}/billing`}
-                  className="w-full cursor-pointer"
-                >
-                  Billing & Plans
+                <Link href={`/billing`} className="w-full cursor-pointer">
+                  {freelancerNavTranslations.billingPlans || "Billing & Plans"}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link
-                  href={`/${locale}/help`}
-                  className="w-full cursor-pointer"
-                >
-                  Help & Support
+                <Link href={`/help`} className="w-full cursor-pointer">
+                  {freelancerNavTranslations.helpSupport || "Help & Support"}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -182,7 +193,7 @@ function FreelancerNavBar() {
                 className="text-red-600 cursor-pointer"
                 onClick={handleSignOut}
               >
-                Sign Out
+                {freelancerNavTranslations.signOut || "Sign Out"}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -243,34 +254,46 @@ function FreelancerNavBar() {
                     className="w-full justify-start text-red-600"
                     asChild
                   >
-                    <Link href={`/${locale}/profile/1`}>View Profile</Link>
+                    <Link href={`/profile/1`}>
+                      {freelancerNavTranslations.viewProfile || "View Profile"}
+                    </Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/${locale}/settings`}>Account Settings</Link>
+                    <Link href={`/settings`}>
+                      {freelancerNavTranslations.accountSettings ||
+                        "Account Settings"}
+                    </Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/${locale}/billing`}>Billing & Plans</Link>
+                    <Link href={`/billing`}>
+                      {freelancerNavTranslations.billingPlans ||
+                        "Billing & Plans"}
+                    </Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href="/help">Help & Support</Link>
+                    <Link href="/help">
+                      {freelancerNavTranslations.helpSupport ||
+                        "Help & Support"}
+                    </Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start text-red-600"
+                    onClick={handleSignOut}
                   >
-                    Sign Out
+                    {freelancerNavTranslations.signOut || "Sign Out"}
                   </Button>
                 </div>
               </div>

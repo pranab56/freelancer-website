@@ -13,7 +13,10 @@
   },
   "common": {
     "search": "Rechercher",
-    "language": "Langue"
+    "language": {
+      "english": "Anglais",
+      "french": "Français"
+    }
   },
   "topTalent": {
     "banner": {
@@ -319,5 +322,53 @@
         "hireButton": "Embaucher le Freelance →"
       }
     }
+  },
+  "mainContent": {
+    "jobBoardTitle": "Tableau des emplois",
+    "tendersTitle": "Appels d'offres",
+    "jobBoardSubtitle": "Trouvez les opportunités parfaites qui correspondent à vos compétences",
+    "tendersSubtitle": "Explorez les appels d'offres disponibles et soumettez vos propositions",
+    "filterButton": "Filtrer",
+    "showingResults": "Affichage",
+    "resultsText": "résultats",
+    "sortByPlaceholder": "Trier par",
+    "sortNewest": "Les plus récents",
+    "sortOldest": "Les plus anciens",
+    "sortBudgetHigh": "Budget le plus élevé",
+    "sortBudgetLow": "Budget le plus bas",
+    "noJobsFoundTitle": "Aucun emploi trouvé",
+    "noJobsFoundDescription": "Essayez d'ajuster vos filtres ou revenez plus tard pour de nouvelles opportunités",
+    "loadingText": "Chargement...",
+    "loadMoreText": "Charger plus",
+    "jobsText": "Emplois",
+    "tendersText": "Appels d'offres"
+  },
+  "freelancerNavbar": {
+    "jobBoard": "Tableau des emplois",
+    "tenders": "Appels d'offres",
+    "inbox": "Boîte de réception",
+    "invoices": "Factures",
+    "myProjects": "Mes projets",
+    "mySubscription": "Mon abonnement",
+    "viewProfile": "Voir le profil",
+    "accountSettings": "Paramètres du compte",
+    "billingPlans": "Facturation et plans",
+    "helpSupport": "Aide et support",
+    "signOut": "Déconnexion"
+  },
+  "jobBoard": {
+    "freelancerBanner": {
+      "header": "Explorez les meilleures opportunités freelance",
+      "text": "Parcourez les derniers projets freelance et trouvez votre prochaine grande opportunité. Que vous cherchiez à travailler à distance ou sur site, découvrez des emplois qui correspondent à vos compétences et à votre expertise.",
+      "buttonName": ""
+    },
+    "clientBanner": {
+      "header": "Publiez votre job et trouvez les meilleurs talents",
+      "text": "Vous cherchez à embaucher des freelances qualifiés pour votre prochain projet ? Notre plateforme vous connecte avec des professionnels de premier plan dans divers secteurs pour donner vie à votre vision.",
+      "buttonName": "Publier un job"
+    },
+    "recentPostsHeading": "Publications récentes",
+    "recentPostsSubheading": "Choisissez le meilleur talent pour le succès de votre organisation.",
+    "searchPlaceholder": "Rechercher..."
   }
 }

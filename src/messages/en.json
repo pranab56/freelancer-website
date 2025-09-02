@@ -13,7 +13,10 @@
   },
   "common": {
     "search": "Search",
-    "language": "Language"
+    "language": {
+      "english": "English",
+      "french": "French"
+    }
   },
   "topTalent": {
     "banner": {
@@ -318,5 +321,53 @@
         "hireButton": "Hire Freelancer →"
       }
     }
+  },
+  "mainContent": {
+    "jobBoardTitle": "Job Board",
+    "tendersTitle": "Tenders",
+    "jobBoardSubtitle": "Find the perfect opportunities that match your skills",
+    "tendersSubtitle": "Explore available tenders and submit your proposals",
+    "filterButton": "Filter",
+    "showingResults": "Showing",
+    "resultsText": "results",
+    "sortByPlaceholder": "Sort by",
+    "sortNewest": "Newest First",
+    "sortOldest": "Oldest First",
+    "sortBudgetHigh": "Highest Budget",
+    "sortBudgetLow": "Lowest Budget",
+    "noJobsFoundTitle": "No jobs found",
+    "noJobsFoundDescription": "Try adjusting your filters or check back later for new opportunities",
+    "loadingText": "Loading...",
+    "loadMoreText": "Load More",
+    "jobsText": "Jobs",
+    "tendersText": "Tenders"
+  },
+  "freelancerNavbar": {
+    "jobBoard": "Job Board",
+    "tenders": "Tenders",
+    "inbox": "Inbox",
+    "invoices": "Invoices",
+    "myProjects": "My Projects",
+    "mySubscription": "My Subscription",
+    "viewProfile": "View Profile",
+    "accountSettings": "Account Settings",
+    "billingPlans": "Billing & Plans",
+    "helpSupport": "Help & Support",
+    "signOut": "Sign Out"
+  },
+  "jobBoard": {
+    "freelancerBanner": {
+      "header": "Explore Top Freelance Opportunities",
+      "text": "Browse through the latest freelance projects and find your next big opportunity. Whether you're looking to work remotely or collaborate on-site, discover jobs that match your skills and expertise.",
+      "buttonName": ""
+    },
+    "clientBanner": {
+      "header": "Post Your Job & Find Top Talent",
+      "text": "Looking to hire skilled freelancers for your next project? Our job board connects you with top-tier professionals across various industries to help bring your vision to life.",
+      "buttonName": "Post a Job"
+    },
+    "recentPostsHeading": "Recent Posts",
+    "recentPostsSubheading": "Choose the best talent for your organization's success.",
+    "searchPlaceholder": "Search..."
   }
 }

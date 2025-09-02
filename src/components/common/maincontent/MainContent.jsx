@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import JobTenderCard from "../JobTenderCard";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
@@ -16,6 +17,11 @@ function MainContent({ type = "tender" }) {
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [displayedItems, setDisplayedItems] = useState(6);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const mainContentTranslations = messages?.mainContent || {};
+  const commonTranslations = messages?.common || {};
 
   // Mock data for demonstration - in real app this would come from props or API
   const generateItems = (count) => {
@@ -60,12 +66,16 @@ function MainContent({ type = "tender" }) {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
-              {type === "job" ? "Job Board" : "Tenders"}
+              {type === "job"
+                ? mainContentTranslations.jobBoardTitle || "Job Board"
+                : mainContentTranslations.tendersTitle || "Tenders"}
             </h1>
             <p className="text-gray-600 mt-1">
               {type === "job"
-                ? "Find the perfect opportunities that match your skills"
-                : "Explore available tenders and submit your proposals"}
+                ? mainContentTranslations.jobBoardSubtitle ||
+                  "Find the perfect opportunities that match your skills"
+                : mainContentTranslations.tendersSubtitle ||
+                  "Explore available tenders and submit your proposals"}
             </p>
           </div>
 
@@ -76,23 +86,36 @@ function MainContent({ type = "tender" }) {
             className="flex items-center gap-2 button-gradient lg:hidden"
           >
             <Filter className="w-4 h-4" />
-            Filter
+            {mainContentTranslations.filterButton || "Filter"}
           </Button>
           {/* Results count, filter button and sorting */}
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-500">
-              Showing {items.length} results
+              {mainContentTranslations.showingResults || "Showing"}{" "}
+              {items.length} {mainContentTranslations.resultsText || "results"}
             </span>
 
             <Select>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Sort by" />
+                <SelectValue
+                  placeholder={
+                    mainContentTranslations.sortByPlaceholder || "Sort by"
+                  }
+                />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="newest">Newest First</SelectItem>
-                <SelectItem value="oldest">Oldest First</SelectItem>
-                <SelectItem value="budget-high">Highest Budget</SelectItem>
-                <SelectItem value="budget-low">Lowest Budget</SelectItem>
+                <SelectItem value="newest">
+                  {mainContentTranslations.sortNewest || "Newest First"}
+                </SelectItem>
+                <SelectItem value="oldest">
+                  {mainContentTranslations.sortOldest || "Oldest First"}
+                </SelectItem>
+                <SelectItem value="budget-high">
+                  {mainContentTranslations.sortBudgetHigh || "Highest Budget"}
+                </SelectItem>
+                <SelectItem value="budget-low">
+                  {mainContentTranslations.sortBudgetLow || "Lowest Budget"}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -136,10 +159,11 @@ function MainContent({ type = "tender" }) {
             </svg>
           </div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            No jobs found
+            {mainContentTranslations.noJobsFoundTitle || "No jobs found"}
           </h3>
           <p className="text-gray-500 text-center max-w-sm">
-            Try adjusting your filters or check back later for new opportunities
+            {mainContentTranslations.noJobsFoundDescription ||
+              "Try adjusting your filters or check back later for new opportunities"}
           </p>
         </div>
       )}
@@ -156,10 +180,14 @@ function MainContent({ type = "tender" }) {
             {isLoading ? (
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
-                Loading...
+                {mainContentTranslations.loadingText || "Loading..."}
               </div>
             ) : (
-              `Load More ${type === "job" ? "Jobs" : "Tenders"}`
+              `${mainContentTranslations.loadMoreText || "Load More"} ${
+                type === "job"
+                  ? mainContentTranslations.jobsText || "Jobs"
+                  : mainContentTranslations.tendersText || "Tenders"
+              }`
             )}
           </Button>
         </div>
