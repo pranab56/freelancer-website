@@ -18,6 +18,23 @@ const nextConfig = {
   },
   // Ensure proper output for Vercel
   output: "standalone",
+
+  // Add webpack configuration to handle CORS in development
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.devServer = {
+        ...config.devServer,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods":
+            "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+          "Access-Control-Allow-Headers":
+            "X-Requested-With, content-type, Authorization",
+        },
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;

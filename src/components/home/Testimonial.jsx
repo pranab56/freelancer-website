@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useSelector } from "react-redux";
@@ -102,69 +102,85 @@ function Testimonial() {
     return text.slice(0, maxLength).trim();
   };
 
-  useEffect(() => {
-    // Adjust truncate length based on device width
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setTruncateLength(100); // smaller screens, shorter text
-      } else if (window.innerWidth < 1024) {
-        setTruncateLength(120); // tablets
-      } else {
-        setTruncateLength(100); // desktops
-      }
-    };
+  // Memoized resize handler with dependencies
+  const handleResize = useCallback(() => {
+    const width = window.innerWidth;
+    if (width < 640) {
+      setTruncateLength(100); // smaller screens, shorter text
+    } else if (width < 1024) {
+      setTruncateLength(120); // tablets
+    } else {
+      setTruncateLength(100); // desktops
+    }
+  }, []); // No dependencies as it only uses window.innerWidth
 
-    handleResize();
+  // Effect for resize listener
+  useEffect(() => {
+    handleResize(); // Initial call
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [handleResize]); // Add memoized handler as dependency
 
+  // Effect for loading Swiper
   useEffect(() => {
+    let swiperInstance = null;
+
     const loadSwiper = async () => {
-      const { default: Swiper } = await import("swiper");
-      const { Navigation, Pagination, Autoplay } = await import(
-        "swiper/modules"
-      );
+      try {
+        const { default: Swiper } = await import("swiper");
+        const { Navigation, Pagination, Autoplay } = await import(
+          "swiper/modules"
+        );
 
-      await import("swiper/css");
-      await import("swiper/css/navigation");
-      await import("swiper/css/pagination");
+        await import("swiper/css");
+        await import("swiper/css/navigation");
+        await import("swiper/css/pagination");
 
-      if (swiperRef.current) {
-        new Swiper(swiperRef.current, {
-          modules: [Navigation, Pagination, Autoplay],
-          spaceBetween: 20,
-          slidesPerView: 1,
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-          pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-            dynamicBullets: true,
-          },
-          autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-          },
-          breakpoints: {
-            640: {
-              slidesPerView: 2,
+        if (swiperRef.current) {
+          swiperInstance = new Swiper(swiperRef.current, {
+            modules: [Navigation, Pagination, Autoplay],
+            spaceBetween: 20,
+            slidesPerView: 1,
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
             },
-            1024: {
-              slidesPerView: 3,
+            pagination: {
+              el: ".swiper-pagination",
+              clickable: true,
+              dynamicBullets: true,
             },
-            1280: {
-              slidesPerView: 4,
+            autoplay: {
+              delay: 3000,
+              disableOnInteraction: false,
             },
-          },
-        });
+            breakpoints: {
+              640: {
+                slidesPerView: 2,
+              },
+              1024: {
+                slidesPerView: 3,
+              },
+              1280: {
+                slidesPerView: 4,
+              },
+            },
+          });
+        }
+      } catch (error) {
+        console.error("Failed to load Swiper:", error);
       }
     };
 
     loadSwiper();
-  }, []);
+
+    // Cleanup function
+    return () => {
+      if (swiperInstance) {
+        swiperInstance.destroy();
+      }
+    };
+  }, []); // Empty dependency array is okay here as Swiper is loaded dynamically
 
   return (
     <section className="py-16 px-4 sm:px-6 bg-gray-50">

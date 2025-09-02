@@ -21,12 +21,39 @@ function TopTalent() {
   const messages = useSelector((state) => state.language.messages);
   const topTalentTranslations = messages?.topTalent || {};
 
+  // Debug logging to see what's happening
+  console.log("🔍 TopTalent Debug:");
+  console.log("Messages:", messages);
+  console.log("TopTalent translations:", topTalentTranslations);
+  console.log("Banner title:", topTalentTranslations.banner?.title);
+
   // Simple loading check - if no messages, show loading
   if (!messages || Object.keys(messages).length === 0) {
+    console.log("TopTalent: No messages loaded yet, showing loading...");
     return (
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-center min-h-screen">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Additional safety check for topTalent translations
+  if (
+    !topTalentTranslations ||
+    Object.keys(topTalentTranslations).length === 0
+  ) {
+    console.log(
+      "TopTalent: No topTalent translations found, showing fallback..."
+    );
+    return (
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Loading Top Talent...</h1>
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto"></div>
+          </div>
         </div>
       </div>
     );
