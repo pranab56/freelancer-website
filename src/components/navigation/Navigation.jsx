@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import NavBar from "@/components/navbar/NavBar";
 import Footer from "@/components/common/Footer/Footer";
@@ -11,11 +11,18 @@ export default function Navigation({ children }) {
   const [mounted, setMounted] = useState(false);
   const currentUser = useSelector((state) => state.currentUser.currentUser);
 
-  useEffect(() => {
+  // Memoize the mounted effect to prevent unnecessary re-renders
+  const initializeMounted = useCallback(() => {
     setMounted(true);
   }, []);
 
-  const renderNavbar = () => {
+  // Use effect to set mounted state
+  useEffect(() => {
+    initializeMounted();
+  }, [initializeMounted]);
+
+  // Memoize navbar rendering to prevent unnecessary re-renders
+  const renderNavbar = useMemo(() => {
     if (!currentUser) {
       return <NavBar />;
     }
@@ -24,8 +31,9 @@ export default function Navigation({ children }) {
     ) : (
       <FreelancerNavBar />
     );
-  };
+  }, [currentUser]);
 
+  // Prevent rendering before mounting to avoid hydration issues
   if (!mounted) {
     return (
       <div className="min-h-screen bg-white">
@@ -38,7 +46,7 @@ export default function Navigation({ children }) {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {renderNavbar()}
+      {renderNavbar}
       <main className="flex-grow">{children}</main>
       <Footer />
     </div>
