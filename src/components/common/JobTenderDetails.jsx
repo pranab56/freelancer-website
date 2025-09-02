@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import ShowLoginDialog from "./showLoginDialog/ShowLoginDialog";
 import { DialogDescription, DialogTitle } from "../ui/dialog";
 import { useRouter } from "next/navigation";
+
 function JobDetailsPage({ jobData }) {
   const pathname = usePathname();
   const isTenderPage = pathname.includes("tenders-details");
@@ -17,70 +18,104 @@ function JobDetailsPage({ jobData }) {
   const currentUser = useSelector((state) => state.currentUser.currentUser);
   const userType = currentUser?.type;
   const router = useRouter();
+
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const jobDetailsTranslations = messages?.jobDetails || {};
+  const commonTranslations = messages?.common || {};
+
   // Default/mock data
   const defaultJobData = {
-    title: "Senior Graphic Designer",
+    title: jobDetailsTranslations.defaultJobTitle || "Senior Graphic Designer",
     description:
+      jobDetailsTranslations.defaultJobDescription ||
       "Bakery is an independent creative and culture agency designed to ignite people's obsession in great products. From our headquarters in Austin, TX, we work with highly ambitious brands to infuse cultural value and drive desire at every interaction point, increasing their fandom and helping them make things people want. Bakery is a 2017 and 2024 Adage Small Agency of the Year.",
     fullDescription: [
-      "Becoming the agency people trust for brand-building and design talent, you'll be responsible for taking ideas from concept to execution, creating work that gets attention, sparks conversation, and stands out in a crowded market. You will:",
-      "Illustrate brands through a meticulous design eye, a passion for brand-building, and a knack for turning insights into standout, creative work, we want to hear from you. This role is for someone who brings market-leading graphic design expertise and digital product design - and a spingdl for UI and Printcapacious content strategies.",
-      "You'll make for brands like Nike, Degon, and Pepsi. Must be employee in the USA and work on-site in Austin, TX About Us.",
-      "Bakery is an independent creative and culture agency designed to ignite people's obsession in great products. From our headquarters in Austin, TX, we work with highly ambitious brands to infuse cultural value and drive desire at every interaction point, increasing their fandom and helping them make things people want. Bakery is a 2017 and 2024 Adage Small Agency of the Year.",
+      jobDetailsTranslations.fullDescriptionParagraph1 ||
+        "Becoming the agency people trust for brand-building and design talent, you'll be responsible for taking ideas from concept to execution, creating work that gets attention, sparks conversation, and stands out in a crowded market. You will:",
+      jobDetailsTranslations.fullDescriptionParagraph2 ||
+        "Illustrate brands through a meticulous design eye, a passion for brand-building, and a knack for turning insights into standout, creative work, we want to hear from you. This role is for someone who brings market-leading graphic design expertise and digital product design - and a spingdl for UI and Printcapacious content strategies.",
+      jobDetailsTranslations.fullDescriptionParagraph3 ||
+        "You'll make for brands like Nike, Degon, and Pepsi. Must be employee in the USA and work on-site in Austin, TX About Us.",
+      jobDetailsTranslations.fullDescriptionParagraph4 ||
+        "Bakery is an independent creative and culture agency designed to ignite people's obsession in great products. From our headquarters in Austin, TX, we work with highly ambitious brands to infuse cultural value and drive desire at every interaction point, increasing their fandom and helping them make things people want. Bakery is a 2017 and 2024 Adage Small Agency of the Year.",
     ],
     responsibilities: [
-      "As a Senior Designer, you'll play a pivotal role in shaping brand worlds, campaigns, and cultural moments for our clients. You'll be responsible for taking ideas from concept to execution, creating work that gets attention, sparks conversation, and stands out in a crowded market. You will:",
-      "Invent and oversee campaign visuals, packaging, and marketing materials that drive cultural relevance.",
-      "Lead the project from concept to production, balancing big thinking with meticulous execution.",
-      "Bring fresh, unexpected design solutions that push brands forward while ensuring strategic clarity and business impact.",
-      "Work closely with Creative Directors, Art Directors, Writers, and Strategists to craft breakthrough work.",
-      "Stay on top of design trends, typography, color theory, and cultural movements to ensure Bakery's work remains fresh and category-defining.",
-      "Present all work successfully to the highest standards—clean, effective, and impossible to ignore.",
-      "Manage multiple projects efficiently, keeping deadlines, budgets, and client expectations in check.",
-      "Present work clearly and persuasively, making a strong case for design decisions.",
+      jobDetailsTranslations.responsibility1 ||
+        "As a Senior Designer, you'll play a pivotal role in shaping brand worlds, campaigns, and cultural moments for our clients. You'll be responsible for taking ideas from concept to execution, creating work that gets attention, sparks conversation, and stands out in a crowded market. You will:",
+      jobDetailsTranslations.responsibility2 ||
+        "Invent and oversee campaign visuals, packaging, and marketing materials that drive cultural relevance.",
+      jobDetailsTranslations.responsibility3 ||
+        "Lead the project from concept to production, balancing big thinking with meticulous execution.",
+      jobDetailsTranslations.responsibility4 ||
+        "Bring fresh, unexpected design solutions that push brands forward while ensuring strategic clarity and business impact.",
+      jobDetailsTranslations.responsibility5 ||
+        "Work closely with Creative Directors, Art Directors, Writers, and Strategists to craft breakthrough work.",
+      jobDetailsTranslations.responsibility6 ||
+        "Stay on top of design trends, typography, color theory, and cultural movements to ensure Bakery's work remains fresh and category-defining.",
+      jobDetailsTranslations.responsibility7 ||
+        "Present all work successfully to the highest standards—clean, effective, and impossible to ignore.",
+      jobDetailsTranslations.responsibility8 ||
+        "Manage multiple projects efficiently, keeping deadlines, budgets, and client expectations in check.",
+      jobDetailsTranslations.responsibility9 ||
+        "Present work clearly and persuasively, making a strong case for design decisions.",
     ],
     requirements: [
-      "An impressive portfolio of work created for leading lifestyle brands.",
-      "5+ years of experience in a top-tier agency, or in-house creative team.",
-      "A well-curated portfolio that showcases branding, visual storytelling, campaign work, and exceptional craft.",
-      "Expertise in Adobe Creative Suite (Illustrator, Photoshop, InDesign).",
-      "Strong illustration, typography, and layout skills with a meticulous eye for detail.",
-      "Experience working across print, digital, packaging, and environmental design.",
-      "The ability to juggle multiple projects and move in a fast-moving, high-output environment.",
-      "A systematic design mindset—you don't just make things look good, you make them work in an efficient and effective system.",
+      jobDetailsTranslations.requirement1 ||
+        "An impressive portfolio of work created for leading lifestyle brands.",
+      jobDetailsTranslations.requirement2 ||
+        "5+ years of experience in a top-tier agency, or in-house creative team.",
+      jobDetailsTranslations.requirement3 ||
+        "A well-curated portfolio that showcases branding, visual storytelling, campaign work, and exceptional craft.",
+      jobDetailsTranslations.requirement4 ||
+        "Expertise in Adobe Creative Suite (Illustrator, Photoshop, InDesign).",
+      jobDetailsTranslations.requirement5 ||
+        "Strong illustration, typography, and layout skills with a meticulous eye for detail.",
+      jobDetailsTranslations.requirement6 ||
+        "Experience working across print, digital, packaging, and environmental design.",
+      jobDetailsTranslations.requirement7 ||
+        "The ability to juggle multiple projects and move in a fast-moving, high-output environment.",
+      jobDetailsTranslations.requirement8 ||
+        "A systematic design mindset—you don't just make things look good, you make them work in an efficient and effective system.",
     ],
     benefits: [
-      "Medical, Dental and Vision Insurance",
-      "Unlimited Vacation Time",
-      "2 weeks Work from Anywhere (WFA)",
-      "Annual Bonuses",
-      "Pet-Friendly Office",
-      "On-site Massage Therapist",
-      "Yearly Creative Stipend",
-      "Snacks, Meals and Drinks",
-      "No Time Tracking!",
+      jobDetailsTranslations.benefit1 || "Medical, Dental and Vision Insurance",
+      jobDetailsTranslations.benefit2 || "Unlimited Vacation Time",
+      jobDetailsTranslations.benefit3 || "2 weeks Work from Anywhere (WFA)",
+      jobDetailsTranslations.benefit4 || "Annual Bonuses",
+      jobDetailsTranslations.benefit5 || "Pet-Friendly Office",
+      jobDetailsTranslations.benefit6 || "On-site Massage Therapist",
+      jobDetailsTranslations.benefit7 || "Yearly Creative Stipend",
+      jobDetailsTranslations.benefit8 || "Snacks, Meals and Drinks",
+      jobDetailsTranslations.benefit9 || "No Time Tracking!",
     ],
   };
 
   const defaultTenderData = {
-    title: "Project 1: CRMS Alignment",
-    role: "Business Analyst",
+    title:
+      jobDetailsTranslations.defaultTenderTitle || "Project 1: CRMS Alignment",
+    role: jobDetailsTranslations.defaultTenderRole || "Business Analyst",
     fullDescription: [
-      "This project involves aligning customer relationship management systems across departments to improve data accessibility and performance.XYZ Corp",
+      jobDetailsTranslations.tenderDescription ||
+        "This project involves aligning customer relationship management systems across departments to improve data accessibility and performance.XYZ Corp",
     ],
-    location: "Paris",
-    datePosted: "3/2025",
-    deadLine: "05/2023",
+    location: jobDetailsTranslations.tenderLocation || "Paris",
+    datePosted: jobDetailsTranslations.tenderDatePosted || "3/2025",
+    deadLine: jobDetailsTranslations.tenderDeadline || "05/2023",
 
     requirements: [
-      "5+ years of experience in Business Analysis",
-      "Experience with CRM systems (Salesforce, Zoho, etc.)",
-      "Strong problem-solving and analytical skills",
-      "Ability to work in a fast-paced environment",
+      jobDetailsTranslations.tenderRequirement1 ||
+        "5+ years of experience in Business Analysis",
+      jobDetailsTranslations.tenderRequirement2 ||
+        "Experience with CRM systems (Salesforce, Zoho, etc.)",
+      jobDetailsTranslations.tenderRequirement3 ||
+        "Strong problem-solving and analytical skills",
+      jobDetailsTranslations.tenderRequirement4 ||
+        "Ability to work in a fast-paced environment",
     ],
-    startDate: "07/2023",
-    endDate: "12/2023",
-    postedOn: "3/2025",
+    startDate: jobDetailsTranslations.tenderStartDate || "07/2023",
+    endDate: jobDetailsTranslations.tenderEndDate || "12/2023",
+    postedOn: jobDetailsTranslations.tenderPostedOn || "3/2025",
   };
 
   const job = jobData || (isTenderPage ? defaultTenderData : defaultJobData);
@@ -107,14 +142,17 @@ function JobDetailsPage({ jobData }) {
   };
 
   return (
-    <div className="max-w-5xl mx-auto  space-y-6 mb-6 2xl:mb-10">
+    <div className="max-w-5xl mx-auto space-y-6 mb-6 2xl:mb-10">
       {/* Header Section */}
       <Card>
         <CardHeader>
           <div className="flex items-start justify-between">
             <div className="space-y-2">
               <p className="text-sm text-gray-500">
-                {isTenderPage ? "Tender Details" : "Job Details"}
+                {isTenderPage
+                  ? jobDetailsTranslations.tenderDetailsLabel ||
+                    "Tender Details"
+                  : jobDetailsTranslations.jobDetailsLabel || "Job Details"}
               </p>{" "}
               <div className="flex gap-2 lg:hidden">
                 <Button
@@ -124,7 +162,7 @@ function JobDetailsPage({ jobData }) {
                   className="h-9 flex items-center gap-2 button-gradient"
                 >
                   <Copy />
-                  Copy Link
+                  {jobDetailsTranslations.copyLinkButton || "Copy Link"}
                 </Button>
                 <Button
                   size="sm"
@@ -132,7 +170,7 @@ function JobDetailsPage({ jobData }) {
                   className="h-9 flex items-center gap-2 button-gradient"
                 >
                   <Share2 size={15} />
-                  Share
+                  {jobDetailsTranslations.shareButton || "Share"}
                 </Button>
               </div>
               <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
@@ -146,7 +184,7 @@ function JobDetailsPage({ jobData }) {
                 className="h-9 flex items-center gap-2 button-gradient"
               >
                 <Copy />
-                Copy Link
+                {jobDetailsTranslations.copyLinkButton || "Copy Link"}
               </Button>
               <Button
                 size="sm"
@@ -154,7 +192,7 @@ function JobDetailsPage({ jobData }) {
                 className="h-9 flex items-center gap-2 button-gradient"
               >
                 <Share2 size={15} />
-                Share
+                {jobDetailsTranslations.shareButton || "Share"}
               </Button>
             </div>
           </div>
@@ -172,12 +210,12 @@ function JobDetailsPage({ jobData }) {
       </Card>
 
       {/* Responsibilities Section */}
-      {/* Responsibilities Section - Only show for jobs */}
       {!isTenderPage && job.responsibilities && (
         <Card>
           <CardHeader>
             <CardTitle className="text-xl font-bold text-gray-900">
-              RESPONSIBILITIES
+              {jobDetailsTranslations.responsibilitiesTitle ||
+                "RESPONSIBILITIES"}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -207,7 +245,7 @@ function JobDetailsPage({ jobData }) {
       <Card>
         <CardHeader>
           <CardTitle className="text-xl font-bold text-gray-900">
-            Requirements
+            {jobDetailsTranslations.requirementsTitle || "Requirements"}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -227,7 +265,7 @@ function JobDetailsPage({ jobData }) {
         <Card>
           <CardHeader>
             <CardTitle className="text-xl font-bold text-gray-900">
-              Benefits
+              {jobDetailsTranslations.benefitsTitle || "Benefits"}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -242,56 +280,55 @@ function JobDetailsPage({ jobData }) {
           </CardContent>
         </Card>
       )}
+
       {isTenderPage && (
         <Card>
           <CardHeader>
             <CardTitle className="text-xl font-bold text-gray-900">
-              Important Dates
+              {jobDetailsTranslations.importantDatesTitle || "Important Dates"}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               <p className="text-gray-700">
-                Start Date: {job.startDate || "N/A"}
+                {jobDetailsTranslations.startDateLabel || "Start Date"}:{" "}
+                {job.startDate || "N/A"}
               </p>
-
-              <p className="text-gray-700">End Date: {job.endDate || "N/A"}</p>
 
               <p className="text-gray-700">
-                Posted On: {job.postedOn || "N/A"}
+                {jobDetailsTranslations.endDateLabel || "End Date"}:{" "}
+                {job.endDate || "N/A"}
               </p>
 
-              <p className="text-gray-700">Deadline: {job.deadLine || "N/A"}</p>
+              <p className="text-gray-700">
+                {jobDetailsTranslations.postedOnLabel || "Posted On"}:{" "}
+                {job.postedOn || "N/A"}
+              </p>
+
+              <p className="text-gray-700">
+                {jobDetailsTranslations.deadlineLabel || "Deadline"}:{" "}
+                {job.deadLine || "N/A"}
+              </p>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* Action Button */}
-      {/* <div className="flex justify-center pt-6 mb-6">
-        {userType !== "client" ? (
-          <Button
-            size="lg"
-            className="button-gradient text-white px-8 py-3 text-base font-medium"
-            onClick={handleApplyForThisPosition}
-          >
-            {isTenderPage ? "Respond to Tender" : "Apply For This Position"}
-          </Button>
-        ) : null}
-      </div> */}
       <ShowLoginDialog open={openLoginDialog} onOpenChange={setOpenLoginDialog}>
         <DialogTitle className="text-2xl font-bold">
-          Login to Apply for this Position
+          {jobDetailsTranslations.loginDialogTitle ||
+            "Login to Apply for this Position"}
         </DialogTitle>
         <DialogDescription className="text-sm text-gray-600">
-          Please login to apply for this position
+          {jobDetailsTranslations.loginDialogDescription ||
+            "Please login to apply for this position"}
         </DialogDescription>
         <div className="flex justify-end">
           <Button
-            className="button-gradient text-white font-medium w-fit "
+            className="button-gradient text-white font-medium w-fit"
             onClick={() => router.push("/login")}
           >
-            Login
+            {jobDetailsTranslations.loginButtonText || "Login"}
           </Button>
         </div>
       </ShowLoginDialog>

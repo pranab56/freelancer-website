@@ -323,6 +323,36 @@
       }
     }
   },
+  "jobTenderSidebar": {
+    "defaultCompanyName": "CONLINE",
+    "visitWebsite": "Visiter le site web",
+    "defaultTitle": "CONLINE",
+    "defaultJobType": "Temps plein",
+    "defaultLocation": "Dhaka, Bangladesh",
+    "defaultDatePosted": "1 juil. 2025",
+
+    "jobTypeLabel": "Type de poste",
+    "totalApplyLabel": "Total des candidatures",
+    "locationLabel": "Lieu",
+    "datePostedLabel": "Date de publication",
+
+    "respondToTenderButtonText": "Répondre à l'appel d'offres",
+    "respondedButtonText": "Répondu",
+    "applyButtonText": "Postuler à ce poste",
+    "appliedButtonText": "Candidature envoyée",
+
+    "alreadyRespondedToTenderError": "Vous avez déjà répondu à cet appel d'offres",
+    "tenderRespondedSuccess": "Réponse à l'appel d'offres envoyée avec succès",
+    "tenderRespondedSuccessDescription": "Vous pouvez maintenant consulter votre réponse dans la page de l'appel d'offres",
+
+    "alreadyAppliedToJobError": "Vous avez déjà postulé à ce poste",
+    "jobAppliedSuccess": "Candidature envoyée avec succès",
+    "jobAppliedSuccessDescription": "Vous pouvez maintenant consulter votre candidature dans la page du poste",
+
+    "loginDialogTitle": "Connectez-vous pour postuler à ce poste",
+    "loginDialogDescription": "Veuillez vous connecter pour postuler à ce poste",
+    "loginButtonText": "Connexion"
+  },
   "mainContent": {
     "jobBoardTitle": "Tableau des emplois",
     "tendersTitle": "Appels d'offres",
@@ -370,5 +400,88 @@
     "recentPostsHeading": "Publications récentes",
     "recentPostsSubheading": "Choisissez le meilleur talent pour le succès de votre organisation.",
     "searchPlaceholder": "Rechercher..."
+  },
+  "jobDetails": {
+    "jobDetailsLabel": "Détails de l'emploi",
+    "tenderDetailsLabel": "Détails de l'appel d'offres",
+    "copyLinkButton": "Copier le lien",
+    "shareButton": "Partager",
+
+    "defaultJobTitle": "Designer Graphique Senior",
+    "defaultJobDescription": "Bakery est une agence créative et culturelle indépendante conçue pour susciter l'obsession des gens pour de grands produits. Depuis notre siège à Austin, TX, nous travaillons avec des marques très ambitieuses pour insuffler une valeur culturelle et susciter le désir à chaque point d'interaction, augmentant leur fandom et les aidant à créer des choses que les gens veulent. Bakery est une agence de petite taille Adage des années 2017 et 2024.",
+
+    "fullDescriptionParagraph1": "Devenir l'agence en qui les gens ont confiance pour la création de marques et le talent en design, vous serez responsable de transformer des idées en exécution, créant un travail qui attire l'attention, suscite la conversation et se démarque sur un marché encombré. Vous allez :",
+    "fullDescriptionParagraph2": "Illustrer des marques avec un œil de design méticuleux, une passion pour la création de marques et un talent pour transformer les perspectives en un travail créatif remarquable, nous voulons vous entendre. Ce rôle est destiné à quelqu'un qui apporte une expertise en design graphique de premier plan et en design de produits numériques - et un sens de l'UI et des stratégies de contenu Printcapacious.",
+    "fullDescriptionParagraph3": "Vous travaillerez pour des marques comme Nike, Degon et Pepsi. Doit être employé aux États-Unis et travailler sur site à Austin, TX À propos de nous.",
+    "fullDescriptionParagraph4": "Bakery est une agence créative et culturelle indépendante conçue pour susciter l'obsession des gens pour de grands produits. Depuis notre siège à Austin, TX, nous travaillons avec des marques très ambitieuses pour insuffler une valeur culturelle et susciter le désir à chaque point d'interaction, augmentant leur fandom et les aidant à créer des choses que les gens veulent. Bakery est une agence de petite taille Adage des années 2017 et 2024.",
+
+    "responsibilitiesTitle": "RESPONSABILITÉS",
+    "responsibility1": "En tant que Designer Senior, vous jouerez un rôle pivot dans la création de mondes de marques, de campagnes et de moments culturels pour nos clients. Vous serez responsable de transformer des idées en exécution, créant un travail qui attire l'attention, suscite la conversation et se démarque sur un marché encombré. Vous allez :",
+    "responsibility2": "Inventer et superviser des visuels de campagne, des emballages et des supports marketing qui génèrent une pertinence culturelle.",
+    "responsibility3": "Diriger le projet de la conception à la production, en équilibrant la pensée globale avec une exécution méticuleuse.",
+    "responsibility4": "Apporter des solutions de design inattendues et fraîches qui font avancer les marques tout en assurant une clarté stratégique et un impact commercial.",
+    "responsibility5": "Travailler en étroite collaboration avec les Directeurs Créatifs, les Directeurs Artistiques, les Rédacteurs et les Stratèges pour créer un travail révolutionnaire.",
+    "responsibility6": "Rester à jour sur les tendances du design, la typographie, la théorie des couleurs et les mouvements culturels pour garantir que le travail de Bakery reste frais et définissant sa catégorie.",
+    "responsibility7": "Présenter tout le travail avec succès aux plus hauts standards - propre, efficace et impossible à ignorer.",
+    "responsibility8": "Gérer efficacement plusieurs projets, en respectant les délais, les budgets et les attentes des clients.",
+    "responsibility9": "Présenter le travail de manière claire et convaincante, en faisant valoir les décisions de design.",
+
+    "requirementsTitle": "Exigences",
+    "requirement1": "Un portfolio impressionnant de travaux réalisés pour des marques de style de vie de premier plan.",
+    "requirement2": "5+ années d'expérience dans une agence de premier plan ou une équipe créative interne.",
+    "requirement3": "Un portfolio bien conçu qui met en valeur le branding, le storytelling visuel, les travaux de campagne et un artisanat exceptionnel.",
+    "requirement4": "Expertise dans la suite Adobe Creative (Illustrator, Photoshop, InDesign).",
+    "requirement5": "Compétences solides en illustration, typographie et mise en page avec un œil méticuleux pour les détails.",
+    "requirement6": "Expérience dans les domaines de l'impression, du numérique, de l'emballage et du design environnemental.",
+    "requirement7": "La capacité de jongler avec plusieurs projets et d'évoluer dans un environnement dynamique et à haut rendement.",
+    "requirement8": "Un état d'esprit de design systématique - vous ne vous contentez pas de faire quelque chose de beau, vous le faites fonctionner de manière efficace et efficiente.",
+
+    "benefitsTitle": "Avantages",
+    "benefit1": "Assurance médicale, dentaire et optique",
+    "benefit2": "Congés illimités",
+    "benefit3": "2 semaines de travail à distance (WFA)",
+    "benefit4": "Primes annuelles",
+    "benefit5": "Bureau adapté aux animaux de compagnie",
+    "benefit6": "Massothérapeute sur place",
+    "benefit7": "Allocation créative annuelle",
+    "benefit8": "Collations, repas et boissons",
+    "benefit9": "Pas de suivi du temps !",
+
+    "defaultTenderTitle": "Projet 1 : Alignement CRMS",
+    "defaultTenderRole": "Analyste d'affaires",
+    "tenderDescription": "Ce projet implique l'alignement des systèmes de gestion de la relation client entre les départements pour améliorer l'accessibilité et les performances des données. XYZ Corp",
+    "tenderLocation": "Paris",
+    "tenderDatePosted": "3/2025",
+    "tenderDeadline": "05/2023",
+
+    "tenderRequirement1": "5+ années d'expérience en analyse commerciale",
+    "tenderRequirement2": "Expérience avec les systèmes CRM (Salesforce, Zoho, etc.)",
+    "tenderRequirement3": "Solides compétences en résolution de problèmes et en analyse",
+    "tenderRequirement4": "Capacité à travailler dans un environnement dynamique",
+
+    "tenderStartDate": "07/2023",
+    "tenderEndDate": "12/2023",
+    "tenderPostedOn": "3/2025",
+
+    "importantDatesTitle": "Dates importantes",
+    "startDateLabel": "Date de début",
+    "endDateLabel": "Date de fin",
+    "postedOnLabel": "Publié le",
+    "deadlineLabel": "Date limite",
+
+    "loginDialogTitle": "Connectez-vous pour postuler à ce poste",
+    "loginDialogDescription": "Veuillez vous connecter pour postuler à ce poste",
+    "loginButtonText": "Connexion"
+  },
+  "tenderLayout": {
+    "freelancerBannerHeader": "Commencez à explorer les appels d'offres dès aujourd'hui !",
+    "freelancerBannerText": "Que vous soumettiez une proposition ou que vous publiiez un projet, notre plateforme simplifie le processus pour les clients et les freelances, garantissant des résultats de qualité et des collaborations réussies.",
+
+    "clientBannerHeader": "Parcourez et soumettez des appels d'offres",
+    "clientBannerText": "Bienvenue sur notre Portail des Appels d'Offres, où les entreprises et les freelances peuvent trouver et soumettre des opportunités de projet. Que vous cherchiez à publier un projet ou à soumissionner à un appel d'offres, nous assurons un processus transparent pour vous connecter aux professionnels et organisations appropriés.",
+    "clientBannerButtonName": "Publiez votre appel d'offres",
+
+    "ongoingTendersHeading": "Appels d'offres en cours",
+    "ongoingTendersSubheading": "Trouvez des opportunités de projet qui correspondent à votre expertise."
   }
 }

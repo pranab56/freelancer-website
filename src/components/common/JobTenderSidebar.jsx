@@ -12,6 +12,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { DialogDescription } from "../ui/dialog";
 import { useRouter } from "next/navigation";
 import useToast from "@/hooks/showToast/ShowToast";
+
 function JobTenderSidebar({ jobData }) {
   const pathname = usePathname();
   const isTenderPage = pathname.includes("tenders-details");
@@ -23,24 +24,30 @@ function JobTenderSidebar({ jobData }) {
   const [respondedToTender, setRespondedToTender] = useState(false);
   const [respondedToJob, setRespondedToJob] = useState(false);
   const showToast = useToast();
-  // Default/mock data if no jobData is provided
 
-  console.log("isLoggedIn", isLoggedIn);
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const jobTenderSidebarTranslations = messages?.jobTenderSidebar || {};
+  const commonTranslations = messages?.common || {};
+
+  // Default/mock data if no jobData is provided
   const defaultData = {
     id: 1,
     company: {
-      name: "CONLINE",
+      name: jobTenderSidebarTranslations.defaultCompanyName || "CONLINE",
       logo: "/jobtender/job_tender_details.png",
-      website: "visit Website",
+      website: jobTenderSidebarTranslations.visitWebsite || "Visit Website",
     },
-    title: "CONLINE",
-    jobType: "Full Time",
+    title: jobTenderSidebarTranslations.defaultTitle || "CONLINE",
+    jobType: jobTenderSidebarTranslations.defaultJobType || "Full Time",
     totalApply: 20,
-    location: "Dhaka, Bangladesh",
-    datePosted: "Jul 1, 2025",
+    location:
+      jobTenderSidebarTranslations.defaultLocation || "Dhaka, Bangladesh",
+    datePosted: jobTenderSidebarTranslations.defaultDatePosted || "Jul 1, 2025",
   };
 
   const job = jobData || defaultData;
+
   const handleApplyForThisPosition = () => {
     if (!isLoggedIn) {
       setOpenLoginDialog(true);
@@ -49,25 +56,44 @@ function JobTenderSidebar({ jobData }) {
 
   const handleRespondToTender = () => {
     if (respondedToTender) {
-      showToast.error("You have already responded to this tender");
+      showToast.error(
+        jobTenderSidebarTranslations.alreadyRespondedToTenderError ||
+          "You have already responded to this tender"
+      );
     } else {
       setRespondedToTender(true);
-      showToast.success("Tender responded successfully", {
-        description: "You can now view your response in the tender page",
-      });
+      showToast.success(
+        jobTenderSidebarTranslations.tenderRespondedSuccess ||
+          "Tender responded successfully",
+        {
+          description:
+            jobTenderSidebarTranslations.tenderRespondedSuccessDescription ||
+            "You can now view your response in the tender page",
+        }
+      );
     }
   };
 
   const handleRespondToJob = () => {
     if (respondedToJob) {
-      showToast.error("You have already applied for this job");
+      showToast.error(
+        jobTenderSidebarTranslations.alreadyAppliedToJobError ||
+          "You have already applied for this job"
+      );
     } else {
       setRespondedToJob(true);
-      showToast.success("Job applied successfully", {
-        description: "You can now view your response in the job page",
-      });
+      showToast.success(
+        jobTenderSidebarTranslations.jobAppliedSuccess ||
+          "Job applied successfully",
+        {
+          description:
+            jobTenderSidebarTranslations.jobAppliedSuccessDescription ||
+            "You can now view your response in the job page",
+        }
+      );
     }
   };
+
   return (
     <Card className="w-full max-w-[17rem] mx-auto bg-white shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200">
       <CardHeader className="text-center p-6 pb-4">
@@ -88,7 +114,6 @@ function JobTenderSidebar({ jobData }) {
         <p className="text-sm text-gray-500 mb-4">{job.company.website}</p>
 
         {/* Apply Button */}
-
         {isTenderPage ? (
           userType !== "client" ? (
             <Button
@@ -101,7 +126,11 @@ function JobTenderSidebar({ jobData }) {
                 isLoggedIn ? handleRespondToTender : handleApplyForThisPosition
               }
             >
-              {respondedToTender ? "Responded" : "Respond to Tender"}
+              {respondedToTender
+                ? jobTenderSidebarTranslations.respondedButtonText ||
+                  "Responded"
+                : jobTenderSidebarTranslations.respondToTenderButtonText ||
+                  "Respond to Tender"}
             </Button>
           ) : null
         ) : userType !== "client" ? (
@@ -115,7 +144,10 @@ function JobTenderSidebar({ jobData }) {
               isLoggedIn ? handleRespondToJob : handleApplyForThisPosition
             }
           >
-            {respondedToJob ? "Applied" : "Apply for this Position"}
+            {respondedToJob
+              ? jobTenderSidebarTranslations.appliedButtonText || "Applied"
+              : jobTenderSidebarTranslations.applyButtonText ||
+                "Apply for this Position"}
           </Button>
         ) : null}
         <Separator className="mt-4" />
@@ -126,7 +158,9 @@ function JobTenderSidebar({ jobData }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Briefcase className="w-4 h-4 text-gray-500" />
-            <span className="text-sm font-medium text-gray-700">Job Type</span>
+            <span className="text-sm font-medium text-gray-700">
+              {jobTenderSidebarTranslations.jobTypeLabel || "Job Type"}
+            </span>
           </div>
           <span className="text-sm text-gray-600">{job.jobType}</span>
         </div>
@@ -136,7 +170,7 @@ function JobTenderSidebar({ jobData }) {
           <div className="flex items-center gap-2">
             <Users className="w-4 h-4 text-gray-500" />
             <span className="text-sm font-medium text-gray-700">
-              Total Apply
+              {jobTenderSidebarTranslations.totalApplyLabel || "Total Apply"}
             </span>
           </div>
           <span className="text-sm text-gray-600">{job.totalApply}</span>
@@ -146,7 +180,9 @@ function JobTenderSidebar({ jobData }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-gray-500" />
-            <span className="text-sm font-medium text-gray-700">Location</span>
+            <span className="text-sm font-medium text-gray-700">
+              {jobTenderSidebarTranslations.locationLabel || "Location"}
+            </span>
           </div>
           <span className="text-sm text-gray-600">{job.location}</span>
         </div>
@@ -156,7 +192,7 @@ function JobTenderSidebar({ jobData }) {
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-gray-500" />
             <span className="text-sm font-medium text-gray-700">
-              Date Posted
+              {jobTenderSidebarTranslations.datePostedLabel || "Date Posted"}
             </span>
           </div>
           <span className="text-sm text-gray-600">{job.datePosted}</span>
@@ -164,17 +200,19 @@ function JobTenderSidebar({ jobData }) {
       </CardContent>
       <ShowLoginDialog open={openLoginDialog} onOpenChange={setOpenLoginDialog}>
         <DialogTitle className="text-2xl font-bold">
-          Login to Apply for this Position
+          {jobTenderSidebarTranslations.loginDialogTitle ||
+            "Login to Apply for this Position"}
         </DialogTitle>
         <DialogDescription className="text-sm text-gray-600">
-          Please login to apply for this position
+          {jobTenderSidebarTranslations.loginDialogDescription ||
+            "Please login to apply for this position"}
         </DialogDescription>
         <div className="flex justify-end">
           <Button
             className="button-gradient text-white font-medium w-fit"
             onClick={() => router.push("/login")}
           >
-            Login
+            {jobTenderSidebarTranslations.loginButtonText || "Login"}
           </Button>
         </div>
       </ShowLoginDialog>
