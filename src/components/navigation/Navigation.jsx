@@ -11,15 +11,15 @@ export default function Navigation({ children }) {
   const [mounted, setMounted] = useState(false);
   const currentUser = useSelector((state) => state.currentUser.currentUser);
 
-  // Memoize the mounted effect to prevent unnecessary re-renders
-  const initializeMounted = useCallback(() => {
-    setMounted(true);
-  }, []);
-
-  // Use effect to set mounted state
+  // Use effect to set mounted state only once
   useEffect(() => {
-    initializeMounted();
-  }, [initializeMounted]);
+    setMounted(true);
+
+    // Optional: Return cleanup function
+    return () => {
+      setMounted(false);
+    };
+  }, []); // Empty dependency array ensures this runs only once
 
   // Memoize navbar selection to prevent unnecessary re-renders
   const NavbarComponent = useMemo(() => {
