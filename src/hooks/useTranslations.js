@@ -1,14 +1,16 @@
 "use client";
 
-import { useLanguage } from "../contexts/LanguageContext";
+import { useSelector } from "react-redux";
 
 export const useTranslations = (namespace) => {
-  const { messages } = useLanguage();
+  const { messages, currentLocale } = useSelector((state) => state.language);
 
   const t = (key, values = {}) => {
     const namespaceData = messages[namespace];
     if (!namespaceData) {
-      console.warn(`Namespace "${namespace}" not found in messages`);
+      console.warn(
+        `Namespace "${namespace}" not found in messages for locale: ${currentLocale}`
+      );
       return key;
     }
 
@@ -19,14 +21,16 @@ export const useTranslations = (namespace) => {
       if (value && typeof value === "object" && k in value) {
         value = value[k];
       } else {
-        console.warn(`Translation key "${namespace}.${key}" not found`);
+        console.warn(
+          `Translation key "${namespace}.${key}" not found for locale: ${currentLocale}`
+        );
         return key;
       }
     }
 
     if (typeof value !== "string") {
       console.warn(
-        `Translation value for "${namespace}.${key}" is not a string`
+        `Translation value for "${namespace}.${key}" is not a string for locale: ${currentLocale}`
       );
       return key;
     }

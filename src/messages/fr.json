@@ -274,6 +274,22 @@
           "intention": "Passionné de Voitures"
         }
       }
+    },
+    "services": {
+      "banner": {
+        "title": "Choisissez les meilleurs talents pour la réussite de votre organisation.",
+        "description": "Choisissez le freelance parfait pour élever votre organisation avec des compétences, de l'expérience et une expertise de premier ordre.",
+        "buttonText": "Embaucher des Freelances"
+      },
+      "heading": {
+        "title": "Design UX",
+        "subtitle": "Offrez à vos visiteurs une expérience fluide grâce à un design UX solide."
+      },
+      "serviceCard": {
+        "jobCompleted": "Travail Terminé : {count}",
+        "dailyRate": "Taux Quotidien : ${amount}",
+        "hireButton": "Embaucher le Freelance →"
+      }
     }
   }
 }

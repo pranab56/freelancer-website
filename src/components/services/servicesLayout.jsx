@@ -1,18 +1,32 @@
+"use client";
+
 import React from "react";
 import Banner from "../common/banner/Banner";
 import Heading from "../common/heading/Heading";
 import ServiceCard from "../common/ServiceCard/ServiceCard";
-import ExploreMore from "./ExploreMore";
 import PopularServices from "../home/PopularServices";
+import { useSelector } from "react-redux";
+import { currentLanguage } from "../../redux/features/languageSlice";
 
 function ServicesLayout() {
+  const messages = useSelector((state) => state.language.messages);
+  const languages = useSelector(currentLanguage);
+  console.log("servicesLayout", languages);
+  const servicesTranslations = messages?.home?.services || {};
+
   const setServiceBanner = {
     src: "/services/service_1.png",
-    header: "Choose the best talent for your organization's success.",
-    text: "Choose the perfect freelancer to elevate your organization with top-tier skills, experience, and expertise.",
-    buttonName: "Hire Freelancers",
+    header:
+      servicesTranslations.banner?.title ||
+      "Choose the best talent for your organization's success.",
+    text:
+      servicesTranslations.banner?.description ||
+      "Choose the perfect freelancer to elevate your organization with top-tier skills, experience, and expertise.",
+    buttonName: servicesTranslations.banner?.buttonText || "Hire Freelancers",
   };
+
   const services = Array(8).fill({}); // or your service data
+
   return (
     <div className="max-w-7xl mx-auto">
       <Banner
@@ -24,8 +38,11 @@ function ServicesLayout() {
 
       <div className="px-4 sm:px-6 2xl:px-0 py-4 md:py-12 ">
         <Heading
-          heading="UX Design"
-          subheading="Provide your visitors with a seamless experience through strong UX design."
+          heading={servicesTranslations.heading?.title || "UX Design"}
+          subheading={
+            servicesTranslations.heading?.subtitle ||
+            "Provide your visitors with a seamless experience through strong UX design."
+          }
         />
       </div>
 

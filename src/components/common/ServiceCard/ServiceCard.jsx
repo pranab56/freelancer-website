@@ -9,8 +9,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { currentLanguage } from "../../../redux/features/languageSlice";
 
 function ServiceCard() {
+  const messages = useSelector((state) => state.language.messages);
+  const serviceCardTranslations = messages?.home?.services?.serviceCard || {};
+  const language = useSelector(currentLanguage);
   return (
     <Card className="max-w-sm border-none bg-white">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -18,8 +23,16 @@ function ServiceCard() {
       </CardHeader>
 
       <CardContent className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+        <div
+          className={`flex items-center justify-between ${
+            language === "fr" ? "items-end" : ""
+          }`}
+        >
+          <div
+            className={`flex items-center space-x-3 ${
+              language === "fr" ? "flex flex-col items-start" : ""
+            }`}
+          >
             <Avatar>
               <AvatarImage src="/services/avatar.png" />
               <AvatarFallback>OR</AvatarFallback>
@@ -30,9 +43,13 @@ function ServiceCard() {
             </div>
           </div>
           <div className="text-right">
-            <p className="text-xs text-muted-foreground">Job Completed: 30</p>
+            <p className="text-xs text-muted-foreground">
+              {serviceCardTranslations.jobCompleted?.replace("{count}", "30") ||
+                "Job Completed: 30"}
+            </p>
             <p className="text-normal h2-gradient-text font-bold">
-              Daily Rate: $50
+              {serviceCardTranslations.dailyRate?.replace("${amount}", "50") ||
+                "Daily Rate: $50"}
             </p>
           </div>
         </div>
@@ -52,7 +69,9 @@ function ServiceCard() {
       </CardContent>
 
       <CardFooter className="flex justify-end">
-        <Button className="button-gradient">Hire Freelancer →</Button>
+        <Button className="button-gradient">
+          {serviceCardTranslations.hireButton || "Hire Freelancer →"}
+        </Button>
       </CardFooter>
     </Card>
   );

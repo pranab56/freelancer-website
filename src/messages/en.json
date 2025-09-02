@@ -273,6 +273,22 @@
           "intention": "Car Enthusiast"
         }
       }
+    },
+    "services": {
+      "banner": {
+        "title": "Choose the best talent for your organization's success.",
+        "description": "Choose the perfect freelancer to elevate your organization with top-tier skills, experience, and expertise.",
+        "buttonText": "Hire Freelancers"
+      },
+      "heading": {
+        "title": "UX Design",
+        "subtitle": "Provide your visitors with a seamless experience through strong UX design."
+      },
+      "serviceCard": {
+        "jobCompleted": "Job Completed: {count}",
+        "dailyRate": "Daily Rate: ${amount}",
+        "hireButton": "Hire Freelancer →"
+      }
     }
   }
 }

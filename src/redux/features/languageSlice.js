@@ -68,6 +68,7 @@ const languageSlice = createSlice({
       });
     },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(loadMessages.pending, (state) => {
@@ -95,6 +96,8 @@ const languageSlice = createSlice({
       });
   },
 });
+
+export const currentLanguage = (state) => state.language.currentLocale;
 
 export const { setLocale, setMessages, initializeLanguage } =
   languageSlice.actions;

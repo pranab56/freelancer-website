@@ -1,211 +1,146 @@
-# Redux Setup Documentation
+# Redux Store Documentation
 
-This project uses Redux Toolkit with Redux Persist for state management. The setup includes authentication, user management, and is ready for additional features.
+## Language System
 
-## Structure
+The language system is implemented using Redux and provides internationalization (i18n) support for the application.
 
-```
-src/redux/
-├── store/
-│   └── store.js          # Main store configuration
-├── features/
-│   ├── auth/
-│   │   └── authSlice.js  # Authentication state management
-│   └── user/
-│       └── userSlice.js  # User profile management
-├── Provider.jsx          # Redux Provider component
-├── hooks.js              # Custom hooks for Redux usage
-└── README.md             # This documentation
-```
+### Architecture
 
-## Featuresd
+- **Language Slice** (`src/redux/features/languageSlice.js`): Manages language state, locale switching, and message loading
+- **Language Provider** (`src/components/providers/LanguageProvider.jsx`): Initializes the language system on app startup
+- **useTranslations Hook** (`src/hooks/useTranslations.js`): Provides translation functionality to components
+- **Language Selector** (`src/components/common/LanguageSelector/LanguageSelector.jsx`): UI component for switching languages
 
-### 1. Store Configuration (`store.js`)
+### Features
 
-- Configured with Redux Toolkit
-- Includes Redux Persist for state persistence
-- Development tools enabled in non-production
-- Proper middleware configuration
+- ✅ **Redux-based state management** - Language state is managed centrally
+- ✅ **Persistent storage** - Language preference is saved in localStorage
+- ✅ **Async message loading** - Messages are loaded dynamically for each locale
+- ✅ **Fallback support** - Falls back to English if preferred locale fails to load
+- ✅ **Real-time switching** - Language changes are applied immediately without page refresh
+- ✅ **Type-safe translations** - Supports nested keys and interpolation
 
-### 2. Authentication Slice (`authSlice.js`)
+### Usage
 
-- User login/logout functionality
-- Async thunks for API calls
-- Loading states and error handling
-- Token management
-
-### 3. User Slice (`userSlice.js`)
-
-- User profile management
-- Fetch and update user data
-- Profile update tracking
-
-### 4. Custom Hooks (`hooks.js`)
-
-- `useAuth()` - Access authentication state
-- `useUser()` - Access user state
-- `useAppDispatch()` - Typed dispatch
-- `useAppSelector()` - Typed selector
-
-## Usage
-
-### Basic Usage in Components
+#### 1. Basic Translation
 
 ```jsx
-"use client";
-
-import { useAuth, useAppDispatch } from "../redux/hooks";
-import { loginUser } from "../redux/features/auth/authSlice";
+import { useTranslations } from "@/hooks/useTranslations";
 
 function MyComponent() {
-  const dispatch = useAppDispatch();
-  const { user, isAuthenticated, isLoading } = useAuth();
-
-  const handleLogin = async (credentials) => {
-    await dispatch(loginUser(credentials));
-  };
+  const t = useTranslations("home.services");
 
   return (
     <div>
-      {isAuthenticated ? (
-        <p>Welcome, {user.email}!</p>
-      ) : (
-        <button
-          onClick={() =>
-            handleLogin({ email: "test@example.com", password: "password" })
-          }
-        >
-          Login
-        </button>
-      )}
+      <h1>{t("banner.title")}</h1>
+      <p>{t("banner.description")}</p>
     </div>
   );
 }
 ```
 
-### Adding New Slices
-
-1. Create a new slice file in `features/`:
+#### 2. Translation with Interpolation
 
 ```jsx
-// src/redux/features/project/projectSlice.js
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+const t = useTranslations("home.services.serviceCard");
 
-export const fetchProjects = createAsyncThunk(
-  "project/fetchProjects",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetch("/api/projects");
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+// In your translation file: "jobCompleted": "Job Completed: {count}"
+<p>{t("jobCompleted", { count: 30 })}</p>
 
-const projectSlice = createSlice({
-  name: "project",
-  initialState: {
-    projects: [],
-    isLoading: false,
-    error: null,
-  },
-  reducers: {
-    clearError: (state) => {
-      state.error = null;
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchProjects.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(fetchProjects.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.projects = action.payload;
-      })
-      .addCase(fetchProjects.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
-      });
-  },
-});
-
-export const { clearError } = projectSlice.actions;
-export default projectSlice.reducer;
+// In your translation file: "dailyRate": "Daily Rate: ${amount}"
+<p>{t("dailyRate", { amount: 50 })}</p>
 ```
 
-2. Add the slice to the store:
+#### 3. Language Switching
 
 ```jsx
-// In store.js
-import projectSlice from "../features/project/projectSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setLocale, loadMessages } from "@/redux/features/languageSlice";
 
-const rootReducer = combineReducers({
-  auth: authSlice,
-  user: userSlice,
-  project: projectSlice, // Add this line
-});
-```
+function LanguageSwitcher() {
+  const dispatch = useDispatch();
+  const { currentLocale } = useSelector((state) => state.language);
 
-3. Create a custom hook:
+  const handleLanguageChange = async (newLocale) => {
+    await dispatch(loadMessages(newLocale)).unwrap();
+    dispatch(setLocale(newLocale));
+  };
 
-```jsx
-// In hooks.js
-export const useProject = () => {
-  return useSelector((state) => state.project);
-};
-```
-
-### State Persistence
-
-The store is configured with Redux Persist to automatically save and restore state. Currently, only `auth` and `user` slices are persisted. To add more slices to persistence:
-
-```jsx
-// In store.js
-const persistConfig = {
-  key: "root",
-  storage,
-  whitelist: ["auth", "user", "project"], // Add new slices here
-};
-```
-
-## Best Practices
-
-1. **Use Custom Hooks**: Always use the custom hooks from `hooks.js` instead of plain `useDispatch` and `useSelector`.
-
-2. **Async Operations**: Use `createAsyncThunk` for all API calls and async operations.
-
-3. **Error Handling**: Always handle errors in async thunks using `rejectWithValue`.
-
-4. **Loading States**: Include loading states for better UX.
-
-5. **State Structure**: Keep state normalized and avoid deeply nested objects.
-
-6. **Selectors**: Use selectors for complex state computations.
-
-## Example Component
-
-See `src/components/example/ReduxExample.jsx` for a complete example of how to use Redux in components.
-
-## Development Tools
-
-Redux DevTools are automatically enabled in development mode. You can install the Redux DevTools browser extension for debugging.
-
-## API Integration
-
-The slices are set up to work with REST APIs. Update the fetch URLs in the async thunks to match your actual API endpoints.
-
-## Testing
-
-When testing components that use Redux, wrap them in the Provider:
-
-```jsx
-import { Provider } from "react-redux";
-import { store } from "../redux/store/store";
-
-function TestWrapper({ children }) {
-  return <Provider store={store}>{children}</Provider>;
+  return (
+    <div>
+      <button onClick={() => handleLanguageChange("en")}>English</button>
+      <button onClick={() => handleLanguageChange("fr")}>Français</button>
+    </div>
+  );
 }
 ```
+
+### Translation File Structure
+
+Translation files are located in `src/messages/` and follow this structure:
+
+```json
+{
+  "navigation": {
+    "home": "Home",
+    "aboutUs": "About Us"
+  },
+  "home": {
+    "services": {
+      "banner": {
+        "title": "Choose the best talent",
+        "description": "Choose the perfect freelancer..."
+      }
+    }
+  }
+}
+```
+
+### Available Locales
+
+- **English (en)**: `src/messages/en.json`
+- **French (fr)**: `src/messages/fr.json`
+
+### State Structure
+
+```javascript
+{
+  language: {
+    currentLocale: "en",
+    messages: {}, // Current locale messages
+    allMessages: {}, // All loaded messages
+    loading: false,
+    error: null
+  }
+}
+```
+
+### Actions
+
+- `loadMessages(locale)`: Async thunk to load messages for a specific locale
+- `setLocale(locale)`: Set the current locale
+- `setMessages({ locale, messages })`: Set messages for a specific locale
+- `initializeLanguage({ locale, messages })`: Initialize the language system
+
+### Best Practices
+
+1. **Namespace Organization**: Group related translations under logical namespaces
+2. **Key Naming**: Use descriptive, hierarchical keys (e.g., `home.services.banner.title`)
+3. **Interpolation**: Use `{variable}` syntax for dynamic content
+4. **Fallbacks**: Always provide fallback text for missing translations
+5. **Performance**: Messages are cached after first load, so switching is instant
+
+### Troubleshooting
+
+- **Missing translations**: Check console for warnings about missing keys
+- **Language not switching**: Ensure the language slice is properly connected to the store
+- **Messages not loading**: Check that translation files exist and are properly formatted
+
+### Migration from Context
+
+If migrating from a context-based approach:
+
+1. Replace `useLanguage()` with `useSelector((state) => state.language)`
+2. Update `useTranslations` hook to use Redux state
+3. Remove LanguageContext imports and usage
+4. Ensure Redux store includes the language slice
