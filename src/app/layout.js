@@ -3,8 +3,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Provider } from "@/redux/Provider";
-import { Toaster } from "@/components/ui/toaster";
 import React, { useState, useEffect } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
