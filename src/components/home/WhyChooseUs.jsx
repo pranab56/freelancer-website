@@ -7,20 +7,31 @@ function WhyChooseUs() {
   const messages = useSelector((state) => state.language.messages);
   const whyChooseUsTranslations = messages?.home?.whyChooseUs || {};
 
+  // Add loading check to prevent rendering before translations are ready
+  if (!messages || Object.keys(messages).length === 0) {
+    return (
+      <div className="w-full py-16 px-6 2xl:px-0">
+        <div className="container mx-auto max-w-[100rem] 2xl:max-w-10/12">
+          <div className="flex justify-center items-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const features = [
     {
-      title: whyChooseUsTranslations.features?.topVetted?.title,
-      description: whyChooseUsTranslations.features?.topVetted?.description,
+      title: whyChooseUsTranslations.features?.topVetted?.title || "Top-Vetted Freelancers",
+      description: whyChooseUsTranslations.features?.topVetted?.description || "Work with handpicked experts who meet the highest standards for skill, experience, and reliability.",
     },
     {
-      title: whyChooseUsTranslations.features?.zeroCommission?.title,
-      description:
-        whyChooseUsTranslations.features?.zeroCommission?.description,
+      title: whyChooseUsTranslations.features?.zeroCommission?.title || "Zero Commission Fees",
+      description: whyChooseUsTranslations.features?.zeroCommission?.description || "Transparent pricing guaranteed—pay or earn exactly what's agreed with no hidden fees.",
     },
     {
-      title: whyChooseUsTranslations.features?.flexibleScalable?.title,
-      description:
-        whyChooseUsTranslations.features?.flexibleScalable?.description,
+      title: whyChooseUsTranslations.features?.flexibleScalable?.title || "Flexible & Scalable Talent",
+      description: whyChooseUsTranslations.features?.flexibleScalable?.description || "Hire for small tasks or full-scale projects—whatever you need, whenever you need it.",
     },
   ];
 

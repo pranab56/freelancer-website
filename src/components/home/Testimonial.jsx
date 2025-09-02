@@ -11,41 +11,82 @@ function Testimonial() {
   const [expandedComments, setExpandedComments] = useState({});
   const [truncateLength, setTruncateLength] = useState(120); // default for desktop
 
+  // Add loading check to prevent rendering before translations are ready
+  if (!messages || Object.keys(messages).length === 0) {
+    return (
+      <section className="py-16 lg:py-20 bg-white">
+        <div className="max-w-[100rem] mx-auto">
+          <div className="flex justify-center items-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   const testimonials = [
     {
       id: 1,
-      title: testimonialTranslations.testimonials?.smoothProcess?.title,
-      comment: testimonialTranslations.testimonials?.smoothProcess?.comment,
+      title:
+        testimonialTranslations.testimonials?.smoothProcess?.title ||
+        "Smooth Process",
+      comment:
+        testimonialTranslations.testimonials?.smoothProcess?.comment ||
+        "The car-buying process was incredibly smooth and hassle-free! I found my dream car within minutes, and the team guided me through every step. Highly recommended for anyone looking to buy or sell a car!",
       avatar: "/home/john_doe.png",
-      name: testimonialTranslations.testimonials?.smoothProcess?.name,
-      intention: testimonialTranslations.testimonials?.smoothProcess?.intention,
+      name:
+        testimonialTranslations.testimonials?.smoothProcess?.name || "John Doe",
+      intention:
+        testimonialTranslations.testimonials?.smoothProcess?.intention ||
+        "Happy Customer",
     },
     {
       id: 2,
-      title: testimonialTranslations.testimonials?.amazingSupport?.title,
-      comment: testimonialTranslations.testimonials?.amazingSupport?.comment,
+      title:
+        testimonialTranslations.testimonials?.amazingSupport?.title ||
+        "Amazing Support",
+      comment:
+        testimonialTranslations.testimonials?.amazingSupport?.comment ||
+        "Excellent customer service! The platform made it easy to compare options and find the best deals. The support team answered all my questions and ensured a seamless experience.",
       avatar: "/home/sara.png",
-      name: testimonialTranslations.testimonials?.amazingSupport?.name,
+      name:
+        testimonialTranslations.testimonials?.amazingSupport?.name ||
+        "Sarah Johnson",
       intention:
-        testimonialTranslations.testimonials?.amazingSupport?.intention,
+        testimonialTranslations.testimonials?.amazingSupport?.intention ||
+        "First-Time Buyer",
     },
     {
       id: 3,
-      title: testimonialTranslations.testimonials?.trustedPlatform?.title,
-      comment: testimonialTranslations.testimonials?.trustedPlatform?.comment,
+      title:
+        testimonialTranslations.testimonials?.trustedPlatform?.title ||
+        "Trusted Platform",
+      comment:
+        testimonialTranslations.testimonials?.trustedPlatform?.comment ||
+        "This platform is a game-changer for car enthusiasts. The transparency and reliability gave me confidence while purchasing. I sold my old car here too, and the process was quick and efficient!",
       avatar: "/home/mike.png",
-      name: testimonialTranslations.testimonials?.trustedPlatform?.name,
+      name:
+        testimonialTranslations.testimonials?.trustedPlatform?.name ||
+        "Mike Brown",
       intention:
-        testimonialTranslations.testimonials?.trustedPlatform?.intention,
+        testimonialTranslations.testimonials?.trustedPlatform?.intention ||
+        "Car Enthusiast",
     },
     {
       id: 4,
-      title: testimonialTranslations.testimonials?.trustedPlatform?.title,
-      comment: testimonialTranslations.testimonials?.trustedPlatform?.comment,
+      title:
+        testimonialTranslations.testimonials?.trustedPlatform?.title ||
+        "Trusted Platform",
+      comment:
+        testimonialTranslations.testimonials?.trustedPlatform?.comment ||
+        "This platform is a game-changer for car enthusiasts. The transparency and reliability gave me confidence while purchasing. I sold my old car here too, and the process was quick and efficient!",
       avatar: "/home/mike.png",
-      name: testimonialTranslations.testimonials?.trustedPlatform?.name,
+      name:
+        testimonialTranslations.testimonials?.trustedPlatform?.name ||
+        "Mike Brown",
       intention:
-        testimonialTranslations.testimonials?.trustedPlatform?.intention,
+        testimonialTranslations.testimonials?.trustedPlatform?.intention ||
+        "Car Enthusiast",
     },
   ];
 

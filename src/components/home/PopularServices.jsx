@@ -11,45 +11,65 @@ function PopularServices() {
   const messages = useSelector((state) => state.language.messages);
   const popularServicesTranslations = messages?.home?.popularServices || {};
 
+  // Add loading check to prevent rendering before translations are ready
+  if (!messages || Object.keys(messages).length === 0) {
+    return (
+      <div className="w-full lg:w-10/12 px-6 mx-auto my-12 flex flex-col justify-center">
+        <div className="animate-pin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto"></div>
+      </div>
+    );
+  }
+
   const popularCategories = [
     {
       id: 1,
-      label: popularServicesTranslations.services?.graphicDesign,
+      label:
+        popularServicesTranslations.services?.graphicDesign || "Graphic Design",
       src: "/popular_categories/graphics_design.png",
     },
     {
       id: 2,
-      label: popularServicesTranslations.services?.cartoonAnimation,
+      label:
+        popularServicesTranslations.services?.cartoonAnimation ||
+        "Cartoon Animation",
       src: "/popular_categories/cartoon_animation.png",
     },
     {
       id: 3,
-      label: popularServicesTranslations.services?.illustration,
+      label:
+        popularServicesTranslations.services?.illustration || "Illustration",
       src: "/popular_categories/illustration.png",
     },
     {
       id: 4,
-      label: popularServicesTranslations.services?.flyersVouchers,
+      label:
+        popularServicesTranslations.services?.flyersVouchers ||
+        "Flyers & Vouchers",
       src: "/popular_categories/flyers.png",
     },
     {
       id: 5,
-      label: popularServicesTranslations.services?.logoDesign,
+      label: popularServicesTranslations.services?.logoDesign || "Logo Design",
       src: "/popular_categories/logo_design.png",
     },
     {
       id: 6,
-      label: popularServicesTranslations.services?.socialGraphics,
+      label:
+        popularServicesTranslations.services?.socialGraphics ||
+        "Social Graphics",
       src: "/popular_categories/social.png",
     },
     {
       id: 7,
-      label: popularServicesTranslations.services?.articleWriting,
+      label:
+        popularServicesTranslations.services?.articleWriting ||
+        "Article Writing",
       src: "/popular_categories/article.png",
     },
     {
       id: 8,
-      label: popularServicesTranslations.services?.videoEditing,
+      label:
+        popularServicesTranslations.services?.videoEditing || "Video Editing",
       src: "/popular_categories/video_editing.png",
     },
   ];
@@ -58,8 +78,9 @@ function PopularServices() {
     <div className="w-full lg:w-10/12 px-6 mx-auto my-12 flex flex-col justify-center">
       <h2 className="text-4xl h2-gradient-text leading-14 font-bold text-center">
         {pathname === "/services"
-          ? popularServicesTranslations.exploreMoreTitle
-          : popularServicesTranslations.title}
+          ? popularServicesTranslations.exploreMoreTitle ||
+            "Explore More Services"
+          : popularServicesTranslations.title || "Our Popular Services"}
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-8 my-12">
         {popularCategories.map((category, index) => (
@@ -90,7 +111,7 @@ function PopularServices() {
         ))}
       </div>
       <Button className="w-60 button-gradient mx-auto">
-        {popularServicesTranslations.seeAllCategories}
+        {popularServicesTranslations.seeAllCategories || "See All Categories"}
       </Button>
     </div>
   );

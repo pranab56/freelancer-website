@@ -13,35 +13,61 @@ function TalentCategories() {
   const messages = useSelector((state) => state.language.messages);
   const sliderTranslations = messages?.home?.slider || {};
 
+  // Add loading check to prevent rendering before translations are ready
+  if (!messages || Object.keys(messages).length === 0) {
+    return (
+      <div className="w-full px-6 mx-auto my-12 flex flex-col justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto"></div>
+      </div>
+    );
+  }
+
   const categories = [
     {
       id: 1,
-      name: sliderTranslations.categories?.graphicsDesign,
+      name: sliderTranslations.categories?.graphicsDesign || "Graphics Design",
       icon: Lightbulb,
     },
     {
       id: 2,
-      name: sliderTranslations.categories?.digitalMarketing,
+      name:
+        sliderTranslations.categories?.digitalMarketing || "Digital Marketing",
       icon: Lightbulb,
     },
     {
       id: 3,
-      name: sliderTranslations.categories?.writingTranslation,
+      name:
+        sliderTranslations.categories?.writingTranslation ||
+        "Writing & Translation",
       icon: Lightbulb,
     },
     {
       id: 4,
-      name: sliderTranslations.categories?.videoAnimation,
+      name:
+        sliderTranslations.categories?.videoAnimation || "Video & Animation",
       icon: Lightbulb,
     },
-    { id: 5, name: sliderTranslations.categories?.musicAudio, icon: Lightbulb },
+    {
+      id: 5,
+      name: sliderTranslations.categories?.musicAudio || "Music & Audio",
+      icon: Lightbulb,
+    },
     {
       id: 6,
-      name: sliderTranslations.categories?.programmingTech,
+      name:
+        sliderTranslations.categories?.programmingTech || "Programming & Tech",
       icon: Lightbulb,
     },
-    { id: 7, name: sliderTranslations.categories?.business, icon: Lightbulb },
-    { id: 8, name: sliderTranslations.categories?.aiServices, icon: Lightbulb },
+    {
+      id: 7,
+      name: sliderTranslations.categories?.business || "Business",
+      icon: Lightbulb,
+    },
+    {
+      id: 8,
+      name: sliderTranslations.categories?.aiServices || "AI Services",
+      icon: Lightbulb,
+    },
   ];
 
   useEffect(() => {
