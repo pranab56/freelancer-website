@@ -3,15 +3,18 @@
 import { Provider as ReduxProvider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store/store";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { initializeLanguage } from "./features/languageSlice";
 
 function LanguageInitializer({ children }) {
   const dispatch = useDispatch();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Memoize the initialization function to prevent unnecessary re-renders
   const initializeLanguageState = useCallback(async () => {
+    if (isInitialized) return;
+
     console.log("🚀 LanguageInitializer: Starting language initialization...");
 
     // Check localStorage for saved preference first
@@ -45,11 +48,9 @@ function LanguageInitializer({ children }) {
         })
       );
       console.log("🚀 LanguageInitializer: Language initialized successfully");
+      setIsInitialized(true);
     } catch (error) {
-      console.error(
-        `Failed to load messages for locale: ${targetLocale}`,
-        error
-      );
+      console.error("Language initialization error:", error);
       // Fallback to English
       console.log("LanguageInitializer: Falling back to English...");
       try {
@@ -61,16 +62,19 @@ function LanguageInitializer({ children }) {
           })
         );
         console.log("LanguageInitializer: Fallback to English completed");
+        setIsInitialized(true);
       } catch (fallbackError) {
         console.error("Failed to load fallback messages", fallbackError);
       }
     }
-  }, []); // Empty dependency array to run only once
+  }, [dispatch, isInitialized]);
 
   // Use effect to trigger initialization
   useEffect(() => {
-    initializeLanguageState();
-  }, [initializeLanguageState]);
+    if (!isInitialized) {
+      initializeLanguageState();
+    }
+  }, [initializeLanguageState, isInitialized]);
 
   return children;
 }

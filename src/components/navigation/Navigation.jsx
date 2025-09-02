@@ -21,16 +21,12 @@ export default function Navigation({ children }) {
     initializeMounted();
   }, [initializeMounted]);
 
-  // Memoize navbar rendering to prevent unnecessary re-renders
-  const renderNavbar = useMemo(() => {
+  // Memoize navbar selection to prevent unnecessary re-renders
+  const NavbarComponent = useMemo(() => {
     if (!currentUser) {
-      return <NavBar />;
+      return NavBar;
     }
-    return currentUser.type === "client" ? (
-      <ClientNavBar />
-    ) : (
-      <FreelancerNavBar />
-    );
+    return currentUser.type === "client" ? ClientNavBar : FreelancerNavBar;
   }, [currentUser]);
 
   // Prevent rendering before mounting to avoid hydration issues
@@ -46,7 +42,7 @@ export default function Navigation({ children }) {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {renderNavbar}
+      <NavbarComponent />
       <main className="flex-grow">{children}</main>
       <Footer />
     </div>
