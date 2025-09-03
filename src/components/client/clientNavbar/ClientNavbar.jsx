@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ReactCountryFlag from "react-country-flag";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -47,6 +47,47 @@ function ClientNavBar() {
   const dispatch = useDispatch();
   const localeFromHook = useLocale();
 
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const loading = useSelector((state) => state.language.loading);
+  const currentLocale = useSelector((state) => state.language.currentLocale);
+
+  // Extensive debugging logs
+  console.log("ClientNavbar - Full Redux State:", {
+    messages,
+    loading,
+    currentLocale,
+    hasClientSection: !!messages?.client,
+    hasNavbarSection: !!messages?.client?.navbar,
+    navbarKeys: messages?.client?.navbar
+      ? Object.keys(messages.client.navbar)
+      : "No keys",
+  });
+
+  const translations = useMemo(() => {
+    const navbarTranslations = messages?.client?.navbar || {
+      jobBoard: "Job Board",
+      tenders: "Tenders",
+      myProjects: "My Projects",
+      invoices: "Invoices",
+      inbox: "Inbox",
+      mySubscription: "My Subscription",
+      viewProfile: "View Profile",
+      accountSettings: "Account Settings",
+      billingPlans: "Billing & Plans",
+      helpSupport: "Help & Support",
+      signOut: "Sign Out",
+      client: "Client",
+    };
+
+    console.log("ClientNavbar - Translations Computed:", {
+      navbarTranslations,
+      fallbackUsed: !messages?.client?.navbar,
+    });
+
+    return navbarTranslations;
+  }, [messages]);
+
   // Use only Redux state for locale
   const locale = localeFromHook;
   const userType = useSelector((state) => state.currentUser.currentUser.type);
@@ -57,12 +98,12 @@ function ClientNavBar() {
 
   // Navigation items - only client specific pages
   const navItems = [
-    { label: "Job Board", href: `/job-board` },
-    { label: "Tenders", href: `/tenders` },
-    { label: "My Projects", href: `/my-projects` },
-    { label: "Invoices", href: `/invoices` },
-    { label: "Inbox", href: `/inbox` },
-    { label: "My Subscription", href: `/my-subscription` },
+    { label: translations.jobBoard, href: `/job-board` },
+    { label: translations.tenders, href: `/tenders` },
+    { label: translations.myProjects, href: `/my-projects` },
+    { label: translations.invoices, href: `/invoices` },
+    { label: translations.inbox, href: `/inbox` },
+    { label: translations.mySubscription, href: `/my-subscription` },
   ];
 
   // Helper function to determine if link is active
@@ -73,7 +114,7 @@ function ClientNavBar() {
   // Mock user data (in real app, this would come from auth context)
   const user = {
     name: "John Client",
-    role: "Client",
+    role: translations.client,
     avatar: "/client/profile/client.png",
   };
 
@@ -151,23 +192,23 @@ function ClientNavBar() {
                   href={`/client-profile-private/1`}
                   className="w-full cursor-pointer"
                 >
-                  View Profile
+                  {translations.viewProfile}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={`/settings`} className="w-full cursor-pointer">
-                  Account Settings
+                  {translations.accountSettings}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={`/billing`} className="w-full cursor-pointer">
-                  Billing & Plans
+                  {translations.billingPlans}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <Link href={`/help`} className="w-full cursor-pointer">
-                  Help & Support
+                  {translations.helpSupport}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -175,7 +216,7 @@ function ClientNavBar() {
                 className="text-red-600 cursor-pointer"
                 onClick={handleSignOut}
               >
-                Sign Out
+                {translations.signOut}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -235,35 +276,39 @@ function ClientNavBar() {
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/client-profile-private/1`}>View Profile</Link>
+                    <Link href={`/client-profile-private/1`}>
+                      {translations.viewProfile}
+                    </Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/settings`}>Account Settings</Link>
+                    <Link href={`/settings`}>
+                      {translations.accountSettings}
+                    </Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/billing`}>Billing & Plans</Link>
+                    <Link href={`/billing`}>{translations.billingPlans}</Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/help`}>Help & Support</Link>
+                    <Link href={`/help`}>{translations.helpSupport}</Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start text-red-600"
                     onClick={handleSignOut}
                   >
-                    Sign Out
+                    {translations.signOut}
                   </Button>
                 </div>
               </div>

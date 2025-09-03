@@ -32,6 +32,10 @@ function ProfileEditDialog() {
         locationPlaceholder: "Select location",
         languageLabel: "Language",
         languagePlaceholder: "Select language",
+        changeProfilePicture: "Change Profile Picture",
+        changeCover: "Change Cover",
+        cancel: "Cancel",
+        saveChanges: "Save Changes",
         serviceTypes: {
           design: "Design",
           development: "Development",
@@ -82,7 +86,7 @@ function ProfileEditDialog() {
           />
         </div>
         <Button variant="ghost" className="text-sm">
-          Change Profile Picture ✏️
+          {translations.changeProfilePicture}
         </Button>
 
         <div className="relative w-full rounded-lg overflow-hidden border h-40">
@@ -94,7 +98,7 @@ function ProfileEditDialog() {
           />
         </div>
         <Button variant="ghost" className="text-sm">
-          Change Cover ✏️
+          {translations.changeCover}
         </Button>
       </div>
 

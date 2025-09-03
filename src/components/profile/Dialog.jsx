@@ -75,6 +75,8 @@ export default function EditProfileDialog({ open, onClose }) {
         },
         cancelButton: "Cancel",
         saveChangesButton: "Save Changes",
+        changeProfilePicture: "Change Profile Picture",
+        changeCover: "Change Cover",
       },
     [messages]
   );
@@ -100,7 +102,7 @@ export default function EditProfileDialog({ open, onClose }) {
               />
             </div>
             <Button variant="ghost" className="text-sm">
-              Change Profile Picture ✏️
+              {translations.changeProfilePicture} ✏️
             </Button>
 
             <div className="relative w-full rounded-lg overflow-hidden border h-40">
@@ -112,7 +114,7 @@ export default function EditProfileDialog({ open, onClose }) {
               />
             </div>
             <Button variant="ghost" className="text-sm">
-              Change Cover ✏️
+              {translations.changeCover} ✏️
             </Button>
           </div>
 

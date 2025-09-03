@@ -1,6 +1,7 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,6 +22,37 @@ import {
 } from "@/components/ui/select";
 
 export default function EducationDialogAddEdit({ isOpen, onClose }) {
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const translations = useMemo(
+    () =>
+      messages?.profile?.education || {
+        title: "Add Education & Certifications",
+        degree: "Degree",
+        degreePlaceholder: "Select Degree",
+        school: "School/University",
+        schoolPlaceholder: "Select School / University",
+        schoolRequired: "School/University is required",
+        startYear: "Select Start Year",
+        endYear: "Select End Year",
+        yearPlaceholder: "Year",
+        cancel: "Cancel",
+        saveChanges: "Save Changes",
+        successMessage: "Education saved successfully!",
+        // Degree options
+        associateDegree: "Associate Degree",
+        bachelorsDegree: "Bachelor's Degree",
+        mastersDegree: "Master's Degree",
+        doctorate: "Doctorate (PhD)",
+        professionalDegree: "Professional Degree",
+        certificate: "Certificate",
+        diploma: "Diploma",
+        highSchoolDiploma: "High School Diploma",
+        other: "Other",
+      },
+    [messages]
+  );
+
   const {
     register,
     handleSubmit,
@@ -39,7 +71,7 @@ export default function EducationDialogAddEdit({ isOpen, onClose }) {
 
   const onSubmit = (data) => {
     console.log("Education data:", data);
-    alert("Education saved successfully!");
+    alert(translations.successMessage);
     onClose?.();
   };
 
@@ -53,15 +85,15 @@ export default function EducationDialogAddEdit({ isOpen, onClose }) {
   const years = Array.from({ length: 50 }, (_, i) => currentYear - i + 10);
 
   const degrees = [
-    "Associate Degree",
-    "Bachelor's Degree",
-    "Master's Degree",
-    "Doctorate (PhD)",
-    "Professional Degree",
-    "Certificate",
-    "Diploma",
-    "High School Diploma",
-    "Other",
+    translations.associateDegree,
+    translations.bachelorsDegree,
+    translations.mastersDegree,
+    translations.doctorate,
+    translations.professionalDegree,
+    translations.certificate,
+    translations.diploma,
+    translations.highSchoolDiploma,
+    translations.other,
   ];
 
   return (
@@ -70,7 +102,7 @@ export default function EducationDialogAddEdit({ isOpen, onClose }) {
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4 border-b-0">
           <DialogTitle className="text-lg font-semibold text-gray-900">
-            Add Education & Certifications
+            {translations.title}
           </DialogTitle>
           {/* <Button
             variant="ghost"
@@ -86,10 +118,12 @@ export default function EducationDialogAddEdit({ isOpen, onClose }) {
         <div className="px-6 pb-6 space-y-6">
           {/* Degree Field */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium text-gray-900">Degree</Label>
+            <Label className="text-sm font-medium text-gray-900">
+              {translations.degree}
+            </Label>
             <Select onValueChange={(value) => setValue("degree", value)}>
               <SelectTrigger className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500">
-                <SelectValue placeholder="Select Degree" />
+                <SelectValue placeholder={translations.degreePlaceholder} />
               </SelectTrigger>
               <SelectContent>
                 {degrees.map((degree) => (
@@ -110,14 +144,14 @@ export default function EducationDialogAddEdit({ isOpen, onClose }) {
               htmlFor="school"
               className="text-sm font-medium text-gray-900"
             >
-              School/University
+              {translations.school}
             </Label>
             <Input
               id="school"
-              placeholder="Select School / University"
+              placeholder={translations.schoolPlaceholder}
               className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500 placeholder:text-gray-400"
               {...register("school", {
-                required: "School/University is required",
+                required: translations.schoolRequired,
               })}
             />
             {errors.school && (
@@ -128,12 +162,12 @@ export default function EducationDialogAddEdit({ isOpen, onClose }) {
           {/* Start Year Field */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-gray-900">
-              Select Start Year
+              {translations.startYear}
             </Label>
             <div className="relative">
               <Select onValueChange={(value) => setValue("startYear", value)}>
                 <SelectTrigger className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500">
-                  <SelectValue placeholder="Year" />
+                  <SelectValue placeholder={translations.yearPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
                   {years.map((year) => (
@@ -156,12 +190,12 @@ export default function EducationDialogAddEdit({ isOpen, onClose }) {
           {/* End Year Field */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-gray-900">
-              Select End Year
+              {translations.endYear}
             </Label>
             <div className="relative">
               <Select onValueChange={(value) => setValue("endYear", value)}>
                 <SelectTrigger className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500">
-                  <SelectValue placeholder="Year" />
+                  <SelectValue placeholder={translations.yearPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
                   {years.map((year) => (
@@ -190,14 +224,14 @@ export default function EducationDialogAddEdit({ isOpen, onClose }) {
             onClick={onCancel}
             className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50 w-full md:w-auto"
           >
-            Cancel
+            {translations.cancel}
           </Button>
           <Button
             type="submit"
             onClick={handleSubmit(onSubmit)}
             className="px-6 button-gradient py-2 bg-blue-600 hover:bg-blue-700 text-white"
           >
-            Save Changes
+            {translations.saveChanges}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,6 +1,7 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,6 +32,35 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
   const [showUploadDialog, setShowUploadDialog] = useState(false);
   const fileInputRef = useRef(null);
   const showToast = useToast();
+
+  // Get translations from Redux
+  const messages = useSelector((state) => state.language.messages);
+  const translations = useMemo(
+    () =>
+      messages?.profile?.addNewProjectDialog || {
+        title: "Add New Project",
+        name: "Name",
+        namePlaceholder: "Sabbir Ahmed",
+        nameRequired: "Name is required",
+        titleLabel: "Title",
+        titlePlaceholder: "Write a title",
+        titleRequired: "Title is required",
+        completeDate: "Complete Date",
+        completeDateRequired: "Complete date is required",
+        description: "Description",
+        descriptionPlaceholder: "Design",
+        projectThumbnail: "Project Thumbnail",
+        cancel: "Cancel",
+        saveChanges: "Save Changes",
+        successMessage: "Project saved successfully!",
+        updateThumbnail: "Update Thumbnail",
+        updateThumbnailDescription: "Choose an option to update your project thumbnail.",
+        uploadNewImage: "Upload New Image",
+        removeCurrentImage: "Remove Current Image",
+      },
+    [messages]
+  );
+
   const {
     register,
     handleSubmit,
@@ -38,17 +68,17 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
     reset,
   } = useForm({
     defaultValues: {
-      name: "Sabbir Ahmed",
-      title: "Write a title",
+      name: translations.namePlaceholder,
+      title: translations.titlePlaceholder,
       completeDate: "2020",
-      description: "Design",
+      description: translations.descriptionPlaceholder,
     },
   });
 
   const onSubmit = (data) => {
     console.log("Project data:", data);
     console.log("Thumbnail image:", thumbnailImage);
-    showToast.success("Project saved successfully!");
+    showToast.success(translations.successMessage);
     onClose?.();
   };
 
@@ -93,7 +123,7 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
           {/* Header */}
           <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4 border-b-0">
             <DialogTitle className="text-lg font-semibold text-gray-900">
-              Add New Project
+              {translations.title}
             </DialogTitle>
           </DialogHeader>
 
@@ -119,7 +149,7 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
                 </div>
 
                 <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-                  <span>Project Thumbnail</span>
+                  <span>{translations.projectThumbnail}</span>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -139,12 +169,12 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
                     htmlFor="name"
                     className="text-sm font-medium text-gray-900"
                   >
-                    Name
+                    {translations.name}
                   </Label>
                   <Input
                     id="name"
                     className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                    {...register("name", { required: "Name is required" })}
+                    {...register("name", { required: translations.nameRequired })}
                   />
                   {errors.name && (
                     <p className="text-sm text-red-600">
@@ -159,12 +189,12 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
                     htmlFor="title"
                     className="text-sm font-medium text-gray-900"
                   >
-                    Title
+                    {translations.titleLabel}
                   </Label>
                   <Input
                     id="title"
                     className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                    {...register("title", { required: "Title is required" })}
+                    {...register("title", { required: translations.titleRequired })}
                   />
                   {errors.title && (
                     <p className="text-sm text-red-600">
@@ -179,14 +209,14 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
                     htmlFor="completeDate"
                     className="text-sm font-medium text-gray-900"
                   >
-                    Complete Date
+                    {translations.completeDate}
                   </Label>
                   <div className="relative">
                     <Input
                       id="completeDate"
                       className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 pr-10"
                       {...register("completeDate", {
-                        required: "Complete date is required",
+                        required: translations.completeDateRequired,
                       })}
                     />
                     <Calendar
@@ -207,7 +237,7 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
                     htmlFor="description"
                     className="text-sm font-medium text-gray-900"
                   >
-                    Description
+                    {translations.description}
                   </Label>
                   <Textarea
                     id="description"
@@ -227,14 +257,14 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
               onClick={onCancel}
               className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50 w-full md:w-auto"
             >
-              Cancel
+              {translations.cancel}
             </Button>
             <Button
               type="submit"
               onClick={handleSubmit(onSubmit)}
               className="px-6 button-gradient py-2 bg-blue-600 hover:bg-blue-700 text-white"
             >
-              Save Changes
+              {translations.saveChanges}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -246,10 +276,10 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
               <ImageIcon size={20} />
-              Update Thumbnail
+              {translations.updateThumbnail}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Choose an option to update your project thumbnail.
+              {translations.updateThumbnailDescription}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="grid gap-3 py-4">
@@ -259,7 +289,7 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
               variant="outline"
             >
               <Upload size={18} />
-              Upload New Image
+              {translations.uploadNewImage}
             </Button>
             {thumbnailImage && (
               <Button
@@ -268,12 +298,12 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
                 variant="outline"
               >
                 <X size={18} />
-                Remove Current Image
+                {translations.removeCurrentImage}
               </Button>
             )}
           </div>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{translations.cancel}</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

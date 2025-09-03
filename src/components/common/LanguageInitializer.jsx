@@ -34,27 +34,19 @@ export default function LanguageInitializer({
 
     console.log("LanguageInitializer - Target locale:", targetLocale);
 
-    // Load messages for the target locale
-    const loadMessagesForLocale = async (locale) => {
-      try {
-        const messages = await import(`../../messages/${locale}.json`);
-        return messages.default;
-      } catch (error) {
-        console.error(`Failed to load messages for locale: ${locale}`, error);
-        // Fallback to English
-        const fallbackMessages = await import(`../../messages/en.json`);
-        return fallbackMessages.default;
+    // Use the loadMessages async thunk to properly load messages into Redux
+    dispatch(loadMessages(targetLocale)).then((result) => {
+      console.log("LanguageInitializer - loadMessages result:", result);
+      if (result.payload) {
+        console.log("LanguageInitializer - Messages loaded successfully:", {
+          locale: result.payload.locale,
+          hasClient: !!result.payload.messages.client,
+          hasProfilePrivate: !!result.payload.messages.client?.profilePrivate,
+          profilePrivateKeys: result.payload.messages.client?.profilePrivate
+            ? Object.keys(result.payload.messages.client.profilePrivate)
+            : "N/A",
+        });
       }
-    };
-
-    // Initialize with the target locale and messages
-    loadMessagesForLocale(targetLocale).then((messages) => {
-      dispatch(
-        initializeLanguage({
-          locale: targetLocale,
-          messages: messages,
-        })
-      );
     });
   }, [dispatch, initialLocale, initialMessages]);
 

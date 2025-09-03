@@ -56,10 +56,27 @@ const languageSlice = createSlice({
       })
       .addCase(loadMessages.fulfilled, (state, action) => {
         const { locale, messages } = action.payload;
+        console.log("languageSlice - loadMessages.fulfilled:", {
+          locale,
+          hasMessages: !!messages,
+          hasClient: !!messages.client,
+          hasProfilePrivate: !!messages.client?.profilePrivate,
+          profilePrivateKeys: messages.client?.profilePrivate
+            ? Object.keys(messages.client.profilePrivate)
+            : "N/A",
+        });
+
         state.loading = false;
         state.messages = messages;
         state.allMessages[locale] = messages;
         state.currentLocale = locale;
+
+        console.log("languageSlice - State updated:", {
+          currentMessages: state.messages,
+          hasClient: !!state.messages.client,
+          hasProfilePrivate: !!state.messages.client?.profilePrivate,
+        });
+
         // Update document language attribute
         if (typeof document !== "undefined") {
           document.documentElement.lang = locale;

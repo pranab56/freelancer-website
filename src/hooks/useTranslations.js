@@ -1,45 +1,53 @@
 "use client";
 
-import { useSelector } from "react-redux";
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadMessages } from '@/redux/features/languageSlice';
 
-export const useTranslations = (namespace) => {
-  const { messages, currentLocale } = useSelector((state) => state.language);
+export function useTranslations(namespace = 'client') {
+  const dispatch = useDispatch();
+  const [translations, setTranslations] = useState({});
+  const messages = useSelector((state) => state.language.messages);
+  const currentLocale = useSelector((state) => state.language.currentLocale);
 
-  const t = (key, values = {}) => {
-    const namespaceData = messages[namespace];
-    if (!namespaceData) {
-      console.warn(
-        `Namespace "${namespace}" not found in messages for locale: ${currentLocale}`
-      );
-      return key;
+  useEffect(() => {
+    // If messages are not loaded, load them
+    if (!messages || !messages[namespace]) {
+      dispatch(loadMessages(currentLocale));
     }
+  }, [currentLocale, namespace, dispatch, messages]);
 
-    const keys = key.split(".");
-    let value = namespaceData;
+  useEffect(() => {
+    // When messages change, update translations
+    if (messages && messages[namespace]) {
+      setTranslations(messages[namespace]);
+    }
+  }, [messages, namespace]);
 
-    for (const k of keys) {
-      if (value && typeof value === "object" && k in value) {
-        value = value[k];
-      } else {
-        console.warn(
-          `Translation key "${namespace}.${key}" not found for locale: ${currentLocale}`
-        );
-        return key;
+  // Fallback translations if nothing is loaded
+  const fallbackTranslations = {
+    client: {
+      navbar: {
+        jobBoard: "Job Board",
+        tenders: "Tenders",
+        myProjects: "My Projects",
+        invoices: "Invoices",
+        inbox: "Inbox",
+        mySubscription: "My Subscription",
+        viewProfile: "View Profile",
+        accountSettings: "Account Settings",
+        billingPlans: "Billing & Plans",
+        helpSupport: "Help & Support",
+        signOut: "Sign Out",
+        client: "Client"
       }
     }
-
-    if (typeof value !== "string") {
-      console.warn(
-        `Translation value for "${namespace}.${key}" is not a string for locale: ${currentLocale}`
-      );
-      return key;
-    }
-
-    // Simple interpolation for values like {name}
-    return value.replace(/\{(\w+)\}/g, (match, key) => {
-      return values[key] !== undefined ? values[key] : match;
-    });
   };
 
-  return t;
-};
+  // Return translations with fallback
+  return translations || fallbackTranslations[namespace] || {};
+}
+
+export function useNamespaceTranslations(namespace) {
+  return useTranslations(namespace);
+}

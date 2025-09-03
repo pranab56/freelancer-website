@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import CompanyLifeAddEditDialog from "./CompanyLifeAddEditDialog";
 
-function ProjectListPrivate() {
+function ProjectListPrivate({ translations }) {
   const [isCompanyLifeDialogOpen, setIsCompanyLifeDialogOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -48,18 +48,22 @@ function ProjectListPrivate() {
       <div className="w-full bg-gray-100 mx-auto py-6 my-6 px-4">
         <div className="space-y-4 w-full max-w-7xl mx-auto py-6">
           <h1 className="h2-gradient-text text-2xl font-bold text-justify">
-            Ongoing Tenders
+            {translations.ongoingTenders}
           </h1>
           {projects.map((project) => (
             <div key={project.id} className=" flex justify-between">
               <div className="space-y-1">
                 {" "}
                 <h1 className="text-lg font-bold">
-                  Project {project.id}: {project.name}
+                  {translations.project} {project.id}: {project.name}
                 </h1>
-                <p>Role: {project.role}</p>
+                <p>
+                  {translations.role}: {project.role}
+                </p>
               </div>
-              <Button className="button-gradient">View Tender</Button>
+              <Button className="button-gradient">
+                {translations.viewTender}
+              </Button>
             </div>
           ))}
         </div>
@@ -68,27 +72,28 @@ function ProjectListPrivate() {
       <div className="w-full max-w-7xl mx-auto py-6 my-6 px-4 md:px-6 2xl:px-0">
         <div className="flex justify-between items-center">
           <h1 className="h2-gradient-text text-2xl font-bold text-justify">
-            Company Life
+            {translations.companyLife}
           </h1>
           <div className="flex gap-2">
             <Button
               className="bg-transparent shadow-none h2-gradient-text"
               onClick={handleAddPost}
             >
-              Add New Post <LucideCirclePlus className="text-blue-500" />
+              {translations.addNewPost}{" "}
+              <LucideCirclePlus className="text-blue-500" />
             </Button>
             <Button
               className="bg-transparent shadow-none h2-gradient-text"
               onClick={handleEditPost}
             >
-              Edit Post <FiEdit className="text-blue-500" />
+              {translations.editPost} <FiEdit className="text-blue-500" />
             </Button>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto py-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, index) => (
-            <ServiceCard key={index} />
+            <ServiceCard key={index} translations={translations} />
           ))}
         </div>
       </div>
@@ -105,7 +110,7 @@ function ProjectListPrivate() {
 
 export default ProjectListPrivate;
 
-function ServiceCard() {
+function ServiceCard({ translations }) {
   return (
     <Card className="max-w-sm border-none">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -113,24 +118,26 @@ function ServiceCard() {
       </CardHeader>
 
       <CardContent className="space-y-3">
-        <p className="text-sm text-muted-foreground">20 Jan 2022</p>
+        <p className="text-sm text-muted-foreground">
+          {translations.dateFormat}
+        </p>
 
         <div>
           <h4 className="text-sm font-medium h2-gradient-text">
-            UI/UX Designer
+            {translations.uiuxDesigner}
           </h4>
           <p className="text-lg text-black font-semibold ">
-            UX review presentations
+            {translations.uxReviewPresentations}
           </p>
         </div>
 
         <p className="text-sm text-muted-foreground">
-          I will do ui ux design for saas, web app, dashboard in figma
+          {translations.uiuxDescription}
         </p>
       </CardContent>
 
       <CardFooter className="flex justify-end">
-        <Button className="button-gradient">View Posts →</Button>
+        <Button className="button-gradient">{translations.viewPosts}</Button>
       </CardFooter>
     </Card>
   );

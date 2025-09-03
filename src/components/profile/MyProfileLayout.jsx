@@ -1,29 +1,54 @@
 "use client";
 import Image from "next/image";
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import ProfileHeader from "./ProfileHeader";
-import ProfileSections from "./ProfileSection";
-import SkillsSection from "./SkillSection";
-import ExperienceSection from "./ExperienceSection";
+import dynamic from "next/dynamic";
 
-function MyProfileLayout() {
-  // Get translations from Redux
-  const messages = useSelector((state) => state.language.messages);
-  const translations = useMemo(
-    () =>
-      messages?.profile?.layout || {
-        coverPhotoAlt: "Cover Photo",
-      },
-    [messages]
-  );
+// Dynamic imports with ssr: false
+const ProfileHeader = dynamic(() => import("./ProfileHeader"), {
+  ssr: false,
+  loading: () => (
+    <div className="animate-pulse">
+      <div className="h-32 bg-gray-200 rounded-lg mb-4"></div>
+    </div>
+  ),
+});
 
+const ProfileSections = dynamic(() => import("./ProfileSection"), {
+  ssr: false,
+  loading: () => (
+    <div className="animate-pulse">
+      <div className="h-48 bg-gray-200 rounded-lg mb-4"></div>
+    </div>
+  ),
+});
+
+const SkillsSection = dynamic(() => import("./SkillSection"), {
+  ssr: false,
+  loading: () => (
+    <div className="animate-pulse">
+      <div className="h-32 bg-gray-200 rounded-lg mb-4"></div>
+    </div>
+  ),
+});
+
+const ExperienceSection = dynamic(() => import("./ExperienceSection"), {
+  ssr: false,
+  loading: () => (
+    <div className="animate-pulse">
+      <div className="h-64 bg-gray-200 rounded-lg mb-4"></div>
+    </div>
+  ),
+});
+
+// Main content component
+function MyProfileLayoutContent({ translations, isClient }) {
   return (
     <div className="w-full">
       <div className="relative w-full h-48 sm:h-64 md:h-80 lg:h-96">
         <Image
           src={"/myprofile/cover.png"}
-          alt={translations.coverPhotoAlt}
+          alt={isClient ? translations.coverPhotoAlt : "Cover Photo"}
           fill
           className="object-cover"
           sizes="100vw"
@@ -36,6 +61,57 @@ function MyProfileLayout() {
         <SkillsSection />
       </div>
       <ExperienceSection />
+    </div>
+  );
+}
+
+function MyProfileLayout() {
+  // Client-side only state to prevent hydration mismatch
+  const [isClient, setIsClient] = useState(false);
+
+  // Get translations from Redux (moved outside dynamic component)
+  const messages = useSelector((state) => state.language.messages);
+  const translations = useMemo(
+    () =>
+      messages?.profile?.layout || {
+        coverPhotoAlt: "Cover Photo",
+      },
+    [messages]
+  );
+
+  // Ensure component only renders on client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Show loading state until client-side hydration is complete
+  if (!isClient) {
+    return (
+      <div className="w-full">
+        <div className="relative w-full h-48 sm:h-64 md:h-80 lg:h-96">
+          <div className="animate-pulse bg-gray-200 w-full h-full"></div>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 md:px-6 2xl:px-0">
+          <div className="animate-pulse">
+            <div className="h-32 bg-gray-200 rounded-lg mb-4"></div>
+          </div>
+          <div className="animate-pulse">
+            <div className="h-48 bg-gray-200 rounded-lg mb-4"></div>
+          </div>
+          <div className="animate-pulse">
+            <div className="h-32 bg-gray-200 rounded-lg mb-4"></div>
+          </div>
+        </div>
+        <div className="animate-pulse">
+          <div className="h-64 bg-gray-200 rounded-lg mb-4"></div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="animate-fade-in-up">
+      <MyProfileLayoutContent translations={translations} isClient={isClient} />
     </div>
   );
 }

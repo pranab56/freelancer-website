@@ -35,6 +35,30 @@ function ProfileHeader() {
       messages?.profile?.header || {
         editProfile: "Edit Profile",
         viewProfile: "View Profile",
+        changeProfilePicture: "Change Profile Picture",
+        changeCover: "Change Cover",
+        name: "Name",
+        nameRequired: "Name is required",
+        nameMinLength: "Name must be at least 2 characters",
+        nameMaxLength: "Name must be less than 50 characters",
+        namePlaceholder: "Enter your full name",
+        dailyRate: "Daily Rate",
+        dailyRatePlaceholder: "Enter daily rate",
+        serviceType: "Service Type",
+        serviceTypePlaceholder: "Select service type",
+        categoryType: "Category Type",
+        categoryTypePlaceholder: "Select category",
+        location: "Location",
+        locationPlaceholder: "Select location",
+        language: "Language",
+        languagePlaceholder: "Select language",
+        cancel: "Cancel",
+        saveChanges: "Save Changes",
+        invalidImageType: "Please select a valid image file (JPEG, PNG, WebP)",
+        imageSizeLimit: "Image size should be less than 5MB",
+        available: "Available",
+        verifiedFreelancer: "Verified Freelancer",
+        dayRate: "Day Rate",
       },
     [messages]
   );
@@ -173,7 +197,7 @@ function ProfileHeader() {
                           className="cursor-pointer"
                         >
                           <Upload className="w-4 h-4" />
-                          Change Profile Picture
+                          {translations.changeProfilePicture}
                         </label>
                       </Button>
                     </div>
@@ -230,7 +254,7 @@ function ProfileHeader() {
                           className="cursor-pointer"
                         >
                           <Upload className="w-4 h-4" />
-                          Change Cover
+                          {translations.changeCover}
                         </label>
                       </Button>
                     </div>
@@ -582,6 +606,7 @@ function ProfileHeader() {
         </div>
 
         {/* Status & Info */}
+
         <div className="flex flex-col sm:flex-row lg:flex-col items-center sm:items-center lg:items-end gap-3 w-full lg:w-auto">
           {/* Available Badge */}
           <Badge className="bg-none flex items-center">
