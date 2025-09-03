@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import useToast from "@/hooks/showToast/ShowToast";
 
 function JobTenderSidebar({ jobData }) {
+  const [isClient, setIsClient] = useState(false);
   const pathname = usePathname();
   const isTenderPage = pathname.includes("tenders-details");
   const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
@@ -25,10 +26,42 @@ function JobTenderSidebar({ jobData }) {
   const [respondedToJob, setRespondedToJob] = useState(false);
   const showToast = useToast();
 
+  // Only render on client side to prevent hydration issues
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   // Get translations from Redux
   const messages = useSelector((state) => state.language.messages);
   const jobTenderSidebarTranslations = messages?.jobTenderSidebar || {};
   const commonTranslations = messages?.common || {};
+
+  // Show loading state on server, content on client
+  if (!isClient) {
+    return (
+      <Card className="w-full max-w-[17rem] mx-auto bg-white shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200">
+        <div className="animate-pulse">
+          {/* Header skeleton */}
+          <div className="text-center p-6 pb-4">
+            <div className="w-36 h-36 bg-gray-300 rounded-full mx-auto mb-4"></div>
+            <div className="h-6 bg-gray-300 rounded max-w-32 mx-auto mb-2"></div>
+            <div className="h-4 bg-gray-300 rounded max-w-24 mx-auto mb-4"></div>
+            <div className="h-10 bg-gray-300 rounded max-w-48 mx-auto"></div>
+          </div>
+
+          {/* Content skeleton */}
+          <div className="p-6 pt-4 space-y-4">
+            {[...Array(4)].map((_, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div className="h-4 bg-gray-300 rounded w-20"></div>
+                <div className="h-4 bg-gray-300 rounded w-24"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Card>
+    );
+  }
 
   // Default/mock data if no jobData is provided
   const defaultData = {

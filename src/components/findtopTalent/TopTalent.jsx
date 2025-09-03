@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Banner from "../common/banner/Banner";
 import Heading from "../common/heading/Heading";
@@ -18,42 +18,49 @@ import {
 import { IoSearchOutline } from "react-icons/io5";
 
 function TopTalent() {
+  const [isClient, setIsClient] = useState(false);
   const messages = useSelector((state) => state.language.messages);
   const topTalentTranslations = messages?.topTalent || {};
 
-  // Debug logging to see what's happening
-  console.log("🔍 TopTalent Debug:");
-  console.log("Messages:", messages);
-  console.log("TopTalent translations:", topTalentTranslations);
-  console.log("Banner title:", topTalentTranslations.banner?.title);
+  // Only render on client side to prevent hydration issues
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
-  // Simple loading check - if no messages, show loading
-  if (!messages || Object.keys(messages).length === 0) {
-    console.log("TopTalent: No messages loaded yet, showing loading...");
+  // Show loading state on server, content on client
+  if (!isClient) {
     return (
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+        {/* Banner skeleton */}
+        <div className="animate-pulse">
+          <div className="relative h-64 bg-gray-300 rounded-lg mb-8"></div>
         </div>
-      </div>
-    );
-  }
 
-  // Additional safety check for topTalent translations
-  if (
-    !topTalentTranslations ||
-    Object.keys(topTalentTranslations).length === 0
-  ) {
-    console.log(
-      "TopTalent: No topTalent translations found, showing fallback..."
-    );
-    return (
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Loading Top Talent...</h1>
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto"></div>
+        {/* Heading and search skeleton */}
+        <div className="flex flex-col md:flex-row items-center justify-between px-4 sm:px-6 2xl:px-0">
+          <div className="animate-pulse space-y-4 mb-8">
+            <div className="h-8 bg-gray-300 rounded max-w-48"></div>
+            <div className="h-6 bg-gray-300 rounded max-w-96"></div>
           </div>
+
+          <div className="flex flex-col items-center gap-4 my-5 md:my-8 lg:my-10 px-4 sm:px-6 2xl:px-0">
+            <div className="relative w-full">
+              <div className="h-10 bg-gray-300 rounded"></div>
+            </div>
+            <div className="flex items-center gap-2 md:gap-10">
+              <div className="h-10 bg-gray-300 rounded w-[180px]"></div>
+              <div className="h-10 bg-gray-300 rounded w-[180px]"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Services grid skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center py-4 mx-auto px-4 sm:px-6 2xl:px-0">
+          {[...Array(8)].map((_, index) => (
+            <div key={index} className="animate-pulse">
+              <div className="h-64 bg-gray-300 rounded-lg"></div>
+            </div>
+          ))}
         </div>
       </div>
     );

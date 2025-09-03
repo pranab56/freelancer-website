@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -11,6 +11,7 @@ import { DialogDescription, DialogTitle } from "../ui/dialog";
 import { useRouter } from "next/navigation";
 
 function JobDetailsPage({ jobData }) {
+  const [isClient, setIsClient] = useState(false);
   const pathname = usePathname();
   const isTenderPage = pathname.includes("tenders-details");
   const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
@@ -19,10 +20,42 @@ function JobDetailsPage({ jobData }) {
   const userType = currentUser?.type;
   const router = useRouter();
 
+  // Only render on client side to prevent hydration issues
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   // Get translations from Redux
   const messages = useSelector((state) => state.language.messages);
   const jobDetailsTranslations = messages?.jobDetails || {};
   const commonTranslations = messages?.common || {};
+
+  // Show loading state on server, content on client
+  if (!isClient) {
+    return (
+      <div className="max-w-5xl mx-auto space-y-6 mb-6 2xl:mb-10">
+        {/* Header Section skeleton */}
+        <div className="animate-pulse">
+          <div className="h-48 bg-gray-300 rounded-lg"></div>
+        </div>
+
+        {/* Responsibilities Section skeleton */}
+        <div className="animate-pulse">
+          <div className="h-64 bg-gray-300 rounded-lg"></div>
+        </div>
+
+        {/* Requirements Section skeleton */}
+        <div className="animate-pulse">
+          <div className="h-48 bg-gray-300 rounded-lg"></div>
+        </div>
+
+        {/* Benefits Section skeleton */}
+        <div className="animate-pulse">
+          <div className="h-48 bg-gray-300 rounded-lg"></div>
+        </div>
+      </div>
+    );
+  }
 
   // Default/mock data
   const defaultJobData = {

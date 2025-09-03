@@ -1,104 +1,112 @@
 "use client";
 import React from "react";
-import Banner from "../common/banner/Banner";
-import SideBar from "../common/SideBar";
-import MainContent from "../common/maincontent/MainContent";
+import dynamic from "next/dynamic";
+import Heading from "../common/heading/Heading";
 import { IoSearchOutline } from "react-icons/io5";
 import { Input } from "../ui/input";
-import Heading from "../common/heading/Heading";
+import SideBar from "../common/SideBar";
+import MainContent from "../common/maincontent/MainContent";
+import Banner from "../common/banner/Banner";
 import { useSelector } from "react-redux";
 
-function JobBoardLayout() {
-  const messages = useSelector((state) => state.language.messages);
-  const jobBoardTranslations = messages?.jobBoard || {};
-  const currentUser = useSelector((state) => state.currentUser.currentUser);
-  const userType = currentUser?.type || "client"; // Default to freelancer view if not logged in
+// Dynamic import with no SSR to prevent hydration errors
+const JobBoardLayoutContent = dynamic(
+  () =>
+    Promise.resolve(() => {
+      const [messages, userType] = [
+        useSelector((state) => state.language.messages),
+        useSelector((state) => state.currentUser?.currentUser?.type),
+      ];
 
-  const setTopTalentBannerFreelancer = {
-    src: "/jobtender/job_banner.png",
-    header:
-      jobBoardTranslations.freelancerBanner?.header ||
-      "Explore Top Freelance Opportunities",
-    text:
-      jobBoardTranslations.freelancerBanner?.text ||
-      "Browse through the latest freelance projects and find your next big opportunity. Whether you're looking to work remotely or collaborate on-site, discover jobs that match your skills and expertise.",
-    buttonName: jobBoardTranslations.freelancerBanner?.buttonName || "",
-  };
+      const jobBoardTranslations = messages?.jobBoard || {};
+      const commonTranslations = messages?.common || {};
 
-  const setTopTalentBannerClient = {
-    src: "/jobtender/job_banner.png",
-    header:
-      jobBoardTranslations.clientBanner?.header ||
-      "Post Your Job & Find Top Talent",
-    text:
-      jobBoardTranslations.clientBanner?.text ||
-      "Looking to hire skilled freelancers for your next project? Our job board connects you with top-tier professionals across various industries to help bring your vision to life.",
-    buttonName: jobBoardTranslations.clientBanner?.buttonName || "Post a Job",
-    buttonLink: "/create-job-client",
-  };
+      const setJobBannerFreelancer = {
+        src: "/jobtender/job_banner.png",
+        header:
+          jobBoardTranslations.freelancerBannerHeader ||
+          "Find Your Next Opportunity!",
+        text:
+          jobBoardTranslations.freelancerBannerText ||
+          "Discover exciting job opportunities that match your skills and career goals. Our platform connects talented professionals with innovative companies.",
+        buttonName: "",
+      };
 
-  return (
-    <div className="max-w-7xl py-6 mx-auto">
-      <Banner
-        src={
-          userType === "client"
-            ? setTopTalentBannerClient.src
-            : setTopTalentBannerFreelancer.src
-        }
-        header={
-          userType === "client"
-            ? setTopTalentBannerClient.header
-            : setTopTalentBannerFreelancer.header
-        }
-        text={
-          userType === "client"
-            ? setTopTalentBannerClient.text
-            : setTopTalentBannerFreelancer.text
-        }
-        buttonName={
-          userType === "client"
-            ? setTopTalentBannerClient.buttonName
-            : setTopTalentBannerFreelancer.buttonName
-        }
-        buttonLink={
-          userType === "client"
-            ? setTopTalentBannerClient.buttonLink
-            : setTopTalentBannerFreelancer.buttonLink
-        }
-      />
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 px-4 md:px-6 lg:px-10 2xl:px-0 w-full">
-        {/* Heading */}
-        <Heading
-          heading={jobBoardTranslations.recentPostsHeading || "Recent Posts"}
-          subheading={
-            jobBoardTranslations.recentPostsSubheading ||
-            "Choose the best talent for your organization's success."
-          }
-        />
+      const setJobBannerClient = {
+        src: "/jobtender/job_banner.png",
+        header:
+          jobBoardTranslations.clientBannerHeader || "Post Jobs & Find Talent",
+        text:
+          jobBoardTranslations.clientBannerText ||
+          "Welcome to our Job Board, where businesses can post job opportunities and connect with qualified candidates. Whether you're hiring for a full-time position or seeking freelance talent, we provide the tools and platform to make your recruitment process efficient and successful.",
+        buttonName: jobBoardTranslations.clientBannerButtonName || "Post a Job",
+        buttonLink: "/create-job-client",
+      };
 
-        {/* Search Box */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 w-full md:w-auto">
-          <div className="relative w-full sm:w-64 md:w-72">
-            <IoSearchOutline className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
-            <Input
-              type="text"
-              placeholder={
-                jobBoardTranslations.searchPlaceholder || "Search..."
+      return (
+        <div className="max-w-7xl py-6 mx-auto">
+          <div className="animate-fade-in-up">
+            <Banner
+              src={
+                userType === "client"
+                  ? setJobBannerClient.src
+                  : setJobBannerFreelancer.src
               }
-              className="pl-9 pr-3 w-full"
+              header={
+                userType === "client"
+                  ? setJobBannerClient.header
+                  : setJobBannerFreelancer.header
+              }
+              text={
+                userType === "client"
+                  ? setJobBannerClient.text
+                  : setJobBannerFreelancer.text
+              }
+              buttonName={
+                userType === "client"
+                  ? setJobBannerClient.buttonName
+                  : setJobBannerFreelancer.buttonName
+              }
+              buttonLink={
+                userType === "client"
+                  ? setJobBannerClient.buttonLink
+                  : setJobBannerFreelancer.buttonLink
+              }
             />
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 px-4 md:px-6 lg:px-10 2xl:px-0 w-full">
+              <Heading
+                heading={
+                  jobBoardTranslations.availableJobsHeading || "Available Jobs"
+                }
+                subheading={
+                  jobBoardTranslations.availableJobsSubheading ||
+                  "Browse through our latest job postings and find your next career move."
+                }
+              />
+              <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 w-full md:w-auto">
+                <div className="relative w-full sm:w-64 md:w-72">
+                  <IoSearchOutline className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
+                  <Input
+                    type="text"
+                    placeholder={commonTranslations.search || "Search..."}
+                    className="pl-9 pr-3 w-full"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex mt-10 px-4 sm:px-6 lg:px-10 2xl:px-0">
+              <SideBar />
+              <MainContent type="job" />
+            </div>
           </div>
         </div>
-      </div>
+      );
+    }),
+  { ssr: false }
+);
 
-      <div className="flex mt-10 px-4 sm:px-6 lg:px-10 2xl:px-0">
-        <SideBar />
-        <div className="flex-1">
-          <MainContent type="job" />
-        </div>
-      </div>
-    </div>
-  );
+function JobBoardLayout() {
+  return <JobBoardLayoutContent />;
 }
 
 export default JobBoardLayout;
