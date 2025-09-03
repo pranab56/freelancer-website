@@ -1,12 +1,93 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 function AboutUs() {
+  const [isClient, setIsClient] = useState(false);
   const messages = useSelector((state) => state.language.messages);
   const aboutUsTranslations = messages?.aboutUs || {};
+
+  // Only render on client side to prevent hydration issues
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Show loading state on server, content on client
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-white">
+        {/* Loading skeleton */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 2xl:px-0 py-4 md:py-12 lg:py-16">
+          <div className="animate-pulse">
+            {/* About Us Section Skeleton */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start w-full">
+              <div className="space-y-6">
+                <div className="h-12 bg-gray-300 rounded max-w-md"></div>
+                <div className="h-24 bg-gray-300 rounded"></div>
+                <div className="h-12 bg-gray-300 rounded w-48"></div>
+              </div>
+              <div className="h-96 bg-gray-300 rounded-lg"></div>
+            </div>
+
+            {/* Stats Section Skeleton */}
+            <div className="bg-white py-8 sm:py-12 lg:py-10 mt-12">
+              <div className="flex flex-col lg:flex-row justify-between gap-6">
+                <div className="w-full lg:w-1/2 space-y-4">
+                  <div className="h-32 bg-gray-300 rounded"></div>
+                  <div className="h-32 bg-gray-300 rounded"></div>
+                </div>
+                <div className="w-full lg:w-1/2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    {[...Array(4)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-32 bg-gray-300 rounded-xl"
+                      ></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Our Dream Section Skeleton */}
+            <div className="bg-gray-50 py-4 md:py-12 lg:py-20 mt-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6">
+                  <div className="h-12 bg-gray-300 rounded max-w-md"></div>
+                  <div className="h-32 bg-gray-300 rounded"></div>
+                </div>
+                <div className="h-80 bg-gray-300 rounded-lg"></div>
+              </div>
+            </div>
+
+            {/* Our Mission Section Skeleton */}
+            <div className="py-16 lg:py-20 mt-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="h-80 bg-gray-300 rounded-lg"></div>
+                <div className="space-y-6">
+                  <div className="h-12 bg-gray-300 rounded max-w-md"></div>
+                  <div className="h-32 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Our Vision Section Skeleton */}
+            <div className="bg-gray-50 py-16 lg:py-20 mt-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6">
+                  <div className="h-12 bg-gray-300 rounded max-w-md"></div>
+                  <div className="h-32 bg-gray-300 rounded"></div>
+                </div>
+                <div className="h-80 bg-gray-300 rounded-lg"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">

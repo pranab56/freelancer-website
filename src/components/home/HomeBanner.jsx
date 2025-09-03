@@ -1,15 +1,61 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
 
 function HomeBanner() {
+  const [isClient, setIsClient] = useState(false);
   const locale = useSelector((state) => state.language.currentLocale);
   const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
   const messages = useSelector((state) => state.language.messages);
 
-  // Hardcoded banner text to prevent hydration issues
-  const bannerTranslations = {
+  // Only render on client side to prevent hydration issues
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Show loading state on server, content on client
+  if (!isClient) {
+    return (
+      <section className="relative h-screen w-full">
+        {/* Background Video skeleton */}
+        <div className="absolute inset-0 w-full h-full bg-gray-900" />
+
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+
+        {/* Content skeleton */}
+        <div className="relative z-10 flex items-center justify-center h-full px-6">
+          <div className="text-center lg:min-w-7xl mx-auto">
+            <div className="animate-pulse">
+              {/* Main Heading skeleton */}
+              <div className="space-y-4 mb-6">
+                <div className="h-16 bg-gray-700 rounded max-w-4xl mx-auto"></div>
+                <div className="h-16 bg-gray-700 rounded max-w-3xl mx-auto"></div>
+                <div className="h-16 bg-gray-700 rounded max-w-2xl mx-auto"></div>
+              </div>
+
+              {/* Subheading skeleton */}
+              <div className="h-8 bg-gray-700 rounded max-w-3xl mx-auto mb-12"></div>
+
+              {/* Buttons skeleton */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <div className="h-12 bg-gray-700 rounded min-w-[250px] w-full md:w-auto"></div>
+                <div className="h-12 bg-gray-700 rounded min-w-[250px] w-full md:w-auto"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator skeleton */}
+        <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2">
+          <div className="w-6 h-6 bg-gray-700 rounded-full animate-pulse"></div>
+        </div>
+      </section>
+    );
+  }
+
+  const bannerTranslations = messages?.home?.banner || {
     title: "The Future of Freelance.",
     subtitle1: "Direct Contracts.",
     subtitle2: "Zero Commissions.",
@@ -40,7 +86,7 @@ function HomeBanner() {
 
       {/* Content */}
       <div className="relative z-10 flex items-center justify-center h-full px-6">
-        <div className="text-center lg:min-w-7xl mx-auto">
+        <div className="text-center  lg:min-w-7xl  mx-auto">
           {/* Main Heading */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
             {bannerTranslations.title}{" "}
@@ -79,6 +125,23 @@ function HomeBanner() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"
+          />
+        </svg>
       </div>
     </section>
   );

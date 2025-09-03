@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,8 +9,53 @@ import { MapPin, Mail } from "lucide-react";
 import { Label } from "../ui/label";
 
 function ContactForm() {
+  const [isClient, setIsClient] = useState(false);
   const messages = useSelector((state) => state.language.messages);
   const contactFormTranslations = messages?.contactUs?.form || {};
+
+  // Only render on client side to prevent hydration issues
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Show loading state on server, content on client
+  if (!isClient) {
+    return (
+      <div className="max-w-7xl mx-auto my-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Form Section Skeleton */}
+          <div className="lg:col-span-2">
+            <div className="space-y-6">
+              {/* Name Fields Row Skeleton */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="h-16 bg-gray-300 rounded-xl"></div>
+                <div className="h-16 bg-gray-300 rounded-xl"></div>
+              </div>
+
+              {/* Email and Phone Row Skeleton */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="h-16 bg-gray-300 rounded-xl"></div>
+                <div className="h-16 bg-gray-300 rounded-xl"></div>
+              </div>
+
+              {/* Message Field Skeleton */}
+              <div className="h-40 bg-gray-300 rounded-xl"></div>
+
+              {/* Submit Button Skeleton */}
+              <div className="flex justify-center">
+                <div className="h-12 bg-gray-300 rounded-xl w-48"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Details Card Skeleton */}
+          <div className="lg:col-span-1">
+            <div className="h-80 bg-gray-300 rounded-2xl"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto my-10">

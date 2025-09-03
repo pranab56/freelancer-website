@@ -5,6 +5,7 @@ import "./globals.css";
 import { Provider } from "@/redux/Provider";
 import React, { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
+import LanguageInitializer from "@/components/common/LanguageInitializer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -62,10 +63,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <Provider>
-          <GlobalErrorBoundary>
-            {children}
-            <Toaster />
-          </GlobalErrorBoundary>
+          <LanguageInitializer initialLocale="en" />
+          <GlobalErrorBoundary>{children}</GlobalErrorBoundary>
+          <Toaster />
         </Provider>
       </body>
     </html>

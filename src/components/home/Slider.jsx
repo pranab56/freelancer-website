@@ -11,51 +11,46 @@ function TalentCategories() {
   const swiperRef = useRef(null);
   const locale = useSelector((state) => state.language.currentLocale);
   const messages = useSelector((state) => state.language.messages);
-  const sliderTranslations = messages?.home?.slider || {};
 
-  // Add loading check to prevent rendering before translations are ready
-  if (!messages || Object.keys(messages).length === 0) {
-    return (
-      <div className="w-full px-6 mx-auto my-12 flex flex-col justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto"></div>
-      </div>
-    );
-  }
+  // Get slider translations from Redux state with fallbacks
+  const sliderTranslations = messages?.home?.slider || {};
 
   const categories = [
     {
       id: 1,
-      name: sliderTranslations.categories?.graphicsDesign || "Graphics Design",
+      name:
+        sliderTranslations.categories?.graphicsDesign || "Graphisme & Design",
       icon: Lightbulb,
     },
     {
       id: 2,
       name:
-        sliderTranslations.categories?.digitalMarketing || "Digital Marketing",
+        sliderTranslations.categories?.digitalMarketing || "Marketing Digital",
       icon: Lightbulb,
     },
     {
       id: 3,
       name:
         sliderTranslations.categories?.writingTranslation ||
-        "Writing & Translation",
+        "Rédaction & Traduction",
       icon: Lightbulb,
     },
     {
       id: 4,
       name:
-        sliderTranslations.categories?.videoAnimation || "Video & Animation",
+        sliderTranslations.categories?.videoAnimation || "Vidéo & Animation",
       icon: Lightbulb,
     },
     {
       id: 5,
-      name: sliderTranslations.categories?.musicAudio || "Music & Audio",
+      name: sliderTranslations.categories?.musicAudio || "Musique & Audio",
       icon: Lightbulb,
     },
     {
       id: 6,
       name:
-        sliderTranslations.categories?.programmingTech || "Programming & Tech",
+        sliderTranslations.categories?.programmingTech ||
+        "Programmation & Tech",
       icon: Lightbulb,
     },
     {
@@ -65,7 +60,7 @@ function TalentCategories() {
     },
     {
       id: 8,
-      name: sliderTranslations.categories?.aiServices || "AI Services",
+      name: sliderTranslations.categories?.aiServices || "Services IA",
       icon: Lightbulb,
     },
   ];
@@ -131,7 +126,8 @@ function TalentCategories() {
         {/* Header */}
         <div className="flex justify-between items-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold h2-gradient-text leading-tight">
-            {sliderTranslations.title}
+            {sliderTranslations.title ||
+              "Parcourez nos meilleurs talents par catégorie"}
           </h2>
           <Button
             variant="ghost"
@@ -139,7 +135,8 @@ function TalentCategories() {
             asChild
           >
             <Link href={`/categories`} className="flex items-center">
-              {sliderTranslations.viewAllCategory}
+              {sliderTranslations.viewAllCategory ||
+                "Voir Toutes les Catégories"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

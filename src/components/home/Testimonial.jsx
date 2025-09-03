@@ -11,109 +11,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useSelector } from "react-redux";
 
 function Testimonial() {
+  // All hooks must be called at the top level, before any conditional returns
+  const [isClient, setIsClient] = useState(false);
   const messages = useSelector((state) => state.language.messages);
-  const testimonialTranslations = useMemo(
-    () => messages?.home?.testimonial || {},
-    [messages]
-  );
   const swiperRef = useRef(null);
   const [expandedComments, setExpandedComments] = useState({});
   const [truncateLength, setTruncateLength] = useState(120); // default for desktop
-
-  // Add loading check to prevent rendering before translations are ready
-  if (!messages || Object.keys(messages).length === 0) {
-    return (
-      <section className="py-16 lg:py-20 bg-white">
-        <div className="max-w-[100rem] mx-auto">
-          <div className="flex justify-center items-center min-h-[400px]">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  const testimonials = useMemo(
-    () => [
-      {
-        id: 1,
-        title:
-          testimonialTranslations.testimonials?.smoothProcess?.title ||
-          "Smooth Process",
-        comment:
-          testimonialTranslations.testimonials?.smoothProcess?.comment ||
-          "The car-buying process was incredibly smooth and hassle-free! I found my dream car within minutes, and the team guided me through every step. Highly recommended for anyone looking to buy or sell a car!",
-        avatar: "/home/john_doe.png",
-        name:
-          testimonialTranslations.testimonials?.smoothProcess?.name ||
-          "John Doe",
-        intention:
-          testimonialTranslations.testimonials?.smoothProcess?.intention ||
-          "Happy Customer",
-      },
-      {
-        id: 2,
-        title:
-          testimonialTranslations.testimonials?.amazingSupport?.title ||
-          "Amazing Support",
-        comment:
-          testimonialTranslations.testimonials?.amazingSupport?.comment ||
-          "Excellent customer service! The platform made it easy to compare options and find the best deals. The support team answered all my questions and ensured a seamless experience.",
-        avatar: "/home/sara.png",
-        name:
-          testimonialTranslations.testimonials?.amazingSupport?.name ||
-          "Sarah Johnson",
-        intention:
-          testimonialTranslations.testimonials?.amazingSupport?.intention ||
-          "First-Time Buyer",
-      },
-      {
-        id: 3,
-        title:
-          testimonialTranslations.testimonials?.trustedPlatform?.title ||
-          "Trusted Platform",
-        comment:
-          testimonialTranslations.testimonials?.trustedPlatform?.comment ||
-          "This platform is a game-changer for car enthusiasts. The transparency and reliability gave me confidence while purchasing. I sold my old car here too, and the process was quick and efficient!",
-        avatar: "/home/mike.png",
-        name:
-          testimonialTranslations.testimonials?.trustedPlatform?.name ||
-          "Mike Brown",
-        intention:
-          testimonialTranslations.testimonials?.trustedPlatform?.intention ||
-          "Car Enthusiast",
-      },
-      {
-        id: 4,
-        title:
-          testimonialTranslations.testimonials?.trustedPlatform?.title ||
-          "Trusted Platform",
-        comment:
-          testimonialTranslations.testimonials?.trustedPlatform?.comment ||
-          "This platform is a game-changer for car enthusiasts. The transparency and reliability gave me confidence while purchasing. I sold my old car here too, and the process was quick and efficient!",
-        avatar: "/home/mike.png",
-        name:
-          testimonialTranslations.testimonials?.trustedPlatform?.name ||
-          "Mike Brown",
-        intention:
-          testimonialTranslations.testimonials?.trustedPlatform?.intention ||
-          "Car Enthusiast",
-      },
-    ],
-    [testimonialTranslations]
-  );
-
-  const toggleComment = (id) => {
-    setExpandedComments((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
-
-  const truncateText = (text, maxLength) => {
-    if (text.length <= maxLength) return text;
-    return text.slice(0, maxLength).trim();
-  };
 
   // Memoized resize handler with dependencies
   const handleResize = useCallback(() => {
@@ -127,15 +30,24 @@ function Testimonial() {
     }
   }, []); // No dependencies as it only uses window.innerWidth
 
+  // Effect for client-side rendering
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   // Effect for resize listener
   useEffect(() => {
+    if (!isClient) return; // Only add listener after client-side render
+
     handleResize(); // Initial call
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []); // Remove handleResize from dependency array
+  }, [isClient, handleResize]);
 
   // Effect for loading Swiper
   useEffect(() => {
+    if (!isClient) return; // Only load Swiper after client-side render
+
     let swiperInstance = null;
 
     const loadSwiper = async () => {
@@ -193,7 +105,138 @@ function Testimonial() {
         swiperInstance.destroy();
       }
     };
-  }, []); // Empty dependency array is okay here as Swiper is loaded dynamically
+  }, [isClient]); // Add isClient as dependency
+
+  const testimonialTranslations = useMemo(
+    () =>
+      messages?.home?.testimonial || {
+        title: "What Our Clients Say",
+        seeMore: "See More",
+        seeLess: "See Less",
+        testimonials: {
+          smoothProcess: {
+            title: "Smooth Process",
+            comment:
+              "The car-buying process was incredibly smooth and hassle-free! I found my dream car within minutes, and the team guided me through every step. Highly recommended for anyone looking to buy or sell a car!",
+            name: "John Doe",
+            intention: "Happy Customer",
+          },
+          amazingSupport: {
+            title: "Amazing Support",
+            comment:
+              "Excellent customer service! The platform made it easy to compare options and find the best deals. The support team answered all my questions and ensured a seamless experience.",
+            name: "Sarah Johnson",
+            intention: "First-Time Buyer",
+          },
+          trustedPlatform: {
+            title: "Trusted Platform",
+            comment:
+              "This platform is a game-changer for car enthusiasts. The transparency and reliability gave me confidence while purchasing. I sold my old car here too, and the process was quick and efficient!",
+            name: "Mike Brown",
+            intention: "Car Enthusiast",
+          },
+        },
+      },
+    [messages]
+  );
+
+  const testimonials = useMemo(
+    () => [
+      {
+        id: 1,
+        title: testimonialTranslations.testimonials.smoothProcess.title,
+        comment: testimonialTranslations.testimonials.smoothProcess.comment,
+        avatar: "/home/john_doe.png",
+        name: testimonialTranslations.testimonials.smoothProcess.name,
+        intention: testimonialTranslations.testimonials.smoothProcess.intention,
+      },
+      {
+        id: 2,
+        title: testimonialTranslations.testimonials.amazingSupport.title,
+        comment: testimonialTranslations.testimonials.amazingSupport.comment,
+        avatar: "/home/sara.png",
+        name: testimonialTranslations.testimonials.amazingSupport.name,
+        intention:
+          testimonialTranslations.testimonials.amazingSupport.intention,
+      },
+      {
+        id: 3,
+        title: testimonialTranslations.testimonials.trustedPlatform.title,
+        comment: testimonialTranslations.testimonials.trustedPlatform.comment,
+        avatar: "/home/mike.png",
+        name: testimonialTranslations.testimonials.trustedPlatform.name,
+        intention:
+          testimonialTranslations.testimonials.trustedPlatform.intention,
+      },
+      {
+        id: 4,
+        title: testimonialTranslations.testimonials.trustedPlatform.title,
+        comment: testimonialTranslations.testimonials.trustedPlatform.comment,
+        avatar: "/home/mike.png",
+        name: testimonialTranslations.testimonials.trustedPlatform.name,
+        intention:
+          testimonialTranslations.testimonials.trustedPlatform.intention,
+      },
+    ],
+    [testimonialTranslations]
+  );
+
+  const toggleComment = useCallback((id) => {
+    setExpandedComments((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  }, []);
+
+  const truncateText = useCallback((text, maxLength) => {
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength).trim();
+  }, []);
+
+  // Show loading state on server, content on client
+  if (!isClient) {
+    return (
+      <section className="py-16 px-4 sm:px-6 bg-gray-50">
+        <div className="max-w-[100rem] mx-auto">
+          {/* Header skeleton */}
+          <div className="flex justify-between items-center mb-10">
+            <div className="animate-pulse">
+              <div className="h-12 bg-gray-300 rounded max-w-64"></div>
+            </div>
+          </div>
+
+          {/* Swiper skeleton */}
+          <div className="relative">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, index) => (
+                <div key={index} className="animate-pulse">
+                  <div className="w-full max-w-[22rem] md:max-w-[23.5rem] min-h-[300px] md:min-h-[450px] xl:min-h-[400px] bg-white border border-gray-200 rounded-lg mx-auto">
+                    <div className="p-6 sm:p-8 space-y-4">
+                      <div className="h-6 bg-gray-300 rounded max-w-32"></div>
+                      <div className="space-y-2">
+                        <div className="h-4 bg-gray-300 rounded"></div>
+                        <div className="h-4 bg-gray-300 rounded max-w-48"></div>
+                        <div className="h-4 bg-gray-300 rounded max-w-40"></div>
+                      </div>
+                    </div>
+                    <div className="p-6 sm:p-8 pt-0">
+                      <div className="flex items-center gap-x-4">
+                        <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+                        <div className="space-y-2">
+                          <div className="h-4 bg-gray-300 rounded max-w-24"></div>
+                          <div className="h-3 bg-gray-300 rounded max-w-20"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 px-4 sm:px-6 bg-gray-50">
