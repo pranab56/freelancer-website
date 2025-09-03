@@ -5,6 +5,7 @@ function page() {
 	return (
 		<>
 			<AboutUs />
+      {/* Hello world */}
 		</>
 	);
 }
