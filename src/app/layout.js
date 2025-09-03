@@ -63,7 +63,8 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <Provider>
           <GlobalErrorBoundary>
-            <Toaster> {children}</Toaster>
+            {children}
+            <Toaster />
           </GlobalErrorBoundary>
         </Provider>
       </body>
