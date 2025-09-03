@@ -8,16 +8,21 @@ function HomeBanner() {
   const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
   const messages = useSelector((state) => state.language.messages);
 
-  // Get banner translations directly from Redux state
-  const bannerTranslations = messages?.home?.banner || {};
-
-  // Debug logging
-  console.log("HomeBanner - Locale:", locale);
-  console.log("HomeBanner - Messages:", messages);
-  console.log("HomeBanner - Banner translations:", bannerTranslations);
+  // Hardcoded banner text to prevent hydration issues
+  const bannerTranslations = {
+    title: "The Future of Freelance.",
+    subtitle1: "Direct Contracts.",
+    subtitle2: "Zero Commissions.",
+    description:
+      "Clients connect with top-vetted freelancers. Freelancers keep 100% of what they earn — no commissions, no middlemen. Just pure, direct collaboration and complete transparency.",
+    findTalent: "Find Freelance Talent",
+    forClients: "For Clients",
+    applyToJoin: "Apply to Join",
+    forFreelancers: "For Freelancers",
+  };
 
   return (
-    <section className="relative h-screen w-full overflow-hidden">
+    <section className="relative h-screen w-full">
       {/* Background Video */}
       <video
         autoPlay
@@ -27,7 +32,6 @@ function HomeBanner() {
         className="absolute inset-0 w-full h-full object-cover"
       >
         <source src="/home/hero.mp4" type="video/mp4" />
-        {/* Fallback for browsers that don't support video */}
         Your browser does not support the video tag.
       </video>
 
@@ -36,7 +40,7 @@ function HomeBanner() {
 
       {/* Content */}
       <div className="relative z-10 flex items-center justify-center h-full px-6">
-        <div className="text-center  lg:min-w-7xl  mx-auto">
+        <div className="text-center lg:min-w-7xl mx-auto">
           {/* Main Heading */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
             {bannerTranslations.title}{" "}
@@ -75,23 +79,6 @@ function HomeBanner() {
             </div>
           )}
         </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-          />
-        </svg>
       </div>
     </section>
   );
