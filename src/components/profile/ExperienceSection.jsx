@@ -1,14 +1,19 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Edit3, Plus } from "lucide-react";
+import { Edit3, Plus, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { useGetMyprofileQuery, useUpdateProfileInfoMutation } from '../../features/clientProfile/ClientProfile';
+import toast from "react-hot-toast";
+import {
+  useGetMyprofileQuery,
+  useUpdateProfileInfoMutation,
+} from "../../features/clientProfile/ClientProfile";
 import ExperienceDialogAddEdit from "./ExperienceDialogAddEdit";
 
 function ExperienceSection() {
   const isFreelancerAndLoggedIn = true;
   const { data, isLoading } = useGetMyprofileQuery();
-  const [updateExperience, { isLoading: updatingLoading }] = useUpdateProfileInfoMutation();
+  const [updateExperience, { isLoading: updatingLoading }] =
+    useUpdateProfileInfoMutation();
 
   const translations = useMemo(
     () => ({
@@ -27,10 +32,10 @@ function ExperienceSection() {
 
   // Format date for display
   const formatDate = (dateString) => {
-    if (!dateString) return 'Present';
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short'
+    if (!dateString) return "Present";
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
     });
   };
 
@@ -45,7 +50,7 @@ function ExperienceSection() {
     if (startYear === endYear) {
       return `${startYear}`;
     }
-    return `${startYear} - ${endDate ? endYear : 'Present'}`;
+    return `${startYear} - ${endDate ? endYear : "Present"}`;
   };
 
   // Calculate total experience
@@ -54,11 +59,12 @@ function ExperienceSection() {
 
     let totalMonths = 0;
 
-    experiences.forEach(exp => {
+    experiences.forEach((exp) => {
       const start = new Date(exp.startDate);
       const end = exp.endDate ? new Date(exp.endDate) : new Date();
 
-      const months = (end.getFullYear() - start.getFullYear()) * 12 +
+      const months =
+        (end.getFullYear() - start.getFullYear()) * 12 +
         (end.getMonth() - start.getMonth());
       totalMonths += Math.max(0, months);
     });
@@ -84,6 +90,22 @@ function ExperienceSection() {
   const handleDialogClose = () => {
     setEditingExperience(null);
     setIsExperienceDialogOpen(false);
+  };
+
+  const handleDeleteExperience = async (experienceId) => {
+    if (window.confirm("Are you sure you want to delete this experience?")) {
+      try {
+        await updateExperience({
+          type: "experience",
+          operation: "delete",
+          _id: experienceId,
+        }).unwrap();
+        toast.success("Experience deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting experience:", error);
+        toast.error("Failed to delete experience. Please try again.");
+      }
+    }
   };
 
   if (isLoading) {
@@ -161,7 +183,9 @@ function ExperienceSection() {
         <CardContent className="px-0">
           {apiExperiences.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-gray-500 text-lg mb-4">No experience records found</p>
+              <p className="text-gray-500 text-lg mb-4">
+                No experience records found
+              </p>
               {isFreelancerAndLoggedIn && (
                 <button
                   className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium mx-auto"
@@ -176,7 +200,10 @@ function ExperienceSection() {
           ) : (
             <div className="space-y-6">
               {apiExperiences.map((exp, index) => (
-                <div key={exp._id || index} className="flex gap-4 group relative">
+                <div
+                  key={exp._id || index}
+                  className="flex gap-4 group relative"
+                >
                   <div className="flex flex-col items-center">
                     <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
                     {index < apiExperiences.length - 1 && (
@@ -193,13 +220,22 @@ function ExperienceSection() {
                           {formatDuration(exp.startDate, exp.endDate)}
                         </span>
                         {isFreelancerAndLoggedIn && (
-                          <button
-                            className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-blue-50 rounded"
-                            onClick={() => handleEditExperience(exp)}
-                            aria-label="Edit experience"
-                          >
-                            <Edit3 className="w-3 h-3 text-blue-600" />
-                          </button>
+                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                              className="p-1 hover:bg-blue-50 rounded"
+                              onClick={() => handleEditExperience(exp)}
+                              aria-label="Edit experience"
+                            >
+                              <Edit3 className="w-3 h-3 text-blue-600" />
+                            </button>
+                            <button
+                              className="p-1 hover:bg-red-50 rounded"
+                              onClick={() => handleDeleteExperience(exp._id)}
+                              aria-label="Delete experience"
+                            >
+                              <Trash2 className="w-3 h-3 text-red-600" />
+                            </button>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -208,11 +244,13 @@ function ExperienceSection() {
                         {exp.companyName || "Company"}
                       </p>
                       <p className="text-sm text-gray-700">
-                        <span className="font-medium">Period:</span> {formatDate(exp.startDate)} - {formatDate(exp.endDate)}
+                        <span className="font-medium">Period:</span>{" "}
+                        {formatDate(exp.startDate)} - {formatDate(exp.endDate)}
                       </p>
                       {exp.description && (
                         <p className="text-sm text-gray-700 mt-2">
-                          <span className="font-medium">Description:</span> {exp.description}
+                          <span className="font-medium">Description:</span>{" "}
+                          {exp.description}
                         </p>
                       )}
                     </div>
