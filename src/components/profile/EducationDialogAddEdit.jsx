@@ -19,10 +19,15 @@ import {
 import { Calendar } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import toast from 'react-hot-toast';
-import { useUpdateProfileInfoMutation } from '../../features/clientProfile/ClientProfile';
+import toast from "react-hot-toast";
+import { useUpdateProfileInfoMutation } from "../../features/clientProfile/ClientProfile";
 
-export default function EducationDialogAddEdit({ isOpen, onClose, education, isEditing }) {
+export default function EducationDialogAddEdit({
+  isOpen,
+  onClose,
+  education,
+  isEditing,
+}) {
   const translations = {
     addTitle: "Add Education & Certifications",
     editTitle: "Edit Education & Certifications",
@@ -77,7 +82,10 @@ export default function EducationDialogAddEdit({ isOpen, onClose, education, isE
     if (isEditing && education) {
       setValue("degree", education.degree);
       setValue("school", education.institution);
-      setValue("startYear", new Date(education.startDate).getFullYear().toString());
+      setValue(
+        "startYear",
+        new Date(education.startDate).getFullYear().toString()
+      );
       setValue("endYear", new Date(education.endDate).getFullYear().toString());
     } else {
       // Reset form when adding new
@@ -92,14 +100,15 @@ export default function EducationDialogAddEdit({ isOpen, onClose, education, isE
     const educationData = {
       type: "education",
       degree: data.degree,
+      operation: isEditing ? "update" : "add",
       institution: data.school,
       startDate: formatDateFromYear(data.startYear),
-      endDate: formatDateFromYear(data.endYear)
+      endDate: formatDateFromYear(data.endYear),
     };
 
     // If editing, include the education ID
     if (isEditing && education) {
-      educationData.id = education._id;
+      educationData._id = education._id;
     }
 
     try {
@@ -107,7 +116,11 @@ export default function EducationDialogAddEdit({ isOpen, onClose, education, isE
       console.log("API Response:", response);
 
       // Show appropriate success message
-      toast.success(isEditing ? translations.editSuccessMessage : translations.addSuccessMessage);
+      toast.success(
+        isEditing
+          ? translations.editSuccessMessage
+          : translations.addSuccessMessage
+      );
       reset();
       onClose?.();
     } catch (error) {
@@ -159,6 +172,7 @@ export default function EducationDialogAddEdit({ isOpen, onClose, education, isE
                 onValueChange={(value) => setValue("degree", value)}
                 defaultValue={education?.degree || ""}
                 required
+                disabled={isEditing}
               >
                 <SelectTrigger className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500">
                   <SelectValue placeholder={translations.degreePlaceholder} />
@@ -205,7 +219,11 @@ export default function EducationDialogAddEdit({ isOpen, onClose, education, isE
               <div className="relative">
                 <Select
                   onValueChange={(value) => setValue("startYear", value)}
-                  defaultValue={education ? new Date(education.startDate).getFullYear().toString() : ""}
+                  defaultValue={
+                    education
+                      ? new Date(education.startDate).getFullYear().toString()
+                      : ""
+                  }
                   required
                 >
                   <SelectTrigger className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500">
@@ -225,7 +243,9 @@ export default function EducationDialogAddEdit({ isOpen, onClose, education, isE
                 />
               </div>
               {errors.startYear && (
-                <p className="text-sm text-red-600">{errors.startYear.message}</p>
+                <p className="text-sm text-red-600">
+                  {errors.startYear.message}
+                </p>
               )}
             </div>
 
@@ -237,7 +257,11 @@ export default function EducationDialogAddEdit({ isOpen, onClose, education, isE
               <div className="relative">
                 <Select
                   onValueChange={(value) => setValue("endYear", value)}
-                  defaultValue={education ? new Date(education.endDate).getFullYear().toString() : ""}
+                  defaultValue={
+                    education
+                      ? new Date(education.endDate).getFullYear().toString()
+                      : ""
+                  }
                   required
                 >
                   <SelectTrigger className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500">

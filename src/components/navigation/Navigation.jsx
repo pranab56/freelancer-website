@@ -9,7 +9,6 @@ import { useEffect, useMemo, useState } from "react";
 export default function Navigation({ children }) {
   const [mounted, setMounted] = useState(false);
   const currentUser = localStorage.getItem("role");
-  
 
   // Use effect to set mounted state only once
   useEffect(() => {

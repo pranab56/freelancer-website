@@ -13,25 +13,34 @@ import {
   Eye,
   MessageCircle,
   Plus,
-  UserPlus
+  Trash2,
+  UserPlus,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
-import { useGetMyprofileQuery } from '../../features/clientProfile/ClientProfile';
+import toast from "react-hot-toast";
+import {
+  useGetMyprofileQuery,
+  useUpdateProfileInfoMutation,
+} from "../../features/clientProfile/ClientProfile";
 import AddNewProjectDialog from "./AddNewProjectDialog";
 import EducationDialogAddEdit from "./EducationDialogAddEdit";
 
 function ProfileSections() {
   const [isAddProjectDialogOpen, setIsAddProjectDialogOpen] = useState(false);
-  const [isAddEducationDialogOpen, setIsAddEducationDialogOpen] = useState(false);
+  const [isAddEducationDialogOpen, setIsAddEducationDialogOpen] =
+    useState(false);
   const [editingEducation, setEditingEducation] = useState(null); // Track which education is being edited
 
   const { data, isLoading } = useGetMyprofileQuery();
+  const [updateProfileInfo, { isLoading: isDeleting }] =
+    useUpdateProfileInfoMutation();
 
   const isFreelancerAndLoggedIn = true;
 
-  const educationCertifications = data?.data?.freelancerId?.educationCertifications || [];
+  const educationCertifications =
+    data?.data?.freelancerId?.educationCertifications || [];
 
   const formatDateRange = (startDate, endDate) => {
     const startYear = new Date(startDate).getFullYear();
@@ -57,6 +66,23 @@ function ProfileSections() {
     setIsAddEducationDialogOpen(true);
   };
 
+  // Function to handle delete education
+  const handleDeleteEducation = async (educationId) => {
+    try {
+      const deleteData = {
+        type: "education",
+        operation: "delete",
+        _id: educationId,
+      };
+
+      await updateProfileInfo(deleteData).unwrap();
+      toast.success("Education deleted successfully!");
+    } catch (error) {
+      console.error("Failed to delete education:", error);
+      toast.error("Failed to delete education. Please try again.");
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="w-full">
@@ -70,7 +96,10 @@ function ProfileSections() {
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 {[...Array(3)].map((_, index) => (
-                  <div key={index} className="h-8 w-20 bg-gray-200 rounded animate-pulse"></div>
+                  <div
+                    key={index}
+                    className="h-8 w-20 bg-gray-200 rounded animate-pulse"
+                  ></div>
                 ))}
               </div>
             </CardContent>
@@ -97,7 +126,10 @@ function ProfileSections() {
             <CardContent>
               <div className="space-y-3 flex flex-col items-center">
                 {[...Array(3)].map((_, index) => (
-                  <div key={index} className="h-10 w-full bg-gray-200 rounded animate-pulse"></div>
+                  <div
+                    key={index}
+                    className="h-10 w-full bg-gray-200 rounded animate-pulse"
+                  ></div>
                 ))}
               </div>
             </CardContent>
@@ -139,10 +171,14 @@ function ProfileSections() {
                           {item.degree}
                         </Badge>
                         {isFreelancerAndLoggedIn && (
-                          <div className="absolute right-1 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="absolute right-1 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 items-center">
                             <Edit3
                               className="w-3 h-3 text-blue-600 cursor-pointer hover:text-blue-700"
                               onClick={() => handleEditEducation(item)}
+                            />
+                            <Trash2
+                              className="w-3 h-3 text-blue-600 cursor-pointer hover:text-blue-700"
+                              onClick={() => handleDeleteEducation(item._id)}
                             />
                           </div>
                         )}
@@ -151,26 +187,18 @@ function ProfileSections() {
                     <TooltipContent>
                       <p className="font-semibold">{item.degree}</p>
                       <p>Institution: {item.institution}</p>
-                      <p>Duration: {formatDateRange(item.startDate, item.endDate)}</p>
-                      <p>Start: {new Date(item.startDate).toLocaleDateString()}</p>
-                      <p>End: {new Date(item.endDate).toLocaleDateString()}</p>
-                      {isFreelancerAndLoggedIn && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="mt-2"
-                          onClick={() => handleEditEducation(item)}
-                        >
-                          <Edit3 className="w-3 h-3 mr-1" />
-                          Edit
-                        </Button>
-                      )}
+                      <p>
+                        Duration:{" "}
+                        {formatDateRange(item.startDate, item.endDate)}
+                      </p>
                     </TooltipContent>
                   </Tooltip>
                 ))
               ) : (
                 <div className="text-center w-full py-2">
-                  <p className="text-gray-500 text-sm">No education records found</p>
+                  <p className="text-gray-500 text-sm">
+                    No education records found
+                  </p>
                   {isFreelancerAndLoggedIn && (
                     <Button
                       variant="link"

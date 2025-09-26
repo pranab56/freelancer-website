@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 export default function SkillsDialogAddEdit({
   isOpen,
@@ -80,19 +80,24 @@ export default function SkillsDialogAddEdit({
     try {
       const skillData = {
         type: "skill",
+        operation: isEditing ? "update" : "add",
         category: data.category,
-        skill: data.skill
+        skill: data.skill,
       };
 
       // If editing, include the skill ID
       if (isEditing && editingSkill) {
-        skillData.id = editingSkill._id;
+        skillData._id = editingSkill._id;
       }
 
       const response = await updateSkills(skillData).unwrap();
       console.log("API Response:", response);
 
-      toast.success(isEditing ? translations.editSuccessMessage : translations.addSuccessMessage);
+      toast.success(
+        isEditing
+          ? translations.editSuccessMessage
+          : translations.addSuccessMessage
+      );
       reset();
       onClose?.();
     } catch (error) {
@@ -142,9 +147,13 @@ export default function SkillsDialogAddEdit({
                 value={skillType}
                 onValueChange={handleSkillTypeChange}
                 className="flex flex-col space-y-2"
+                disabled={isEditing}
               >
                 {categories.map((category) => (
-                  <div key={category.value} className="flex items-center space-x-2">
+                  <div
+                    key={category.value}
+                    className="flex items-center space-x-2"
+                  >
                     <RadioGroupItem
                       value={category.value}
                       id={category.value}
@@ -172,8 +181,8 @@ export default function SkillsDialogAddEdit({
                   required: "Skill name is required",
                   minLength: {
                     value: 2,
-                    message: "Skill name must be at least 2 characters"
-                  }
+                    message: "Skill name must be at least 2 characters",
+                  },
                 })}
               />
               {errors.skill && (
