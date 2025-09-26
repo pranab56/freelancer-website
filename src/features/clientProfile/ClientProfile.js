@@ -35,5 +35,4 @@ export const {
   useGetMyprofileQuery,
   useUpdateMyprofileMutation,
   useUpdateProfileInfoMutation,
-  useUpdateEducationMutation,
 } = clientProfileApi;

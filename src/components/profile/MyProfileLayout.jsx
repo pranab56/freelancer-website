@@ -2,6 +2,9 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { baseURL } from "../../utils/BaseURL";
+import { getImageUrl } from "@/utils/getImageUrl";
+import CommentSection from "./CommentSection";
 
 // Dynamic imports with ssr: false
 
@@ -41,13 +44,17 @@ const ExperienceSection = dynamic(() => import("./ExperienceSection"), {
   ),
 });
 
-
-function MyProfileLayoutContent({ translations, isClient }) {
+function MyProfileLayoutContent({
+  translations,
+  isClient,
+  coverPhoto,
+  setCoverPhoto,
+}) {
   return (
     <div className="w-full">
       <div className="relative w-full h-48 sm:h-64 md:h-80 lg:h-96">
         <Image
-          src={"/myprofile/cover.png"}
+          src={getImageUrl(coverPhoto) || "/myprofile/cover.png"}
           alt={isClient ? translations.coverPhotoAlt : "Cover Photo"}
           fill
           className="object-cover"
@@ -56,9 +63,10 @@ function MyProfileLayoutContent({ translations, isClient }) {
         />
       </div>
       <div className="max-w-7xl mx-auto px-4 md:px-6 2xl:px-0">
-        <ProfileHeader />
+        <ProfileHeader setCoverPhoto={setCoverPhoto} />
         <ProfileSections />
         <SkillsSection />
+        <CommentSection />
       </div>
       <ExperienceSection />
     </div>
@@ -68,6 +76,7 @@ function MyProfileLayoutContent({ translations, isClient }) {
 function MyProfileLayout() {
   // Client-side only state to prevent hydration mismatch
   const [isClient, setIsClient] = useState(false);
+  const [coverPhoto, setCoverPhoto] = useState(null);
 
   // Get translations from Redux (moved outside dynamic component)
   const messages = "EN";
@@ -111,7 +120,12 @@ function MyProfileLayout() {
 
   return (
     <div className="animate-fade-in-up">
-      <MyProfileLayoutContent translations={translations} isClient={isClient} />
+      <MyProfileLayoutContent
+        translations={translations}
+        isClient={isClient}
+        coverPhoto={coverPhoto}
+        setCoverPhoto={setCoverPhoto}
+      />
     </div>
   );
 }
