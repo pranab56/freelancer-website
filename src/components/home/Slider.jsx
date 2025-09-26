@@ -1,71 +1,24 @@
 "use client";
-import React, { useEffect, useRef } from "react";
-import Link from "next/link";
-import { useSelector } from "react-redux";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Lightbulb } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import provideIcon from "@/utils/IconProvider/provideIcon";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useRef } from "react";
+import { useGetAllCategoryQuery } from '../../features/category/categoryApi';
 
 function TalentCategories() {
+  const { data, isLoading, isError, isFetching } = useGetAllCategoryQuery(null);
   const swiperRef = useRef(null);
-  const locale = useSelector((state) => state.language.currentLocale);
-  const messages = useSelector((state) => state.language.messages);
+  const messages = true;
 
   // Get slider translations from Redux state with fallbacks
   const sliderTranslations = messages?.home?.slider || {};
 
-  const categories = [
-    {
-      id: 1,
-      name:
-        sliderTranslations.categories?.graphicsDesign || "Graphisme & Design",
-      icon: Lightbulb,
-    },
-    {
-      id: 2,
-      name:
-        sliderTranslations.categories?.digitalMarketing || "Marketing Digital",
-      icon: Lightbulb,
-    },
-    {
-      id: 3,
-      name:
-        sliderTranslations.categories?.writingTranslation ||
-        "Rédaction & Traduction",
-      icon: Lightbulb,
-    },
-    {
-      id: 4,
-      name:
-        sliderTranslations.categories?.videoAnimation || "Vidéo & Animation",
-      icon: Lightbulb,
-    },
-    {
-      id: 5,
-      name: sliderTranslations.categories?.musicAudio || "Musique & Audio",
-      icon: Lightbulb,
-    },
-    {
-      id: 6,
-      name:
-        sliderTranslations.categories?.programmingTech ||
-        "Programmation & Tech",
-      icon: Lightbulb,
-    },
-    {
-      id: 7,
-      name: sliderTranslations.categories?.business || "Business",
-      icon: Lightbulb,
-    },
-    {
-      id: 8,
-      name: sliderTranslations.categories?.aiServices || "Services IA",
-      icon: Lightbulb,
-    },
-  ];
-
   useEffect(() => {
+    // Only initialize Swiper if we have data and not loading
+    if (!data?.data || data.data.length === 0 || isLoading) return;
+
     // Dynamically import Swiper
     const loadSwiper = async () => {
       const { default: Swiper } = await import("swiper");
@@ -118,7 +71,51 @@ function TalentCategories() {
     };
 
     loadSwiper();
-  }, []);
+  }, [data, isLoading]);
+
+  // Show loading state
+  if (isLoading || isFetching) {
+    return (
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="max-w-[100rem] 2xl:max-w-10/12 mx-auto">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-12">
+            <div className="h-12 bg-gray-200 rounded w-1/3 animate-pulse"></div>
+            <div className="h-10 bg-gray-200 rounded w-48 animate-pulse"></div>
+          </div>
+
+          {/* Categories Skeleton */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <Card key={i} className="bg-white border border-gray-200">
+                <CardContent className="p-8 text-center">
+                  <div className="w-16 h-16 mx-auto mb-6 bg-gray-200 rounded-full animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto animate-pulse"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Show error state
+  if (isError) {
+    return (
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="max-w-[100rem] 2xl:max-w-10/12 mx-auto text-center">
+          <div className="flex justify-between items-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold h2-gradient-text leading-tight">
+              {sliderTranslations.title ||
+                "Parcourez nos meilleurs talents par catégorie"}
+            </h2>
+          </div>
+          <p className="text-red-500">Erreur lors du chargement des catégories</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 px-6 bg-gray-50">
@@ -142,18 +139,17 @@ function TalentCategories() {
           </Button>
         </div>
 
-        {/* Categories Slider */}
-        <div className="relative">
-          <div ref={swiperRef} className="swiper">
-            <div className="swiper-wrapper">
-              {categories.map((category) => {
-                const IconComponent = category.icon;
-                return (
-                  <div key={category.id} className="swiper-slide">
+        {/* Categories Slider - Only show if we have data */}
+        {data?.data && data.data.length > 0 ? (
+          <div className="relative">
+            <div ref={swiperRef} className="swiper">
+              <div className="swiper-wrapper">
+                {data.data.map((category) => (
+                  <div key={category._id} className="swiper-slide">
                     <Card className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 bg-white border border-gray-200">
                       <CardContent className="p-8 text-center">
                         {/* Icon */}
-                        <div className="w-16 h-16 mx-auto mb-6  rounded-full flex items-center justify-center  transition-colors">
+                        <div className="w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center transition-colors">
                           {provideIcon({ name: "pen_tool" })}
                         </div>
 
@@ -164,18 +160,22 @@ function TalentCategories() {
                       </CardContent>
                     </Card>
                   </div>
-                );
-              })}
+                ))}
+              </div>
+
+              {/* Navigation */}
+              <div className="swiper-button-prev"></div>
+              <div className="swiper-button-next"></div>
+
+              {/* Pagination */}
+              <div className="swiper-pagination"></div>
             </div>
-
-            {/* Navigation */}
-            <div className="swiper-button-prev"></div>
-            <div className="swiper-button-next"></div>
-
-            {/* Pagination */}
-            <div className="swiper-pagination"></div>
           </div>
-        </div>
+        ) : (
+          <div className="text-center py-12">
+            <p>Aucune catégorie disponible</p>
+          </div>
+        )}
 
         {/* Custom Styles */}
         <style jsx>{`

@@ -1,34 +1,67 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import provideIcon from "@/utils/IconProvider/provideIcon";
-import { useSelector } from "react-redux";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useResetPasswordMutation } from '../../../features/auth/authApi';
 
 const ResetPasswordForm = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [passwordErrors, setPasswordErrors] = useState([]);
   const router = useRouter();
-  const locale = useSelector((state) => state.language.currentLocale);
+
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+
   const validatePassword = (password) => {
-    // At least 8 characters, 1 uppercase, 1 lowercase, 1 number
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
-    return passwordRegex.test(password);
+    const errors = [];
+    
+    // Check minimum length
+    if (password.length < 8) {
+      errors.push("at least 8 characters");
+    }
+    
+    // Check for uppercase letter
+    if (!/(?=.*[A-Z])/.test(password)) {
+      errors.push("one uppercase letter");
+    }
+    
+    // Check for lowercase letter
+    if (!/(?=.*[a-z])/.test(password)) {
+      errors.push("one lowercase letter");
+    }
+    
+    // Check for number
+    if (!/(?=.*\d)/.test(password)) {
+      errors.push("one number");
+    }
+    
+    setPasswordErrors(errors);
+    return errors.length === 0;
   };
 
   const getPasswordMatchStatus = () => {
     if (!password || !confirmPassword) return null;
     return password === confirmPassword ? "match" : "no-match";
+  };
+
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+    if (value) {
+      validatePassword(value);
+    } else {
+      setPasswordErrors([]);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -41,9 +74,7 @@ const ResetPasswordForm = () => {
     }
 
     if (!validatePassword(password)) {
-      setError(
-        "Password must be at least 8 characters with uppercase, lowercase, and number"
-      );
+      setError("Please fix the password requirements below");
       return;
     }
 
@@ -57,18 +88,23 @@ const ResetPasswordForm = () => {
       return;
     }
 
-    setLoading(true);
+    const data = {
+      newPassword: password,
+      confirmPassword: confirmPassword
+    }
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Password reset submitted");
+    try {
+      const result = await resetPassword({ data, token }).unwrap();
+      console.log("Reset password response:", result);
       setSuccess(true);
-      setLoading(false);
-    }, 1000);
+    } catch (error) {
+      console.error("Reset password error:", error);
+      setError(error.data?.message || "Failed to reset password");
+    }
   };
 
   const handleBackToLogin = () => {
-    router.push(`/${locale}/auth/login`);
+    router.push(`/auth/login`);
   };
 
   if (success) {
@@ -150,16 +186,17 @@ const ResetPasswordForm = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={`rounded-full h-12 px-4 pr-12 ${
-                  error && !password ? "border-red-500" : ""
-                }`}
+                onChange={(e) => handlePasswordChange(e.target.value)}
+                className={`rounded-full h-12 px-4 pr-12 ${error && !password ? "border-red-500" : ""
+                  }`}
                 autoComplete="new-password"
+                disabled={isLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                disabled={isLoading}
               >
                 {!showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -167,6 +204,25 @@ const ResetPasswordForm = () => {
                   <Eye className="w-5 h-5" />
                 )}
               </button>
+            </div>
+            
+            {/* Password Requirements */}
+            <div className="mt-2 text-xs text-gray-500">
+              <p>Password must include:</p>
+              <ul className="list-disc list-inside pl-2">
+                <li className={password.length >= 8 ? "text-green-600" : ""}>
+                  At least 8 characters {password.length >= 8 && "✓"}
+                </li>
+                <li className={/(?=.*[A-Z])/.test(password) ? "text-green-600" : ""}>
+                  One uppercase letter {/(?=.*[A-Z])/.test(password) && "✓"}
+                </li>
+                <li className={/(?=.*[a-z])/.test(password) ? "text-green-600" : ""}>
+                  One lowercase letter {/(?=.*[a-z])/.test(password) && "✓"}
+                </li>
+                <li className={/(?=.*\d)/.test(password) ? "text-green-600" : ""}>
+                  One number {/(?=.*\d)/.test(password) && "✓"}
+                </li>
+              </ul>
             </div>
           </div>
 
@@ -184,19 +240,20 @@ const ResetPasswordForm = () => {
                 placeholder="Confirm your Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className={`rounded-full h-12 px-4 pr-12 ${
-                  getPasswordMatchStatus() === "no-match"
-                    ? "border-red-500"
-                    : getPasswordMatchStatus() === "match"
+                className={`rounded-full h-12 px-4 pr-12 ${getPasswordMatchStatus() === "no-match"
+                  ? "border-red-500"
+                  : getPasswordMatchStatus() === "match"
                     ? "border-green-500"
                     : ""
-                }`}
+                  }`}
                 autoComplete="new-password"
+                disabled={isLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                disabled={isLoading}
               >
                 {!showConfirmPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -251,10 +308,10 @@ const ResetPasswordForm = () => {
           {/* Submit Button */}
           <Button
             type="submit"
-            disabled={loading}
+            disabled={isLoading || passwordErrors.length > 0}
             className="w-full button-gradient-rounded h-12 font-semibold text-base"
           >
-            {loading ? "Updating Password..." : "Update Password"}
+            {isLoading ? "Updating Password..." : "Update Password"}
           </Button>
         </form>
 
@@ -263,6 +320,7 @@ const ResetPasswordForm = () => {
           variant="link"
           onClick={handleBackToLogin}
           className="text-gray-600 hover:text-gray-800 flex items-center justify-center gap-2 mx-auto"
+          disabled={isLoading}
         >
           <ArrowLeft className="w-4 h-4" />
           Back to log in

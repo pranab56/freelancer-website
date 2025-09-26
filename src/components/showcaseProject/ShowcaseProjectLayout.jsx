@@ -13,7 +13,7 @@ function ShowcaseProjectLayout() {
     useCheckUserAndLoggedIn();
 
   // Get translations from Redux
-  const messages = useSelector((state) => state.language.messages);
+  const messages = "EN";
   const [error, setError] = useState(null);
 
   const translations = useMemo(() => {

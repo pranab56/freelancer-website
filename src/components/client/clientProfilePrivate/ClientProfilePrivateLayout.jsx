@@ -1,7 +1,6 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
-import { useSelector } from "react-redux";
 import dynamic from "next/dynamic";
+import { useEffect, useMemo, useState } from "react";
 
 // Dynamic imports with SSR disabled to prevent hydration errors
 const ClientProfilePrivate = dynamic(() => import("./ClientProfilePrivate"), {
@@ -50,45 +49,40 @@ const ProjectListPrivate = dynamic(() => import("./ProjectListPrivate"), {
 });
 
 function ClientProfilePrivateLayout() {
-  // Client-side only state to prevent hydration mismatch
   const [isClient, setIsClient] = useState(false);
 
-  // Get translations from Redux (moved outside dynamic component)
-  const messages = useSelector((state) => state.language.messages);
+  // Local translations (no Redux)
   const translations = useMemo(
-    () =>
-      messages?.client?.profilePrivate || {
-        editProfile: "Edit Profile",
-        ongoingTenders: "Ongoing Tenders",
-        companyLife: "Company Life",
-        addNewPost: "Add New Post",
-        editPost: "Edit Post",
-        viewTender: "View Tender",
-        project: "Project",
-        role: "Role",
-        aboutCompany: "About The Company",
-        companyDescription:
-          "At [Freelancer Name], we connect businesses with talented professionals from around the world. Our platform offers a wide range of skilled freelancers, ready to deliver high-quality work across various industries. Whether you're looking for web development, graphic design, content writing, or marketing expertise, we make it easy to find the perfect match for your project. With a focus on efficiency, reliability, and client satisfaction, we ensure every collaboration is seamless and successful. Join us today and experience the power of skilled freelancers tailored to your needs",
-        verifiedClient: "Verified Client",
-        department: "Department",
-        location: "Location",
-        email: "Email",
-        viewPosts: "View Posts →",
-        uiuxDesigner: "UI/UX Designer",
-        uxReviewPresentations: "UX review presentations",
-        uiuxDescription:
-          "I will do ui ux design for saas, web app, dashboard in figma",
-        dateFormat: "20 Jan 2022",
-      },
-    [messages]
+    () => ({
+      editProfile: "Edit Profile",
+      ongoingTenders: "Ongoing Tenders",
+      companyLife: "Company Life",
+      addNewPost: "Add New Post",
+      editPost: "Edit Post",
+      viewTender: "View Tender",
+      project: "Project",
+      role: "Role",
+      aboutCompany: "About The Company",
+      companyDescription:
+        "At [Freelancer Name], we connect businesses with talented professionals from around the world. Our platform offers a wide range of skilled freelancers, ready to deliver high-quality work across various industries. Whether you're looking for web development, graphic design, content writing, or marketing expertise, we make it easy to find the perfect match for your project. With a focus on efficiency, reliability, and client satisfaction, we ensure every collaboration is seamless and successful. Join us today and experience the power of skilled freelancers tailored to your needs",
+      verifiedClient: "Verified Client",
+      department: "Department",
+      location: "Location",
+      email: "Email",
+      viewPosts: "View Posts →",
+      uiuxDesigner: "UI/UX Designer",
+      uxReviewPresentations: "UX review presentations",
+      uiuxDescription:
+        "I will do ui ux design for saas, web app, dashboard in figma",
+      dateFormat: "20 Jan 2022",
+    }),
+    []
   );
 
-  // Ensure component only renders on client side
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Show loading state until client-side hydration is complete
   if (!isClient) {
     return (
       <div className="w-full">

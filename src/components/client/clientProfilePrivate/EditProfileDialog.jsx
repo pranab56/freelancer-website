@@ -1,45 +1,52 @@
-import Image from "next/image";
-import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useForm, Controller } from "react-hook-form";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useUpdateMyprofileMutation } from '../../../features/clientProfile/ClientProfile';
 
-function EditProfileDialog({ isOpen, onClose }) {
-  const [profileImage, setProfileImage] = useState(
-    "/client/profile/client.png"
-  );
+function EditProfileDialog({ isOpen, onClose, profileData }) {
+  const [updateProfile, { isLoading }] = useUpdateMyprofileMutation();
+
+  const [profileImage, setProfileImage] = useState("/client/profile/client.png");
+  const [selectedFile, setSelectedFile] = useState(null);
+
   const fileInputRef = useRef(null);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm({
     defaultValues: {
-      name: "John Doe",
-      companyName: "Z-Worx",
-      department: "Design",
-      categoryType: "UI/UX Designer",
-      location: "France",
-      bio: "I am a UI/UX designer",
+      fullName: "",
+      companyName: "",
+      aboutCompany: "",
     },
   });
+
+  // Reset form when dialog opens or profileData changes
+  useEffect(() => {
+    if (isOpen && profileData) {
+      reset({
+        fullName: profileData.fullName || "",
+        companyName: profileData.companyName || "",
+        aboutCompany: profileData.aboutCompany || "",
+      });
+      setProfileImage(profileData.profile || "/client/profile/client.png");
+      setSelectedFile(null);
+    }
+  }, [isOpen, profileData, reset]);
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -48,6 +55,7 @@ function EditProfileDialog({ isOpen, onClose }) {
   const handleImageChange = (event) => {
     const file = event.target.files?.[0];
     if (file) {
+      setSelectedFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfileImage(reader.result);
@@ -56,11 +64,36 @@ function EditProfileDialog({ isOpen, onClose }) {
     }
   };
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", {
-      ...data,
-      profileImage,
-    });
+  const onSubmit = async (formData) => {
+    console.log("Form Data:", formData);
+
+    try {
+      const payload = new FormData();
+
+      // Use correct field names that match your API
+      payload.append("fullName", formData.fullName);
+      payload.append("companyName", formData.companyName);
+      payload.append("aboutCompany", formData.aboutCompany);
+
+      // Only append file if a new one was selected
+      if (selectedFile) {
+        payload.append("profile", selectedFile);
+      }
+
+      console.log("Sending payload:", {
+        fullName: formData.fullName,
+        companyName: formData.companyName,
+        aboutCompany: formData.aboutCompany,
+        hasFile: !!selectedFile
+      });
+
+      const response = await updateProfile(payload).unwrap();
+      console.log("Profile updated successfully:", response);
+      onClose(); // Close the dialog after successful update
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      // You might want to show an error message to the user here
+    }
   };
 
   return (
@@ -83,6 +116,9 @@ function EditProfileDialog({ isOpen, onClose }) {
                   alt="Profile"
                   fill
                   className="object-cover transition-opacity group-hover:opacity-75"
+                  onError={(e) => {
+                    e.target.src = "/client/profile/client.png";
+                  }}
                 />
                 <div className="absolute inset-0 flex items-center justify-center group-hover:bg-opacity-50 transition-all">
                   <span className="text-white opacity-0 group-hover:opacity-100">
@@ -97,7 +133,7 @@ function EditProfileDialog({ isOpen, onClose }) {
                 accept="image/*"
                 className="hidden"
               />
-              <Button className="button-gradient" onClick={handleImageClick}>
+              <Button type="button" className="button-gradient" onClick={handleImageClick}>
                 Edit Image
               </Button>
             </div>
@@ -105,30 +141,35 @@ function EditProfileDialog({ isOpen, onClose }) {
             {/* Form Fields */}
             <div className="space-y-4">
               <div className="space-y-1">
-                <Label>Name</Label>
+                <Label htmlFor="fullName">Full Name</Label>
                 <Controller
-                  name="name"
+                  name="fullName"
                   control={control}
                   rules={{
-                    required: "Name is required",
+                    required: "Full name is required",
                     minLength: {
                       value: 2,
                       message: "Name must be at least 2 characters",
                     },
                   }}
                   render={({ field }) => (
-                    <Input {...field} placeholder="Name" />
+                    <Input
+                      {...field}
+                      id="fullName"
+                      placeholder="Full Name"
+                      disabled={isLoading}
+                    />
                   )}
                 />
-                {errors.name && (
+                {errors.fullName && (
                   <span className="text-sm text-red-500">
-                    {errors.name.message}
+                    {errors.fullName.message}
                   </span>
                 )}
               </div>
 
               <div className="space-y-1">
-                <Label>Company Name</Label>
+                <Label htmlFor="companyName">Company Name</Label>
                 <Controller
                   name="companyName"
                   control={control}
@@ -140,7 +181,12 @@ function EditProfileDialog({ isOpen, onClose }) {
                     },
                   }}
                   render={({ field }) => (
-                    <Input {...field} placeholder="Company Name" />
+                    <Input
+                      {...field}
+                      id="companyName"
+                      placeholder="Company Name"
+                      disabled={isLoading}
+                    />
                   )}
                 />
                 {errors.companyName && (
@@ -151,128 +197,39 @@ function EditProfileDialog({ isOpen, onClose }) {
               </div>
 
               <div className="space-y-1">
-                <Label>Department</Label>
+                <Label htmlFor="aboutCompany">About Your Company</Label>
                 <Controller
-                  name="department"
+                  name="aboutCompany"
                   control={control}
-                  rules={{ required: "Department is required" }}
+                  rules={{
+                    required: "About Your Company is required",
+                    minLength: {
+                      value: 10,
+                      message: "About must be at least 10 characters",
+                    },
+                  }}
                   render={({ field }) => (
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select department" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Design">Design</SelectItem>
-                        <SelectItem value="Development">Development</SelectItem>
-                        <SelectItem value="Marketing">Marketing</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Textarea
+                      {...field}
+                      id="aboutCompany"
+                      placeholder="Tell us about your company"
+                      className="h-24 resize-none w-full"
+                      disabled={isLoading}
+                    />
                   )}
                 />
-                {errors.department && (
-                  <span className="text-sm text-red-500">
-                    {errors.department.message}
-                  </span>
-                )}
-              </div>
-
-              <div className="space-y-1">
-                <Label>Category Type</Label>
-                <Controller
-                  name="categoryType"
-                  control={control}
-                  rules={{ required: "Category type is required" }}
-                  render={({ field }) => (
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="UI/UX Designer">
-                          UI/UX Designer
-                        </SelectItem>
-                        <SelectItem value="Graphic Designer">
-                          Graphic Designer
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-                {errors.categoryType && (
-                  <span className="text-sm text-red-500">
-                    {errors.categoryType.message}
-                  </span>
-                )}
-              </div>
-
-              <div className="space-y-1">
-                <Label>Location</Label>
-                <Controller
-                  name="location"
-                  control={control}
-                  rules={{ required: "Location is required" }}
-                  render={({ field }) => (
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select location" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="France">France</SelectItem>
-                        <SelectItem value="USA">USA</SelectItem>
-                        <SelectItem value="UK">UK</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-                {errors.location && (
-                  <span className="text-sm text-red-500">
-                    {errors.location.message}
-                  </span>
+                {errors.aboutCompany && (
+                  <span className="text-sm text-red-500">{errors.aboutCompany.message}</span>
                 )}
               </div>
             </div>
           </div>
-
-          <div className="space-y-1">
-            <Label>Bio</Label>
-            <Controller
-              name="bio"
-              control={control}
-              rules={{
-                required: "Bio is required",
-                minLength: {
-                  value: 10,
-                  message: "Bio must be at least 10 characters",
-                },
-              }}
-              render={({ field }) => (
-                <Textarea
-                  {...field}
-                  placeholder="Bio"
-                  className="h-24 resize-none w-full"
-                />
-              )}
-            />
-            {errors.bio && (
-              <span className="text-sm text-red-500">{errors.bio.message}</span>
-            )}
-          </div>
-
           <DialogFooter className="gap-2 ">
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
               Cancel
             </Button>
-            <Button type="submit" className="button-gradient">
-              Save Changes
+            <Button type="submit" className="button-gradient" disabled={isLoading}>
+              {isLoading ? "Saving..." : "Save Changes"}
             </Button>
           </DialogFooter>
         </form>

@@ -1,19 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import toast from 'react-hot-toast';
+import { useSignupMutation } from '../../../features/auth/authApi';
 import AccountTypeDialog from "../clientOrFreelancer/ClientOrFreelancer";
-import { useSelector } from "react-redux";
 
 const SignUpPage = () => {
-  const [showAccountTypeDialog, setShowAccountTypeDialog] = useState(true);
-  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -22,9 +20,20 @@ const SignUpPage = () => {
     password: "",
     confirmPassword: "",
   });
-  const [errors, setErrors] = useState({});
+  const [validationErrors, setValidationErrors] = useState({});
+  const [accountType, setAccountType] = useState("");
+
+  const [createAccount, { isLoading, error: apiError }] = useSignupMutation();
   const router = useRouter();
-  const locale = useSelector((state) => state.language.currentLocale);
+
+  // Get account type from localStorage on component mount
+  useEffect(() => {
+    const storedAccountType = localStorage.getItem("accountType");
+    if (storedAccountType) {
+      setAccountType(storedAccountType);
+    }
+  }, []);
+
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -63,7 +72,7 @@ const SignUpPage = () => {
       newErrors.confirmPassword = "Must be at least 8 characters";
     }
 
-    setErrors(newErrors);
+    setValidationErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -73,32 +82,89 @@ const SignUpPage = () => {
       [field]: value,
     }));
 
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => ({
+    // Clear validation error when user starts typing
+    if (validationErrors[field]) {
+      setValidationErrors((prev) => ({
         ...prev,
         [field]: "",
       }));
     }
   };
 
-  const onFinish = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!accountType) {
+      console.error("No account type selected");
+      return;
+    }
 
     if (!validateForm()) {
       return;
     }
 
-    setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      console.log("SignUp submitted:", formData);
-      setLoading(false);
-    }, 1000);
+    try {
+      const payload = {
+        fullName: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: accountType
+      };
+
+      const response = await createAccount(payload).unwrap();
+
+
+      console.log("Signup response:", response);
+
+      if (response.success) {
+        // Success - navigate to verification
+        const token = response?.data?.createUserToken;
+        router.push(`/auth/verify-email${token ? `?token=${token}` : ''}`);
+        localStorage.removeItem("accountType");
+      }
+    } catch (error) {
+      console.error("Signup error:", error.data?.message || error);
+      toast.error(error.data?.message || "something went wrong. Please try again.");
+
+      // Error is handled by RTK Query error state
+    }
+  };
+
+  const navigateToLogin = () => {
+    router.push("/auth/login");
   };
 
   const handleGoogleSignUp = () => {
     console.log("Google signup clicked");
+    // Implement Google OAuth logic here
+  };
+
+  const togglePasswordVisibility = (field) => {
+    if (field === 'password') {
+      setShowPassword(!showPassword);
+    } else {
+      setShowConfirmPassword(!showConfirmPassword);
+    }
+  };
+
+  // Get error message from validation or API
+  const getFieldError = (field) => {
+    return validationErrors[field] ||
+      (apiError?.data?.errors?.[field]) ||
+      "";
+  };
+
+  const getGeneralError = () => {
+    return apiError?.data?.message ||
+      (apiError && "Something went wrong. Please try again.");
+  };
+
+  const isFormValid = () => {
+    return formData.name &&
+      formData.email &&
+      formData.password &&
+      formData.confirmPassword &&
+      !Object.keys(validationErrors).length;
   };
 
   return (
@@ -108,9 +174,9 @@ const SignUpPage = () => {
         {/* Logo */}
         <div className="flex flex-col gap-4 md:gap-6">
           <div className="w-full flex justify-center items-center">
-            <div className="w-40 h-20 md:w-48 lg:w-56  flex items-center justify-center">
+            <div className="w-40 h-20 md:w-48 lg:w-56 flex items-center justify-center">
               <Image
-                src={"/auth/lunaq.png"}
+                src="/auth/lunaq.png"
                 width={150}
                 height={150}
                 alt="lunaq"
@@ -124,8 +190,15 @@ const SignUpPage = () => {
           </p>
         </div>
 
+        {/* General API Error */}
+        {getGeneralError() && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-600 text-sm">{getGeneralError()}</p>
+          </div>
+        )}
+
         {/* SignUp form */}
-        <form onSubmit={onFinish} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name Field */}
           <div className="space-y-1">
             <Label htmlFor="name" className="text-gray-700 font-medium text-sm">
@@ -137,21 +210,18 @@ const SignUpPage = () => {
               placeholder="Enter your name"
               value={formData.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
-              className={`rounded-full h-11 px-4 ${
-                errors.name ? "border-red-500" : ""
-              }`}
+              className={`rounded-full h-11 px-4 ${getFieldError("name") ? "border-red-500" : ""
+                }`}
+              disabled={isLoading}
             />
-            {errors.name && (
-              <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+            {getFieldError("name") && (
+              <p className="text-red-500 text-xs mt-1">{getFieldError("name")}</p>
             )}
           </div>
 
           {/* Email Field */}
           <div className="space-y-1">
-            <Label
-              htmlFor="email"
-              className="text-gray-700 font-medium text-sm"
-            >
+            <Label htmlFor="email" className="text-gray-700 font-medium text-sm">
               Email*
             </Label>
             <Input
@@ -160,21 +230,18 @@ const SignUpPage = () => {
               placeholder="Enter your email"
               value={formData.email}
               onChange={(e) => handleInputChange("email", e.target.value)}
-              className={`rounded-full h-11 px-4 ${
-                errors.email ? "border-red-500" : ""
-              }`}
+              className={`rounded-full h-11 px-4 ${getFieldError("email") ? "border-red-500" : ""
+                }`}
+              disabled={isLoading}
             />
-            {errors.email && (
-              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+            {getFieldError("email") && (
+              <p className="text-red-500 text-xs mt-1">{getFieldError("email")}</p>
             )}
           </div>
 
           {/* Password Field */}
           <div className="space-y-1">
-            <Label
-              htmlFor="password"
-              className="text-gray-700 font-medium text-sm"
-            >
+            <Label htmlFor="password" className="text-gray-700 font-medium text-sm">
               Password*
             </Label>
             <div className="relative">
@@ -184,16 +251,17 @@ const SignUpPage = () => {
                 placeholder="Create a password"
                 value={formData.password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
-                className={`rounded-full h-11 px-4 pr-12 ${
-                  errors.password ? "border-red-500" : ""
-                }`}
+                className={`rounded-full h-11 px-4 pr-12 ${getFieldError("password") ? "border-red-500" : ""
+                  }`}
+                disabled={isLoading}
               />
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
                 className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => togglePasswordVisibility('password')}
+                disabled={isLoading}
               >
                 {showPassword ? (
                   <EyeOff className="h-4 w-4 text-gray-500" />
@@ -202,10 +270,10 @@ const SignUpPage = () => {
                 )}
               </Button>
             </div>
-            {errors.password && (
-              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+            {getFieldError("password") && (
+              <p className="text-red-500 text-xs mt-1">{getFieldError("password")}</p>
             )}
-            {!errors.password &&
+            {!getFieldError("password") &&
               formData.password &&
               formData.password.length < 8 && (
                 <p className="text-gray-500 text-xs mt-1">
@@ -216,31 +284,27 @@ const SignUpPage = () => {
 
           {/* Confirm Password Field */}
           <div className="space-y-1">
-            <Label
-              htmlFor="confirmPassword"
-              className="text-gray-700 font-medium text-sm"
-            >
+            <Label htmlFor="confirmPassword" className="text-gray-700 font-medium text-sm">
               Confirm Password*
             </Label>
             <div className="relative">
               <Input
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
-                placeholder="Create a password"
+                placeholder="Confirm your password"
                 value={formData.confirmPassword}
-                onChange={(e) =>
-                  handleInputChange("confirmPassword", e.target.value)
-                }
-                className={`rounded-full h-11 px-4 pr-12 ${
-                  errors.confirmPassword ? "border-red-500" : ""
-                }`}
+                onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                className={`rounded-full h-11 px-4 pr-12 ${getFieldError("confirmPassword") ? "border-red-500" : ""
+                  }`}
+                disabled={isLoading}
               />
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
                 className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                onClick={() => togglePasswordVisibility('confirmPassword')}
+                disabled={isLoading}
               >
                 {showConfirmPassword ? (
                   <EyeOff className="h-4 w-4 text-gray-500" />
@@ -249,12 +313,12 @@ const SignUpPage = () => {
                 )}
               </Button>
             </div>
-            {errors.confirmPassword && (
+            {getFieldError("confirmPassword") && (
               <p className="text-red-500 text-xs mt-1">
-                {errors.confirmPassword}
+                {getFieldError("confirmPassword")}
               </p>
             )}
-            {!errors.confirmPassword &&
+            {!getFieldError("confirmPassword") &&
               formData.confirmPassword &&
               formData.confirmPassword.length < 8 && (
                 <p className="text-gray-500 text-xs mt-1">
@@ -267,10 +331,10 @@ const SignUpPage = () => {
           <div className="pt-4">
             <Button
               type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 rounded-full h-12 font-semibold text-base"
+              disabled={isLoading || !isFormValid()}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-full h-12 font-semibold text-base"
             >
-              {loading ? "Creating Account..." : "Sign Up"}
+              {isLoading ? "Creating Account..." : "Sign Up"}
             </Button>
           </div>
 
@@ -280,7 +344,8 @@ const SignUpPage = () => {
               type="button"
               variant="outline"
               onClick={handleGoogleSignUp}
-              className="w-full border-gray-300 hover:border-gray-400 rounded-full h-12 flex items-center justify-center gap-2"
+              disabled={isLoading}
+              className="w-full border-gray-300 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-full h-12 flex items-center justify-center gap-2"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
@@ -311,8 +376,9 @@ const SignUpPage = () => {
             Already have an account?{" "}
             <Button
               variant="link"
-              onClick={() => router.push(`/auth/login`)}
-              className="p-0 h-auto text-blue-600 hover:text-blue-800 font-semibold"
+              onClick={navigateToLogin}
+              disabled={isLoading}
+              className="p-0 h-auto text-blue-600 hover:text-blue-800 disabled:opacity-50 font-semibold"
             >
               Log in
             </Button>

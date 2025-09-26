@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useEffect, useState, useMemo, useCallback } from "react";
-import { useSelector } from "react-redux";
-import NavBar from "@/components/navbar/NavBar";
+import ClientNavBar from "@/components/client/clientNavbar/ClientNavbar";
 import Footer from "@/components/common/Footer/Footer";
 import FreelancerNavBar from "@/components/freelancerNavbar/FreelancerNavbar";
-import ClientNavBar from "@/components/client/clientNavbar/ClientNavbar";
+import NavBar from "@/components/navbar/NavBar";
+import { useEffect, useMemo, useState } from "react";
 
 export default function Navigation({ children }) {
   const [mounted, setMounted] = useState(false);
-  const currentUser = useSelector((state) => state.currentUser.currentUser);
+  const currentUser = localStorage.getItem("role");
+  
 
   // Use effect to set mounted state only once
   useEffect(() => {

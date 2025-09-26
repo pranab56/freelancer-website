@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Async thunk to load messages for a specific locale
 export const loadMessages = createAsyncThunk(
@@ -93,7 +93,7 @@ const languageSlice = createSlice({
   },
 });
 
-export const currentLanguage = (state) => state.language.currentLocale;
+export const currentLanguage = "EN"
 
 export const { setLocale, setMessages, initializeLanguage } =
   languageSlice.actions;

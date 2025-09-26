@@ -1,15 +1,18 @@
 import TipTapEditor from "@/utils/TipTapEditor/TipTapEditor";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setPreferredQualifications } from "@/redux/features/createTender/createtenderSlice";
+import { useState } from "react";
 
 function PrefferedQualificationsTender() {
-  const dispatch = useDispatch();
-
-  const resetTrigger = useSelector((state) => state.createTender.resetTrigger);
+  const [preferredQualifications, setPreferredQualifications] = useState("");
+  const [resetTrigger, setResetTrigger] = useState(false);
 
   const handlePreferredQualifications = (qualifications) => {
-    dispatch(setPreferredQualifications(qualifications));
+    setPreferredQualifications(qualifications);
+  };
+
+  // If you need a reset function, you can add:
+  const resetQualifications = () => {
+    setPreferredQualifications("");
+    setResetTrigger(prev => !prev); // Toggle reset trigger if needed by TipTapEditor
   };
 
   return (
@@ -18,7 +21,7 @@ function PrefferedQualificationsTender() {
         <div>
           <h2 className="text-2xl font-medium ">Preferred qualifications</h2>
           <p>
-            Your applicants don’t need to have these qualifications, but you
+            Your applicants don't need to have these qualifications, but you
             prefer to hire someone with them.
           </p>
         </div>

@@ -5,7 +5,7 @@ import React from "react";
 
 function Qualifications() {
   const dispatch = useDispatch();
-  const resetTrigger = useSelector((state) => state.createJob.resetTrigger);
+  const resetTrigger = "reset";
 
   const handleMustHaveQualifications = (qualifications) => {
     dispatch(setMustHaveQualifications(qualifications));

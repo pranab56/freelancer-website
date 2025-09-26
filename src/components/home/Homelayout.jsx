@@ -23,6 +23,7 @@ const HomeBanner = dynamic(() => import("./HomeBanner"), {
 });
 
 const TalentCategories = dynamic(() => import("./Slider"), {
+  
   ssr: false,
   loading: () => (
     <section className="py-16 px-6 bg-gray-50">

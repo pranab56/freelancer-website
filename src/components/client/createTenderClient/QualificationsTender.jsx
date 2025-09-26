@@ -1,15 +1,18 @@
 import TipTapEditor from "@/utils/TipTapEditor/TipTapEditor";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setMustHaveQualifications } from "@/redux/features/createTender/createtenderSlice";
+import { useState } from "react";
 
 function QualificationsTender() {
-  const dispatch = useDispatch();
-
-  const resetTrigger = useSelector((state) => state.createTender.resetTrigger);
+  const [mustHaveQualifications, setMustHaveQualifications] = useState("");
+  const [resetTrigger, setResetTrigger] = useState(false);
 
   const handleMustHaveQualifications = (qualifications) => {
-    dispatch(setMustHaveQualifications(qualifications));
+    setMustHaveQualifications(qualifications);
+  };
+
+  // If you need a reset function, you can add:
+  const resetQualifications = () => {
+    setMustHaveQualifications("");
+    setResetTrigger(prev => !prev); // Toggle reset trigger if needed by TipTapEditor
   };
 
   return (

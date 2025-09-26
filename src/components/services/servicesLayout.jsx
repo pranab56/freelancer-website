@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useGetAllFreeLancerQuery } from '../../features/freelancer/freelancerApi';
 import Banner from "../common/banner/Banner";
 import Heading from "../common/heading/Heading";
 import ServiceCard from "../common/ServiceCard/ServiceCard";
 import PopularServices from "../home/PopularServices";
-import { useSelector } from "react-redux";
-import { currentLanguage } from "../../redux/features/languageSlice";
 
 function ServicesLayout() {
   const [isClient, setIsClient] = useState(false);
-  const messages = useSelector((state) => state.language.messages);
-  const languages = useSelector(currentLanguage);
+  const messages = "EN";
   const servicesTranslations = messages?.home?.services || {};
+
+  const { data, isLoading, isError } = useGetAllFreeLancerQuery();
 
   // Only render on client side to prevent hydration issues
   useEffect(() => {
@@ -20,7 +20,7 @@ function ServicesLayout() {
   }, []);
 
   // Show loading state on server, content on client
-  if (!isClient) {
+  if (!isClient || isLoading) {
     return (
       <div className="max-w-7xl mx-auto">
         {/* Banner skeleton */}
@@ -40,7 +40,7 @@ function ServicesLayout() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center py-4 px-4 sm:px-6 2xl:px-0 mx-auto">
           {[...Array(8)].map((_, index) => (
             <div key={index} className="animate-pulse">
-              <div className="h-64 bg-gray-300 rounded-lg"></div>
+              <div className="h-96 bg-gray-300 rounded-lg"></div>
             </div>
           ))}
         </div>
@@ -62,6 +62,19 @@ function ServicesLayout() {
     );
   }
 
+  if (isError) {
+    return (
+      <div className="max-w-7xl mx-auto p-4">
+        <div className="text-center py-12">
+          <h2 className="text-2xl font-bold text-red-600">Error Loading Freelancers</h2>
+          <p className="text-gray-600 mt-2">Please try again later.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const freelancers = data?.data || [];
+
   const setServiceBanner = {
     src: "/services/service_1.png",
     header:
@@ -72,8 +85,6 @@ function ServicesLayout() {
       "Choose the perfect freelancer to elevate your organization with top-tier skills, experience, and expertise.",
     buttonName: servicesTranslations.banner?.buttonText || "Hire Freelancers",
   };
-
-  const services = Array(8).fill({}); // or your service data
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -86,18 +97,24 @@ function ServicesLayout() {
 
       <div className="px-4 sm:px-6 2xl:px-0 py-4 md:py-12 ">
         <Heading
-          heading={servicesTranslations.heading?.title || "UX Design"}
+          heading={servicesTranslations.heading?.title || "Top Freelancers"}
           subheading={
             servicesTranslations.heading?.subtitle ||
-            "Provide your visitors with a seamless experience through strong UX design."
+            "Find the perfect talent for your projects from our curated list of professionals."
           }
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center py-4 px-4 sm:px-6 2xl:px-0 mx-auto">
-        {services.map((service, index) => (
-          <ServiceCard key={index} data={service} />
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-4 px-4 sm:px-6 2xl:px-0 mx-auto">
+        {freelancers.length > 0 ? (
+          freelancers.map((freelancer) => (
+            <ServiceCard key={freelancer._id} freelancer={freelancer} />
+          ))
+        ) : (
+          <div className="col-span-full text-center py-12">
+            <p className="text-gray-600">No freelancers available at the moment.</p>
+          </div>
+        )}
       </div>
       <PopularServices />
     </div>

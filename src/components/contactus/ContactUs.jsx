@@ -7,7 +7,7 @@ import ContactForm from "./ContactForm";
 
 function ContactUs() {
   const [isClient, setIsClient] = useState(false);
-  const messages = useSelector((state) => state.language.messages);
+  const messages = "EN";
   const contactUsTranslations = messages?.contactUs || {};
 
   // Only render on client side to prevent hydration issues

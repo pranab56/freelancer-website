@@ -1,31 +1,29 @@
 "use client";
-import React, { useState, useRef, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { X, Edit2, Calendar, Upload, ImageIcon } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialogTitle
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import useToast from "@/hooks/showToast/ShowToast";
+import { Calendar, Edit2, ImageIcon, Upload, X } from "lucide-react";
 import Image from "next/image";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function AddNewProjectDialog({ isOpen, onClose }) {
   const [thumbnailImage, setThumbnailImage] = useState(null);
@@ -33,33 +31,27 @@ export default function AddNewProjectDialog({ isOpen, onClose }) {
   const fileInputRef = useRef(null);
   const showToast = useToast();
 
-  // Get translations from Redux
-  const messages = useSelector((state) => state.language.messages);
-  const translations = useMemo(
-    () =>
-      messages?.profile?.addNewProjectDialog || {
-        title: "Add New Project",
-        name: "Name",
-        namePlaceholder: "Sabbir Ahmed",
-        nameRequired: "Name is required",
-        titleLabel: "Title",
-        titlePlaceholder: "Write a title",
-        titleRequired: "Title is required",
-        completeDate: "Complete Date",
-        completeDateRequired: "Complete date is required",
-        description: "Description",
-        descriptionPlaceholder: "Design",
-        projectThumbnail: "Project Thumbnail",
-        cancel: "Cancel",
-        saveChanges: "Save Changes",
-        successMessage: "Project saved successfully!",
-        updateThumbnail: "Update Thumbnail",
-        updateThumbnailDescription: "Choose an option to update your project thumbnail.",
-        uploadNewImage: "Upload New Image",
-        removeCurrentImage: "Remove Current Image",
-      },
-    [messages]
-  );
+  const translations = {
+    title: "Add New Project",
+    name: "Name",
+    namePlaceholder: "Sabbir Ahmed",
+    nameRequired: "Name is required",
+    titleLabel: "Title",
+    titlePlaceholder: "Write a title",
+    titleRequired: "Title is required",
+    completeDate: "Complete Date",
+    completeDateRequired: "Complete date is required",
+    description: "Description",
+    descriptionPlaceholder: "Design",
+    projectThumbnail: "Project Thumbnail",
+    cancel: "Cancel",
+    saveChanges: "Save Changes",
+    successMessage: "Project saved successfully!",
+    updateThumbnail: "Update Thumbnail",
+    updateThumbnailDescription: "Choose an option to update your project thumbnail.",
+    uploadNewImage: "Upload New Image",
+    removeCurrentImage: "Remove Current Image",
+  };
 
   const {
     register,

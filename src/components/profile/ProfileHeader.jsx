@@ -1,10 +1,6 @@
 "use client";
-import React, { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Edit, Shield, DollarSign, Upload } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +8,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -19,63 +17,52 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useForm, Controller } from "react-hook-form";
+import { DollarSign, Edit, Shield, Upload } from "lucide-react";
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useGetMyprofileQuery } from '../../features/clientProfile/ClientProfile';
+import { baseURL } from '../../utils/BaseURL';
+import { useGetAllCategoryQuery } from '../../features/category/categoryApi';
+import { useGetAllServicesQuery } from '../../features/services/servicesApi';
 
-import useCheckUserAndLoggedIn from "@/hooks/checkUserTypeAndLoggedIn/CheckUserAndLoggedIn";
+
+
+
+
 
 function ProfileHeader() {
-  const { isLoggedIn, userType } = useCheckUserAndLoggedIn();
-
-  // Get translations from Redux
-  const messages = useSelector((state) => state.language.messages);
-  const translations = useMemo(
-    () =>
-      messages?.profile?.header || {
-        editProfile: "Edit Profile",
-        viewProfile: "View Profile",
-        changeProfilePicture: "Change Profile Picture",
-        changeCover: "Change Cover",
-        name: "Name",
-        nameRequired: "Name is required",
-        nameMinLength: "Name must be at least 2 characters",
-        nameMaxLength: "Name must be less than 50 characters",
-        namePlaceholder: "Enter your full name",
-        dailyRate: "Daily Rate",
-        dailyRatePlaceholder: "Enter daily rate",
-        serviceType: "Service Type",
-        serviceTypePlaceholder: "Select service type",
-        categoryType: "Category Type",
-        categoryTypePlaceholder: "Select category",
-        location: "Location",
-        locationPlaceholder: "Select location",
-        language: "Language",
-        languagePlaceholder: "Select language",
-        cancel: "Cancel",
-        saveChanges: "Save Changes",
-        invalidImageType: "Please select a valid image file (JPEG, PNG, WebP)",
-        imageSizeLimit: "Image size should be less than 5MB",
-        available: "Available",
-        verifiedFreelancer: "Verified Freelancer",
-        dayRate: "Day Rate",
-      },
-    [messages]
-  );
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState(
-    "/client/profile/client.png"
-  );
+  const [profileImage, setProfileImage] = useState("/client/profile/client.png");
   const [coverImage, setCoverImage] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [services, setServices] = useState([]);
+
   const [profileData, setProfileData] = useState({
     name: "Sabbir Ahmed",
     dailyRate: "500",
-    serviceType: "Design",
-    categoryType: "UI/UX Designer",
+    serviceType: "",
+    categoryType: "",
     location: "Bangladesh",
     language: "Bengali",
   });
+
+  const { data, isLoading } = useGetMyprofileQuery();
+  const { data: categoryData, isLoading: categoryLoading, isError: categoryError } = useGetAllCategoryQuery();
+  const { data: serviceData, isLoading: serviceLoading, isError: serviceError } = useGetAllServicesQuery();
+
+  // Set categories and services when data is loaded
+  useEffect(() => {
+    if (categoryData?.success && categoryData.data) {
+      setCategories(categoryData.data);
+    }
+  }, [categoryData]);
+
+  useEffect(() => {
+    if (serviceData?.success && serviceData.data) {
+      setServices(serviceData.data);
+    }
+  }, [serviceData]);
 
   const {
     control,
@@ -83,11 +70,29 @@ function ProfileHeader() {
     formState: { errors },
     reset,
     setValue,
-    watch,
   } = useForm({
     defaultValues: profileData,
     mode: "onChange",
   });
+
+  // Update form values when profile data changes
+  useEffect(() => {
+    if (data?.data) {
+      const newProfileData = {
+        name: data.data.fullName || "Sabbir Ahmed",
+        dailyRate: data.data.dailyRate?.toString() || "500",
+        serviceType: data.data.serviceType || "",
+        categoryType: data.data.categoryType || "",
+        location: data.data.location || "Bangladesh",
+        language: data.data.language || "Bengali",
+      };
+
+      setProfileData(newProfileData);
+
+      // Reset form with new values
+      reset(newProfileData);
+    }
+  }, [data, reset]);
 
   const handleImageUpload = (event, type) => {
     const file = event.target.files[0];
@@ -142,23 +147,39 @@ function ProfileHeader() {
     setIsDialogOpen(open);
   };
 
+  // Loading state for dropdowns
+  if (categoryLoading || serviceLoading) {
+    return (
+      <div className="w-full mx-auto relative bg-white my-5 p-4">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
+          <div className="flex space-x-4">
+            <div className="rounded-full bg-gray-200 h-24 w-24"></div>
+            <div className="flex-1 space-y-3">
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full mx-auto relative bg-white my-5">
       {/* Edit button positioned absolutely */}
       <div className="flex items-center justify-end">
         <Dialog open={isDialogOpen} onOpenChange={handleDialogOpen}>
           <DialogTrigger asChild>
-            {isLoggedIn && userType && userType !== "client" && (
-              <Button size="sm" className="button-gradient">
-                {translations.editProfile}
-                <Edit className="w-4 h-4 ml-2" />
-              </Button>
-            )}
+            <Button size="sm" className="button-gradient">
+              Edit Profile
+              <Edit className="w-4 h-4 ml-2" />
+            </Button>
           </DialogTrigger>
           <DialogContent className="md:min-w-3xl lg:min-w-5xl max-h-[90vh] overflow-y-auto">
             <DialogHeader className="flex flex-row items-center justify-between pb-4">
               <DialogTitle className="text-xl font-semibold text-blue-600 h2-gradient-text">
-                {translations.editProfile}
+                Edit Profile
               </DialogTitle>
             </DialogHeader>
 
@@ -197,7 +218,7 @@ function ProfileHeader() {
                           className="cursor-pointer"
                         >
                           <Upload className="w-4 h-4" />
-                          {translations.changeProfilePicture}
+                          Change Profile Picture
                         </label>
                       </Button>
                     </div>
@@ -254,7 +275,7 @@ function ProfileHeader() {
                           className="cursor-pointer"
                         >
                           <Upload className="w-4 h-4" />
-                          {translations.changeCover}
+                          Change Cover
                         </label>
                       </Button>
                     </div>
@@ -286,9 +307,8 @@ function ProfileHeader() {
                         <Input
                           {...field}
                           id="name"
-                          className={`w-full ${
-                            errors.name ? "border-red-500" : ""
-                          }`}
+                          className={`w-full ${errors.name ? "border-red-500" : ""
+                            }`}
                           placeholder="Enter your full name"
                         />
                       )}
@@ -328,9 +348,8 @@ function ProfileHeader() {
                             {...field}
                             id="dailyRate"
                             type="number"
-                            className={`w-full pl-8 ${
-                              errors.dailyRate ? "border-red-500" : ""
-                            }`}
+                            className={`w-full pl-8 ${errors.dailyRate ? "border-red-500" : ""
+                              }`}
                             placeholder="500"
                           />
                         </div>
@@ -343,7 +362,7 @@ function ProfileHeader() {
                     )}
                   </div>
 
-                  {/* Service Type */}
+                  {/* Service Type Dropdown */}
                   <div className="space-y-2">
                     <Label className="text-sm font-medium">
                       Service Type <span className="text-red-500">*</span>
@@ -358,22 +377,27 @@ function ProfileHeader() {
                           onValueChange={field.onChange}
                         >
                           <SelectTrigger
-                            className={`w-full ${
-                              errors.serviceType ? "border-red-500" : ""
-                            }`}
+                            className={`w-full ${errors.serviceType ? "border-red-500" : ""
+                              }`}
                           >
-                            <SelectValue placeholder="Select service type" />
+                            <SelectValue placeholder={
+                              serviceLoading ? "Loading services..." :
+                                services.length === 0 ? "No services available" :
+                                  "Select service type"
+                            } />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Design">Design</SelectItem>
-                            <SelectItem value="Development">
-                              Development
-                            </SelectItem>
-                            <SelectItem value="Marketing">Marketing</SelectItem>
-                            <SelectItem value="Writing">Writing</SelectItem>
-                            <SelectItem value="Consulting">
-                              Consulting
-                            </SelectItem>
+                            {services.length > 0 ? (
+                              services.map((service) => (
+                                <SelectItem key={service._id} value={service._id}>
+                                  {service.name}
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <SelectItem value="" disabled>
+                                No services available
+                              </SelectItem>
+                            )}
                           </SelectContent>
                         </Select>
                       )}
@@ -383,9 +407,14 @@ function ProfileHeader() {
                         {errors.serviceType.message}
                       </p>
                     )}
+                    {serviceError && (
+                      <p className="text-sm text-yellow-600">
+                        Failed to load services
+                      </p>
+                    )}
                   </div>
 
-                  {/* Category Type */}
+                  {/* Category Type Dropdown */}
                   <div className="space-y-2">
                     <Label className="text-sm font-medium">
                       Category Type <span className="text-red-500">*</span>
@@ -400,34 +429,27 @@ function ProfileHeader() {
                           onValueChange={field.onChange}
                         >
                           <SelectTrigger
-                            className={`w-full ${
-                              errors.categoryType ? "border-red-500" : ""
-                            }`}
+                            className={`w-full ${errors.categoryType ? "border-red-500" : ""
+                              }`}
                           >
-                            <SelectValue placeholder="Select category" />
+                            <SelectValue placeholder={
+                              categoryLoading ? "Loading categories..." :
+                                categories.length === 0 ? "No categories available" :
+                                  "Select category"
+                            } />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="UI/UX Designer">
-                              UI/UX Designer
-                            </SelectItem>
-                            <SelectItem value="Graphic Designer">
-                              Graphic Designer
-                            </SelectItem>
-                            <SelectItem value="Web Designer">
-                              Web Designer
-                            </SelectItem>
-                            <SelectItem value="Product Designer">
-                              Product Designer
-                            </SelectItem>
-                            <SelectItem value="Frontend Developer">
-                              Frontend Developer
-                            </SelectItem>
-                            <SelectItem value="Backend Developer">
-                              Backend Developer
-                            </SelectItem>
-                            <SelectItem value="Full Stack Developer">
-                              Full Stack Developer
-                            </SelectItem>
+                            {categories.length > 0 ? (
+                              categories.map((category) => (
+                                <SelectItem key={category._id} value={category._id}>
+                                  {category.name}
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <SelectItem value="" disabled>
+                                No categories available
+                              </SelectItem>
+                            )}
                           </SelectContent>
                         </Select>
                       )}
@@ -435,6 +457,11 @@ function ProfileHeader() {
                     {errors.categoryType && (
                       <p className="text-sm text-red-500">
                         {errors.categoryType.message}
+                      </p>
+                    )}
+                    {categoryError && (
+                      <p className="text-sm text-yellow-600">
+                        Failed to load categories
                       </p>
                     )}
                   </div>
@@ -454,9 +481,8 @@ function ProfileHeader() {
                           onValueChange={field.onChange}
                         >
                           <SelectTrigger
-                            className={`w-full ${
-                              errors.location ? "border-red-500" : ""
-                            }`}
+                            className={`w-full ${errors.location ? "border-red-500" : ""
+                              }`}
                           >
                             <SelectValue placeholder="Select location" />
                           </SelectTrigger>
@@ -496,9 +522,8 @@ function ProfileHeader() {
                           onValueChange={field.onChange}
                         >
                           <SelectTrigger
-                            className={`w-full ${
-                              errors.language ? "border-red-500" : ""
-                            }`}
+                            className={`w-full ${errors.language ? "border-red-500" : ""
+                              }`}
                           >
                             <SelectValue placeholder="Select language" />
                           </SelectTrigger>
@@ -531,7 +556,6 @@ function ProfileHeader() {
                 <Button
                   type="submit"
                   className="bg-blue-600 hover:bg-blue-700 button-gradient"
-                  onClick={() => setIsDialogOpen(false)}
                 >
                   Save Changes
                 </Button>
@@ -542,41 +566,37 @@ function ProfileHeader() {
       </div>
 
       {/* Main profile content */}
-
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 py-6">
         {/* Profile Section */}
         <div className="flex flex-col sm:flex-row items-center sm:items-center gap-6 sm:gap-8 w-full lg:w-auto">
           {/* Profile Image */}
           <div className="relative flex-shrink-0">
             <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-white shadow-lg">
-              <Image
-                src={profileImage}
-                alt={profileData.name}
-                width={112}
-                height={112}
-                className="w-full h-full object-cover"
-              />
+              {
+                data?.data?.profile && <Image
+                  src={baseURL + "/" + data?.data?.profile}
+                  alt={profileData.name}
+                  width={112}
+                  height={112}
+                  className="w-full h-full object-cover"
+                />
+              }
             </div>
             {/* Online Indicator */}
-            <div className="absolute -top-1 -right-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
-              <div className="w-3 h-3 bg-white rounded-full flex items-center justify-center">
-                <span className="text-xs font-bold text-pink-500">m</span>
-              </div>
-            </div>
+            <div className="absolute bottom-2 right-2 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
           </div>
-
           {/* Profile Info */}
           <div className="flex-1">
             <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 break-words text-center md:text-left">
-              {profileData.name}
+              {data?.data?.fullName || profileData.name}
             </h1>
 
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-gray-600 mb-3 text-sm sm:text-base">
-              <p>{profileData.categoryType}</p>
+              <p>{data?.data?.designation || "Professional"}</p>
               <span>|</span>
-              <p>5 Years of experience</p>
+              <p>{data?.data?.yearsOfExperience || "0"} of experience</p>
               <span>|</span>
-              <p>{profileData.location}</p>
+              <p>{data?.data?.location || profileData.location}</p>
             </div>
 
             {/* Country Flags */}
@@ -606,7 +626,6 @@ function ProfileHeader() {
         </div>
 
         {/* Status & Info */}
-
         <div className="flex flex-col sm:flex-row lg:flex-col items-center sm:items-center lg:items-end gap-3 w-full lg:w-auto">
           {/* Available Badge */}
           <Badge className="bg-none flex items-center">
@@ -626,7 +645,7 @@ function ProfileHeader() {
               <DollarSign className="w-3 h-3 text-blue-600" />
             </div>
             <span className="text-blue-600 font-semibold">
-              Day Rate ${profileData.dailyRate}
+              Day Rate ${data?.data?.dailyRate || profileData.dailyRate}
             </span>
           </div>
         </div>

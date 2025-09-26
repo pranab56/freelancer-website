@@ -1,25 +1,123 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
-import { Send, Paperclip, Image } from "lucide-react";
-import { useChat, useAppDispatch } from "../../redux/hooks";
-import {
-  sendMessage,
-  addMessage,
-  setTypingIndicator,
-  fetchChatMessages,
-} from "../../redux/features/chat/chatSlice";
-import { Button } from "../ui/button";
 import { Dialog } from "@radix-ui/react-dialog";
-import { DialogContent, DialogTrigger, DialogTitle } from "../ui/dialog";
-import ReportFreeLancer from "./ReportFreeLancer";
+import { Image, Paperclip, Send } from "lucide-react";
 import Link from "next/link";
-import { useSelector } from "react-redux";
-import { getCurrentUser } from "@/redux/features/currentUser/currentuserSlice";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "../ui/button";
+import { DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog";
+import ReportFreeLancer from "./ReportFreeLancer";
+
+// Demo data
+const demoChats = [
+  {
+    id: "1",
+    name: "John Doe",
+    avatar: "👨‍💼",
+    isOnline: true,
+    lastMessage: "I'll send the files tomorrow",
+    timestamp: "2:30 PM",
+    unreadCount: 2,
+    hasNewMessage: true,
+    projectInfo: {
+      title: "Website Redesign",
+      deliveryDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days from now
+    }
+  },
+  {
+    id: "2",
+    name: "Sarah Smith",
+    avatar: "👩‍💻",
+    isOnline: false,
+    lastMessage: "Thanks for the feedback!",
+    timestamp: "Yesterday",
+    unreadCount: 0,
+    hasNewMessage: false,
+    projectInfo: {
+      title: "Mobile App Development",
+      deliveryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days from now
+    }
+  },
+  {
+    id: "3",
+    name: "Mike Johnson",
+    avatar: "👨‍🎨",
+    isOnline: true,
+    lastMessage: "Can we schedule a call?",
+    timestamp: "10:15 AM",
+    unreadCount: 1,
+    hasNewMessage: true,
+    projectInfo: {
+      title: "Logo Design",
+      deliveryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+    }
+  }
+];
+
+const demoMessages = {
+  "1": [
+    {
+      id: 1,
+      text: "Hello! How's the project going?",
+      sender: "user1",
+      timestamp: "2:15 PM",
+      avatar: "👨‍💼"
+    },
+    {
+      id: 2,
+      text: "It's going great! I'm almost done with the initial design.",
+      sender: "user2",
+      timestamp: "2:20 PM",
+      avatar: "👤"
+    },
+    {
+      id: 3,
+      text: "That's awesome! Can't wait to see it.",
+      sender: "user1",
+      timestamp: "2:25 PM",
+      avatar: "👨‍💼"
+    }
+  ],
+  "2": [
+    {
+      id: 1,
+      text: "Hi! I've reviewed your work and it looks good.",
+      sender: "user2",
+      timestamp: "Yesterday",
+      avatar: "👤"
+    },
+    {
+      id: 2,
+      text: "Thank you! I'll make the revisions today.",
+      sender: "user1",
+      timestamp: "Yesterday",
+      avatar: "👩‍💻"
+    }
+  ],
+  "3": [
+    {
+      id: 1,
+      text: "Hey, I have some questions about the project requirements.",
+      sender: "user1",
+      timestamp: "10:00 AM",
+      avatar: "👨‍🎨"
+    },
+    {
+      id: 2,
+      text: "Sure, what would you like to know?",
+      sender: "user2",
+      timestamp: "10:05 AM",
+      avatar: "👤"
+    }
+  ]
+};
+
 const ChatInterface = () => {
-  const dispatch = useAppDispatch();
-  const { selectedChat, messages, isSendingMessage, typingUsers } = useChat();
+  const [selectedChat, setSelectedChat] = useState(null);
+  const [messages, setMessages] = useState({});
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
+  const [typingUsers, setTypingUsers] = useState({});
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
-  const { type } = useSelector((state) => state.currentUser.currentUser || {});
+  const [currentUserType] = useState("client"); // or "freelancer"
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -42,43 +140,28 @@ const ChatInterface = () => {
       const distance = targetDate.getTime() - now;
 
       if (distance < 0) {
-        // Timer expired
         clearInterval(timer);
-        setTimeLeft({
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-        });
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         return;
       }
 
-      // Calculate time units
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      setTimeLeft({
-        days,
-        hours,
-        minutes,
-        seconds,
-      });
+      setTimeLeft({ days, hours, minutes, seconds });
     }, 1000);
 
-    // Cleanup timer
     return () => clearInterval(timer);
-  }, [selectedChat?.projectInfo?.deliveryDate]); // Re-run when delivery date changes
+  }, [selectedChat?.projectInfo?.deliveryDate]);
 
   // Get messages for selected chat
   const currentMessages = selectedChat ? messages[selectedChat.id] || [] : [];
 
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
-  const currentUser = "user2"; // Current user identifier
+  const currentUser = "user2";
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -89,15 +172,19 @@ const ChatInterface = () => {
     }
   };
 
-  // Fetch messages when chat is selected
+  // Load demo messages when component mounts
   useEffect(() => {
-    if (selectedChat) {
-      dispatch(fetchChatMessages(selectedChat.id));
+    setMessages(demoMessages);
+  }, []);
+
+  // Auto-select first chat on initial load
+  useEffect(() => {
+    if (demoChats.length > 0 && !selectedChat) {
+      setSelectedChat(demoChats[0]);
     }
-  }, [selectedChat, dispatch]);
+  }, []);
 
   useEffect(() => {
-    // Add a small delay to ensure DOM is updated
     const timeoutId = setTimeout(scrollToBottom, 100);
     return () => clearTimeout(timeoutId);
   }, [currentMessages]);
@@ -107,43 +194,52 @@ const ChatInterface = () => {
 
     const messageText = newMessage;
     setNewMessage("");
+    setIsSendingMessage(true);
 
-    // Send message to server (this will handle optimistic updates)
-    try {
-      await dispatch(
-        sendMessage({ chatId: selectedChat.id, message: messageText })
-      ).unwrap();
+    // Add message optimistically
+    const newMessageObj = {
+      id: Date.now(),
+      text: messageText,
+      sender: currentUser,
+      timestamp: "just now",
+      avatar: "👤"
+    };
+
+    setMessages(prev => ({
+      ...prev,
+      [selectedChat.id]: [...(prev[selectedChat.id] || []), newMessageObj]
+    }));
+
+    // Simulate API call delay
+    setTimeout(() => {
+      setIsSendingMessage(false);
 
       // Simulate typing indicator and auto-reply
-      dispatch(
-        setTypingIndicator({
-          chatId: selectedChat.id,
-          userId: "user1",
-          isTyping: true,
-        })
-      );
+      setTypingUsers(prev => ({
+        ...prev,
+        [selectedChat.id]: true
+      }));
+
       setTimeout(() => {
-        dispatch(
-          setTypingIndicator({
-            chatId: selectedChat.id,
-            userId: "user1",
-            isTyping: false,
-          })
-        );
+        setTypingUsers(prev => ({
+          ...prev,
+          [selectedChat.id]: false
+        }));
+
         const autoReply = {
           id: Date.now() + 1,
           text: getRandomReply(),
           sender: "user1",
           timestamp: "just now",
-          avatar: "👨‍💼",
+          avatar: selectedChat.avatar,
         };
-        dispatch(addMessage({ chatId: selectedChat.id, message: autoReply }));
+
+        setMessages(prev => ({
+          ...prev,
+          [selectedChat.id]: [...(prev[selectedChat.id] || []), autoReply]
+        }));
       }, 1500);
-    } catch (error) {
-      console.error("Failed to send message:", error);
-      // Restore the message if sending failed
-      setNewMessage(messageText);
-    }
+    }, 500);
   };
 
   const getRandomReply = () => {
@@ -253,13 +349,13 @@ const ChatInterface = () => {
 
         {/* Right Side - Action Buttons */}
         <div className="flex flex-col md:flex-row justify-center gap-2 items-center space-x-0 md:space-x-4">
-          <Link href={type === "client" ? `/profile/1` : `/client-profile/1`}>
+          <Link href={currentUserType === "client" ? `/profile/1` : `/client-profile/1`}>
             <Button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 font-medium transition-colors">
               <span className="hidden md:block">
-                {type === "client" ? "View Profile" : "View Client Profile"}
+                {currentUserType === "client" ? "View Profile" : "View Client Profile"}
               </span>
               <span className="block md:hidden">
-                {type === "client" ? "Profile" : "Client"}
+                {currentUserType === "client" ? "Profile" : "Client"}
               </span>
             </Button>
           </Link>
@@ -303,9 +399,8 @@ const ChatInterface = () => {
           groupMessages().map((group, groupIndex) => (
             <div
               key={groupIndex}
-              className={`flex ${
-                group.sender === currentUser ? "justify-end" : "justify-start"
-              }`}
+              className={`flex ${group.sender === currentUser ? "justify-end" : "justify-start"
+                }`}
             >
               {group.sender !== currentUser && (
                 <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm mr-3 mt-auto">
@@ -314,30 +409,26 @@ const ChatInterface = () => {
               )}
 
               <div
-                className={`flex flex-col space-y-1 max-w-xs lg:max-w-md ${
-                  group.sender === currentUser ? "items-end" : "items-start"
-                }`}
+                className={`flex flex-col space-y-1 max-w-xs lg:max-w-md ${group.sender === currentUser ? "items-end" : "items-start"
+                  }`}
               >
                 {group.messages.map((message, messageIndex) => (
                   <div
                     key={message.id}
-                    className={`px-4 py-2 rounded-2xl break-words ${
-                      group.sender === currentUser
+                    className={`px-4 py-2 rounded-2xl break-words ${group.sender === currentUser
                         ? "bg-gradient-to-r from-[#002282] to-[#0170DA] text-white rounded-br-sm"
                         : "bg-white text-gray-900 border border-gray-200 rounded-bl-sm"
-                    } ${
-                      messageIndex === group.messages.length - 1 ? "mb-1" : ""
-                    }`}
+                      } ${messageIndex === group.messages.length - 1 ? "mb-1" : ""
+                      }`}
                   >
                     <p className="text-sm">{message.text}</p>
                   </div>
                 ))}
                 <div
-                  className={`flex items-center space-x-2 text-xs text-gray-500 ${
-                    group.sender === currentUser
+                  className={`flex items-center space-x-2 text-xs text-gray-500 ${group.sender === currentUser
                       ? "flex-row-reverse space-x-reverse"
                       : ""
-                  }`}
+                    }`}
                 >
                   <span>{group.timestamp}</span>
                   {group.sender === currentUser && (

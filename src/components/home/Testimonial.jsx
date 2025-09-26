@@ -1,19 +1,18 @@
 "use client";
-import React, {
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
-  useCallback,
-  useMemo,
 } from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { useSelector } from "react-redux";
 
 function Testimonial() {
   // All hooks must be called at the top level, before any conditional returns
   const [isClient, setIsClient] = useState(false);
-  const messages = useSelector((state) => state.language.messages);
+  const messages = "Hello world";
   const swiperRef = useRef(null);
   const [expandedComments, setExpandedComments] = useState({});
   const [truncateLength, setTruncateLength] = useState(120); // default for desktop

@@ -1,25 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import ReactCountryFlag from "react-country-flag";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Drawer,
   DrawerClose,
@@ -28,58 +12,57 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import provideIcon from "@/utils/IconProvider/provideIcon";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setCurrentUser,
-  logout,
-} from "@/redux/features/currentUser/currentuserSlice";
-import provideIcon from "@/utils/IconProvider/provideIcon";
-import LanguageSelector from "@/components/common/LanguageSelector";
 
 function FreelancerNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const dispatch = useDispatch();
 
-  // Get translations from Redux
-  const messages = useSelector((state) => state.language.messages);
-  const freelancerNavTranslations = messages?.freelancerNavbar || {};
-  const commonTranslations = messages?.common || {};
-
-  const userType = useSelector((state) => state.currentUser.currentUser.type);
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Navigation items with translations
+  // Navigation items in English
   const navItems = [
     {
-      label: freelancerNavTranslations.jobBoard || "Job Board",
+      label: "Job Board",
       href: `/job-board`,
     },
     {
-      label: freelancerNavTranslations.tenders || "Tenders",
+      label: "Tenders",
       href: `/tenders`,
     },
     {
-      label: freelancerNavTranslations.inbox || "Inbox",
-      href: `/inbox`,
+      label: "Inbox",
+      href: `/chat`,
     },
     {
-      label: freelancerNavTranslations.invoices || "Invoices",
+      label: "Invoices",
       href: `/invoices`,
     },
     {
-      label: freelancerNavTranslations.myProjects || "My Projects",
+      label: "My Projects",
       href: `/my-projects`,
     },
     {
-      label: freelancerNavTranslations.mySubscription || "My Subscription",
+      label: "My Subscription",
       href: `/my-subscription`,
+    },
+    {
+      label: "Package",
+      href: `/package`,
     },
   ];
 
@@ -88,7 +71,7 @@ function FreelancerNavBar() {
     return pathname === href;
   };
 
-  // Mock user data (in real app, this would come from auth context)
+  // Mock user data
   const user = {
     name: "Sabbir Ahmed",
     role: "UI/UX Designer",
@@ -96,18 +79,8 @@ function FreelancerNavBar() {
   };
 
   const handleSignOut = () => {
-    localStorage.removeItem("token");
-    dispatch(logout());
-    router.replace("/");
-    console.log("sign out");
-  };
-
-  const showAsFreelancer = () => {
-    if (userType === "client") {
-      dispatch(setCurrentUser({ type: "client" }));
-    } else {
-      dispatch(setCurrentUser({ type: "freelancer" }));
-    }
+    localStorage.clear();
+    router.push("/auth/login")
   };
 
   if (!mounted) {
@@ -130,25 +103,23 @@ function FreelancerNavBar() {
             <Link
               key={index}
               href={item.href}
-              className={`font-medium transition-colors ${
-                isActiveLink(item.href)
+              className={`font-medium transition-colors ${isActiveLink(item.href)
                   ? "text-blue-600 hover:text-blue-700"
                   : "text-gray-700 hover:text-gray-900"
-              }`}
+                }`}
             >
               {item.label}
             </Link>
           ))}
         </div>
-        <LanguageSelector className="hidden lg:flex" />
 
         {/* User Profile Section */}
-        <div className="hidden lg:flex items-center  ">
+        <div className="hidden lg:flex items-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="flex items-center space-x-3 shadow-md border hover:bg-gray-50  h-12"
+                className="flex items-center space-x-3 shadow-md border hover:bg-gray-50 h-12"
               >
                 <Image
                   src={user.avatar}
@@ -167,25 +138,24 @@ function FreelancerNavBar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuItem asChild>
-                <Link href={`/profile/1`} className="w-full cursor-pointer">
-                  {freelancerNavTranslations.viewProfile || "View Profile"}
+                <Link href={`/profile`} className="w-full cursor-pointer">
+                  View Profile
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={`/settings`} className="w-full cursor-pointer">
-                  {freelancerNavTranslations.accountSettings ||
-                    "Account Settings"}
+                  Account Settings
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={`/billing`} className="w-full cursor-pointer">
-                  {freelancerNavTranslations.billingPlans || "Billing & Plans"}
+                  Billing & Plans
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <Link href={`/help`} className="w-full cursor-pointer">
-                  {freelancerNavTranslations.helpSupport || "Help & Support"}
+                  Help & Support
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -193,7 +163,7 @@ function FreelancerNavBar() {
                 className="text-red-600 cursor-pointer"
                 onClick={handleSignOut}
               >
-                {freelancerNavTranslations.signOut || "Sign Out"}
+                Sign Out
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -231,16 +201,13 @@ function FreelancerNavBar() {
                 </div>
               </DrawerHeader>
               <div className="px-6 pb-6 space-y-2">
-                {/* Mobile Language Selector */}
-                <LanguageSelector className="w-full mb-2" />
                 {/* Mobile Navigation */}
                 {navItems.map((item, index) => (
                   <Button
                     key={index}
                     variant="ghost"
-                    className={`w-full justify-start ${
-                      isActiveLink(item.href) ? "bg-blue-50 text-blue-600" : ""
-                    }`}
+                    className={`w-full justify-start ${isActiveLink(item.href) ? "bg-blue-50 text-blue-600" : ""
+                      }`}
                     asChild
                   >
                     <Link href={item.href}>{item.label}</Link>
@@ -251,49 +218,38 @@ function FreelancerNavBar() {
                 <div className="pt-4 border-t space-y-2">
                   <Button
                     variant="ghost"
-                    className="w-full justify-start text-red-600"
+                    className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/profile/1`}>
-                      {freelancerNavTranslations.viewProfile || "View Profile"}
-                    </Link>
+                    <Link href={`/profile/1`}>View Profile</Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/settings`}>
-                      {freelancerNavTranslations.accountSettings ||
-                        "Account Settings"}
-                    </Link>
+                    <Link href={`/settings`}>Account Settings</Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href={`/billing`}>
-                      {freelancerNavTranslations.billingPlans ||
-                        "Billing & Plans"}
-                    </Link>
+                    <Link href={`/billing`}>Billing & Plans</Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href="/help">
-                      {freelancerNavTranslations.helpSupport ||
-                        "Help & Support"}
-                    </Link>
+                    <Link href="/help">Help & Support</Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start text-red-600"
                     onClick={handleSignOut}
                   >
-                    {freelancerNavTranslations.signOut || "Sign Out"}
+                    Sign Out
                   </Button>
                 </div>
               </div>

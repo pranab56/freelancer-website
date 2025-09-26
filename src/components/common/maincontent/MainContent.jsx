@@ -1,10 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import JobTenderCard from "../JobTenderCard";
 import { Button } from "@/components/ui/button";
-import { Filter } from "lucide-react";
-import FilterDrawer from "../FilterDrawer";
 import {
   Select,
   SelectContent,
@@ -12,52 +7,73 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Filter } from "lucide-react";
+import { useState } from "react";
+import FilterDrawer from "../FilterDrawer";
+import JobTenderCard from "../JobTenderCard";
 
-function MainContent({ type = "tender" }) {
+function MainContent({ type = "job", jobs = [], isLoading, isError }) {
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [displayedItems, setDisplayedItems] = useState(6);
-  const [isLoading, setIsLoading] = useState(false);
+  const [sortOption, setSortOption] = useState("newest"); // Added state for sorting
 
-  // Get translations from Redux
-  const messages = useSelector((state) => state.language.messages);
+  // Get translations from Redux (placeholder)
+  const messages = "EN";
   const mainContentTranslations = messages?.mainContent || {};
   const commonTranslations = messages?.common || {};
 
-  // Mock data for demonstration - in real app this would come from props or API
-  const generateItems = (count) => {
-    return Array.from({ length: count }, (_, index) => ({
-      id: index + 1,
-      ...(type === "job"
-        ? {
-            jobImg: "/jobtender/job_tender.png",
-            name: `Company ${index + 1}`,
-            designation: `Senior Position ${index + 1}`,
-            location: ["Austin", "Remote", "New York"][index % 3],
-            jobType: ["Remote", "On-site", "Hybrid"][index % 3],
-          }
-        : {
-            jobImg: "/jobtender/job_tender.png",
-            projectName: `Project ${index + 1}`,
-            projectRole: `Role ${index + 1}`,
-            posted: "03/2023",
-            deadline: "05/2023",
-          }),
-    }));
-  };
+  // Apply sorting locally on the client side.
+  // This is a simple example. For large datasets, sorting should be done on the server.
+  const sortedJobs = [...jobs].sort((a, b) => {
+    switch (sortOption) {
+      case "oldest":
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      case "newest":
+      default:
+        return new Date(b.createdAt) - new Date(a.createdAt);
+    }
+  });
 
-  // Generate more items than we initially display
-  const allItems = generateItems(30); // Generate 30 items total
-  const items = allItems.slice(0, displayedItems);
+  // Apply pagination
+  const itemsToDisplay = sortedJobs.slice(0, displayedItems);
 
   const handleLoadMore = async () => {
-    setIsLoading(true);
-
     // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
+    await new Promise((resolve) => setTimeout(resolve, 500));
     setDisplayedItems((prev) => prev + 6);
-    setIsLoading(false);
   };
+
+  const handleSortChange = (value) => {
+    setSortOption(value);
+    setDisplayedItems(6); // Reset pagination when sort changes
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, index) => (
+            <div key={index} className="border rounded-lg p-4 animate-pulse">
+              <div className="h-48 bg-gray-200 rounded mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded mb-2 w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex-1 p-6">
+        <div className="text-center text-red-500">
+          Failed to load jobs. Please try again later.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1">
@@ -73,9 +89,9 @@ function MainContent({ type = "tender" }) {
             <p className="text-gray-600 mt-1">
               {type === "job"
                 ? mainContentTranslations.jobBoardSubtitle ||
-                  "Find the perfect opportunities that match your skills"
+                "Find the perfect opportunities that match your skills"
                 : mainContentTranslations.tendersSubtitle ||
-                  "Explore available tenders and submit your proposals"}
+                "Explore available tenders and submit your proposals"}
             </p>
           </div>
 
@@ -92,10 +108,10 @@ function MainContent({ type = "tender" }) {
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-500">
               {mainContentTranslations.showingResults || "Showing"}{" "}
-              {items.length} {mainContentTranslations.resultsText || "results"}
+              {itemsToDisplay.length} of {jobs.length} {mainContentTranslations.resultsText || "results"}
             </span>
 
-            <Select>
+            <Select value={sortOption} onValueChange={handleSortChange}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue
                   placeholder={
@@ -110,12 +126,13 @@ function MainContent({ type = "tender" }) {
                 <SelectItem value="oldest">
                   {mainContentTranslations.sortOldest || "Oldest First"}
                 </SelectItem>
-                <SelectItem value="budget-high">
+                {/* You can add budget sorting if your Job object has a 'budget' field */}
+                {/* <SelectItem value="budget-high">
                   {mainContentTranslations.sortBudgetHigh || "Highest Budget"}
                 </SelectItem>
                 <SelectItem value="budget-low">
                   {mainContentTranslations.sortBudgetLow || "Lowest Budget"}
-                </SelectItem>
+                </SelectItem> */}
               </SelectContent>
             </Select>
           </div>
@@ -130,18 +147,18 @@ function MainContent({ type = "tender" }) {
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 mx-auto px-4 md:px-0">
-        {items.map((item) => (
+        {itemsToDisplay.map((job) => (
           <JobTenderCard
-            key={item.id}
+            key={job._id} // Use the unique _id from your API
             type={type}
-            data={item}
-            className="h-full" // Ensures cards have equal height
+            data={job} // Pass the entire job object
+            className="h-full"
           />
         ))}
       </div>
 
       {/* Empty State - Show when no jobs available */}
-      {items.length === 0 && (
+      {itemsToDisplay.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16">
           <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mb-4">
             <svg
@@ -169,26 +186,14 @@ function MainContent({ type = "tender" }) {
       )}
 
       {/* Load More Button - For pagination */}
-      {items.length > 0 && displayedItems < allItems.length && (
+      {itemsToDisplay.length > 0 && displayedItems < jobs.length && (
         <div className="flex justify-center mt-8">
           <Button
             onClick={handleLoadMore}
-            disabled={isLoading}
             variant="outline"
             className="px-6 py-3"
           >
-            {isLoading ? (
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
-                {mainContentTranslations.loadingText || "Loading..."}
-              </div>
-            ) : (
-              `${mainContentTranslations.loadMoreText || "Load More"} ${
-                type === "job"
-                  ? mainContentTranslations.jobsText || "Jobs"
-                  : mainContentTranslations.tendersText || "Tenders"
-              }`
-            )}
+            {`Load More ${type === "job" ? "Jobs" : "Tenders"}`}
           </Button>
         </div>
       )}

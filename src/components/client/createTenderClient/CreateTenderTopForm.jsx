@@ -2,6 +2,7 @@
 
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -17,32 +18,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setProjectTitle,
-  setStartDate,
-  setEndDate,
-} from "@/redux/features/createTender/createtenderSlice";
 
 export default function CreateTenderTopForm() {
-  const dispatch = useDispatch();
-  const projectTitle =
-    useSelector((state) => state.createTender.projectTitle) || "";
-  const startDateString = useSelector((state) => state.createTender.startDate);
-  const endDateString = useSelector((state) => state.createTender.endDate);
+  const [projectTitle, setProjectTitle] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   // Handle date selection
   const handleStartDateSelect = (date) => {
-    dispatch(setStartDate(date ? date.toISOString() : null));
+    setStartDate(date);
   };
 
   const handleEndDateSelect = (date) => {
-    dispatch(setEndDate(date ? date.toISOString() : null));
+    setEndDate(date);
   };
-
-  // Convert ISO strings to Date objects for the Calendar component
-  const startDate = startDateString ? new Date(startDateString) : null;
-  const endDate = endDateString ? new Date(endDateString) : null;
 
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 md:px-6 2xl:px-0">
@@ -63,7 +52,7 @@ export default function CreateTenderTopForm() {
             <label className="font-medium">Project title*</label>
             <Select
               value={projectTitle}
-              onValueChange={(value) => dispatch(setProjectTitle(value))}
+              onValueChange={(value) => setProjectTitle(value)}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select project title" />
@@ -77,6 +66,67 @@ export default function CreateTenderTopForm() {
             </Select>
           </div>
 
+          <div className="flex flex-col gap-2 ">
+            <label className="font-medium">Category*</label>
+            <Select
+              value={projectTitle}
+              onValueChange={(value) => setProjectTitle(value)}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select project title" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ux-designer">
+                  User Experience Designer
+                </SelectItem>
+                <SelectItem value="ui-designer">UI Designer</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+
+          <div className="flex flex-col gap-2 ">
+            <label className="font-medium">Service Type*</label>
+            <Select
+              value={projectTitle}
+              onValueChange={(value) => setProjectTitle(value)}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select project title" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ux-designer">
+                  User Experience Designer
+                </SelectItem>
+                <SelectItem value="ui-designer">UI Designer</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+
+
+          <div className="flex flex-col gap-2">
+            <label className="font-medium">Upload Image</label>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                id="image-upload"
+              />
+              <label
+                htmlFor="image-upload"
+                className="cursor-pointer flex flex-col items-center gap-2"
+              >
+                <Upload className="h-8 w-8 text-gray-400" />
+                <span className="text-gray-500">
+                  {uploadedImage ? uploadedImage.name : "Upload Image"}
+                </span>
+              </label>
+            </div>
+          </div>
+
           <div className="grid grid-cols-2 gap-6 mt-6">
             {/* Start Date */}
             <div className="flex flex-col gap-2">
@@ -85,9 +135,8 @@ export default function CreateTenderTopForm() {
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className={`w-full justify-start text-left font-normal ${
-                      !startDate && "text-muted-foreground"
-                    }`}
+                    className={`w-full justify-start text-left font-normal ${!startDate && "text-muted-foreground"
+                      }`}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {startDate ? format(startDate, "MM/dd/yyyy") : "mm/dd/yyyy"}
@@ -111,9 +160,8 @@ export default function CreateTenderTopForm() {
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className={`w-full justify-start text-left font-normal ${
-                      !endDate && "text-muted-foreground"
-                    }`}
+                    className={`w-full justify-start text-left font-normal ${!endDate && "text-muted-foreground"
+                      }`}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {endDate ? format(endDate, "MM/dd/yyyy") : "mm/dd/yyyy"}

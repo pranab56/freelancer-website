@@ -1,39 +1,31 @@
 "use client";
-import React, { useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import Image from "next/image";
-import { useSelector } from "react-redux";
+
+// Define translations locally
+const dialogTranslations = {
+  title: "Invoice Details",
+  clientName: "Client Name",
+  serviceType: "Service Type",
+  projectName: "Project Name",
+  workingDay: "Working Day",
+  totalAmount: "Total Amount",
+  status: "Status",
+  doneButton: "Done",
+};
 
 export default function ViewInvoiceDetailsDialog({
   isOpen,
   onClose,
   invoiceData = null,
 }) {
-  // Get translations from Redux
-  const messages = useSelector((state) => state.language.messages);
-  const dialogTranslations = useMemo(
-    () =>
-      messages?.invoiceDialogs?.viewInvoiceDetails || {
-        title: "Invoice Details",
-        clientName: "Client Name",
-        serviceType: "Service Type",
-        projectName: "Project Name",
-        workingDay: "Working Day",
-        totalAmount: "Total Amount",
-        status: "Status",
-        doneButton: "Done",
-      },
-    [messages]
-  );
-
   // Default invoice data if none provided
   const defaultInvoiceData = {
     clientName: "s. jean",
@@ -121,28 +113,21 @@ export default function ViewInvoiceDetailsDialog({
                   {dialogTranslations.status}:
                 </span>
                 <span
-                  className={`ml-2 px-2 py-1 rounded-md text-sm font-medium ${
-                    invoice.status === "Pending"
+                  className={`ml-2 px-2 py-1 rounded-md text-sm font-medium ${invoice.status === "Pending"
                       ? "bg-yellow-100 text-yellow-800"
                       : invoice.status === "Paid"
-                      ? "bg-green-100 text-green-800"
-                      : invoice.status === "Overdue"
-                      ? "bg-red-100 text-red-800"
-                      : "bg-gray-100 text-gray-800"
-                  }`}
+                        ? "bg-green-100 text-green-800"
+                        : invoice.status === "Overdue"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-gray-100 text-gray-800"
+                    }`}
                 >
                   {invoice.status}
                 </span>
               </div>
             </div>
-            {/* <div className="absolute w-40 h-40 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20 ">
-              <Image
-                src={"/jobtender/job_tender.png"}
-                alt="Invoice Logo"
-                fill
-                className=" rounded-full"
-              />
-            </div> */}
+
+            {/* Logo */}
             <div className="absolute top-5 right-5">
               <Image
                 src={"/jobtender/job_tender.png"}

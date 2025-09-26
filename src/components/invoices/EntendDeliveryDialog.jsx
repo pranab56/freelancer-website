@@ -1,42 +1,38 @@
-import * as React from "react";
-import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 import useToast from "@/hooks/showToast/ShowToast";
-import { useSelector } from "react-redux";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import * as React from "react";
+import { Controller, useForm } from "react-hook-form";
+
+// Define translations locally
+const dialogTranslations = {
+  title: "Select Date & Add Reason",
+  dateLabel: "Date",
+  datePlaceholder: "Pick a date",
+  reasonLabel: "Add Reason",
+  reasonPlaceholder: "Enter your reason...",
+  submitButton: "Submit",
+};
 
 export default function ExtendDeliveryDialog({ isOpen, onClose }) {
   const showToast = useToast();
-  const messages = useSelector((state) => state.language.messages);
-  const dialogTranslations = React.useMemo(
-    () =>
-      messages?.invoiceDialogs?.extendDelivery || {
-        title: "Select Date & Add Reason",
-        dateLabel: "Date",
-        datePlaceholder: "Pick a date",
-        reasonLabel: "Add Reason",
-        reasonPlaceholder: "Enter your reason...",
-        submitButton: "Submit",
-      },
-    [messages]
-  );
 
   React.useEffect(() => {
     setOpen(isOpen);

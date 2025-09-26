@@ -1,36 +1,103 @@
 "use client";
-import { Search } from "lucide-react";
-import React, { useState, useEffect } from "react";
-import { useChat, useAppDispatch } from "../../redux/hooks";
-import {
-  selectChat,
-  setSearchQuery,
-  fetchChatList,
-} from "../../redux/features/chat/chatSlice";
-import Image from "next/image";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
+
+// Demo data
+const demoChats = [
+  {
+    id: "1",
+    name: "John Doe",
+    avatar: "/images/avatar1.jpg",
+    isOnline: true,
+    lastMessage: "I'll send the files tomorrow",
+    timestamp: "2:30 PM",
+    unreadCount: 2,
+    hasNewMessage: true,
+    projectInfo: {
+      title: "Website Redesign",
+      deliveryDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+    }
+  },
+  {
+    id: "2",
+    name: "Sarah Smith",
+    avatar: "/images/avatar2.jpg",
+    isOnline: false,
+    lastMessage: "Thanks for the feedback!",
+    timestamp: "Yesterday",
+    unreadCount: 0,
+    hasNewMessage: false,
+    projectInfo: {
+      title: "Mobile App Development",
+      deliveryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+    }
+  },
+  {
+    id: "3",
+    name: "Mike Johnson",
+    avatar: "/images/avatar3.jpg",
+    isOnline: true,
+    lastMessage: "Can we schedule a call?",
+    timestamp: "10:15 AM",
+    unreadCount: 1,
+    hasNewMessage: true,
+    projectInfo: {
+      title: "Logo Design",
+      deliveryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+    }
+  },
+  {
+    id: "4",
+    name: "Emily Wilson",
+    avatar: "/images/avatar4.jpg",
+    isOnline: true,
+    lastMessage: "The design looks perfect!",
+    timestamp: "9:45 AM",
+    unreadCount: 0,
+    hasNewMessage: false,
+    projectInfo: {
+      title: "Brand Identity",
+      deliveryDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+    }
+  }
+];
 
 function ChatListSidebar() {
-  const dispatch = useAppDispatch();
-
-  const { chatList, selectedChat, isLoading, searchQuery, filteredChatList } =
-    useChat();
+  const [chatList, setChatList] = useState([]);
+  const [selectedChat, setSelectedChat] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    // Fetch chat list on component mount
-    dispatch(fetchChatList());
-  }, [dispatch]);
+    // Simulate API call
+    setTimeout(() => {
+      setChatList(demoChats);
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
   const handleChatSelect = (chatId) => {
-    dispatch(selectChat(chatId));
+    const chat = chatList.find(chat => chat.id === chatId);
+    setSelectedChat(chat);
+
+    // Notify parent component (ChatInterface) about selected chat
+    if (window.React && window.React.setState) {
+      // This would be handled differently in a real app - using context or props
+      window.selectedChat = chat;
+    }
   };
 
   const handleSearchChange = (query) => {
-    dispatch(setSearchQuery(query));
+    setSearchQuery(query);
   };
 
-  // Use filtered list if search query exists, otherwise use full list
-  const displayChatList = searchQuery.trim() ? filteredChatList : chatList;
+  const filteredChatList = searchQuery.trim()
+    ? chatList.filter(chat =>
+      chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    : chatList;
 
   return (
     <div className="lg:w-[30rem] bg-white flex flex-col ">
@@ -46,7 +113,7 @@ function ChatListSidebar() {
       <div className="flex-1 lg:hidden">
         <ScrollArea className="w-full h-full">
           <HorizontalChatList
-            chats={displayChatList}
+            chats={filteredChatList}
             selectedChat={selectedChat}
             onChatSelect={handleChatSelect}
             isLoading={isLoading}
@@ -59,7 +126,7 @@ function ChatListSidebar() {
       <div className="flex-1 overflow-y-auto hidden lg:block">
         <ScrollArea className="h-full">
           <ChatList
-            chats={displayChatList}
+            chats={filteredChatList}
             selectedChat={selectedChat}
             onChatSelect={handleChatSelect}
             isLoading={isLoading}
@@ -126,6 +193,7 @@ function HorizontalChatList({ chats, selectedChat, onChatSelect, isLoading }) {
 
   return (
     <div className="p-4">
+      <TotalMessageCount chatList={chats} />
       <div
         className="flex space-x-4 sm:pb-2"
         style={{ minWidth: "max-content" }}
@@ -138,17 +206,9 @@ function HorizontalChatList({ chats, selectedChat, onChatSelect, isLoading }) {
           >
             {/* Avatar with online status */}
             <div className="relative">
-              <Image
-                src={chat.avatar}
-                alt={chat.name}
-                width={64}
-                height={64}
-                className={`w-12 h-12 md:w-16 md:h-16 rounded-full object-cover ${
-                  selectedChat?.id === chat.id
-                    ? "ring-3 ring-offset-2 ring-blue-500"
-                    : ""
-                }`}
-              />
+              <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-xl">
+                {chat.name.charAt(0)}
+              </div>
               {chat.isOnline && (
                 <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
               )}
@@ -157,14 +217,18 @@ function HorizontalChatList({ chats, selectedChat, onChatSelect, isLoading }) {
             {/* Name */}
             <div className="text-center">
               <p
-                className={`text-xs font-medium truncate max-w-[70px] ${
-                  selectedChat?.id === chat.id
+                className={`text-xs font-medium truncate max-w-[70px] ${selectedChat?.id === chat.id
                     ? "text-gray-900"
                     : "text-gray-700"
-                }`}
+                  }`}
               >
                 {chat.name}
               </p>
+              {chat.unreadCount > 0 && (
+                <span className="bg-blue-500 text-white text-xs rounded-full px-1">
+                  {chat.unreadCount}
+                </span>
+              )}
             </div>
           </div>
         ))}
@@ -177,6 +241,7 @@ function ChatList({ chats, selectedChat, onChatSelect, isLoading }) {
   if (isLoading) {
     return (
       <div className="p-4">
+        <TotalMessageCount chatList={chats} />
         <div className="animate-pulse space-y-3">
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex items-center space-x-3">
@@ -194,23 +259,21 @@ function ChatList({ chats, selectedChat, onChatSelect, isLoading }) {
 
   return (
     <div className="p-2">
+      <TotalMessageCount chatList={chats} />
       {chats.map((chat) => (
         <div
           key={chat.id}
           onClick={() => onChatSelect(chat.id)}
-          className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 mb-1 ${
-            selectedChat?.id === chat.id
+          className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 mb-1 ${selectedChat?.id === chat.id
               ? "bg-blue-500 text-white"
               : "hover:bg-gray-50"
-          }`}
+            }`}
         >
           {/* Avatar with online status */}
           <div className="relative mr-3">
-            <img
-              src={chat.avatar}
-              alt={chat.name}
-              className="w-12 h-12 rounded-full object-cover"
-            />
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+              {chat.name.charAt(0)}
+            </div>
             {chat.isOnline && (
               <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
             )}
@@ -220,27 +283,24 @@ function ChatList({ chats, selectedChat, onChatSelect, isLoading }) {
           <div className="flex-1 min-w-0">
             <div className="flex justify-between items-start mb-1">
               <h3
-                className={`font-semibold text-sm truncate ${
-                  selectedChat?.id === chat.id ? "text-white" : "text-gray-900"
-                }`}
+                className={`font-semibold text-sm truncate ${selectedChat?.id === chat.id ? "text-white" : "text-gray-900"
+                  }`}
               >
                 {chat.name}
               </h3>
               <span
-                className={`text-xs ml-2 ${
-                  selectedChat?.id === chat.id
+                className={`text-xs ml-2 ${selectedChat?.id === chat.id
                     ? "text-blue-100"
                     : "text-gray-500"
-                }`}
+                  }`}
               >
                 {chat.timestamp}
               </span>
             </div>
 
             <p
-              className={`text-sm truncate ${
-                selectedChat?.id === chat.id ? "text-blue-100" : "text-gray-600"
-              }`}
+              className={`text-sm truncate ${selectedChat?.id === chat.id ? "text-blue-100" : "text-gray-600"
+                }`}
             >
               {chat.lastMessage || "No recent message"}
             </p>

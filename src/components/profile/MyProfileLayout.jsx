@@ -1,10 +1,10 @@
 "use client";
-import Image from "next/image";
-import React, { useMemo, useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 
 // Dynamic imports with ssr: false
+
 const ProfileHeader = dynamic(() => import("./ProfileHeader"), {
   ssr: false,
   loading: () => (
@@ -41,7 +41,7 @@ const ExperienceSection = dynamic(() => import("./ExperienceSection"), {
   ),
 });
 
-// Main content component
+
 function MyProfileLayoutContent({ translations, isClient }) {
   return (
     <div className="w-full">
@@ -70,7 +70,7 @@ function MyProfileLayout() {
   const [isClient, setIsClient] = useState(false);
 
   // Get translations from Redux (moved outside dynamic component)
-  const messages = useSelector((state) => state.language.messages);
+  const messages = "EN";
   const translations = useMemo(
     () =>
       messages?.profile?.layout || {

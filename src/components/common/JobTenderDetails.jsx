@@ -1,23 +1,18 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
-import { Copy, Share2, CheckCircle } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { useSelector } from "react-redux";
-import ShowLoginDialog from "./showLoginDialog/ShowLoginDialog";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle, Copy, Share2 } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { DialogDescription, DialogTitle } from "../ui/dialog";
-import { useRouter } from "next/navigation";
+import ShowLoginDialog from "./showLoginDialog/ShowLoginDialog";
 
-function JobDetailsPage({ jobData }) {
+function JobTenderDetails({ jobData }) {
   const [isClient, setIsClient] = useState(false);
   const pathname = usePathname();
   const isTenderPage = pathname.includes("tenders-details");
-  const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
+  const isLoggedIn = true;
   const [openLoginDialog, setOpenLoginDialog] = useState(false);
-  const currentUser = useSelector((state) => state.currentUser.currentUser);
-  const userType = currentUser?.type;
   const router = useRouter();
 
   // Only render on client side to prevent hydration issues
@@ -25,8 +20,19 @@ function JobDetailsPage({ jobData }) {
     setIsClient(true);
   }, []);
 
-  // Get translations from Redux
-  const messages = useSelector((state) => state.language.messages);
+  // Format date for display
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  // Get translations
+  const messages = "EN";
   const jobDetailsTranslations = messages?.jobDetails || {};
   const commonTranslations = messages?.common || {};
 
@@ -38,120 +44,63 @@ function JobDetailsPage({ jobData }) {
         <div className="animate-pulse">
           <div className="h-48 bg-gray-300 rounded-lg"></div>
         </div>
-
-        {/* Responsibilities Section skeleton */}
-        <div className="animate-pulse">
-          <div className="h-64 bg-gray-300 rounded-lg"></div>
-        </div>
-
-        {/* Requirements Section skeleton */}
-        <div className="animate-pulse">
-          <div className="h-48 bg-gray-300 rounded-lg"></div>
-        </div>
-
-        {/* Benefits Section skeleton */}
-        <div className="animate-pulse">
-          <div className="h-48 bg-gray-300 rounded-lg"></div>
-        </div>
+        {/* Other skeletons... */}
       </div>
     );
   }
 
-  // Default/mock data
-  const defaultJobData = {
-    title: jobDetailsTranslations.defaultJobTitle || "Senior Graphic Designer",
-    description:
-      jobDetailsTranslations.defaultJobDescription ||
-      "Bakery is an independent creative and culture agency designed to ignite people's obsession in great products. From our headquarters in Austin, TX, we work with highly ambitious brands to infuse cultural value and drive desire at every interaction point, increasing their fandom and helping them make things people want. Bakery is a 2017 and 2024 Adage Small Agency of the Year.",
-    fullDescription: [
-      jobDetailsTranslations.fullDescriptionParagraph1 ||
-        "Becoming the agency people trust for brand-building and design talent, you'll be responsible for taking ideas from concept to execution, creating work that gets attention, sparks conversation, and stands out in a crowded market. You will:",
-      jobDetailsTranslations.fullDescriptionParagraph2 ||
-        "Illustrate brands through a meticulous design eye, a passion for brand-building, and a knack for turning insights into standout, creative work, we want to hear from you. This role is for someone who brings market-leading graphic design expertise and digital product design - and a spingdl for UI and Printcapacious content strategies.",
-      jobDetailsTranslations.fullDescriptionParagraph3 ||
-        "You'll make for brands like Nike, Degon, and Pepsi. Must be employee in the USA and work on-site in Austin, TX About Us.",
-      jobDetailsTranslations.fullDescriptionParagraph4 ||
-        "Bakery is an independent creative and culture agency designed to ignite people's obsession in great products. From our headquarters in Austin, TX, we work with highly ambitious brands to infuse cultural value and drive desire at every interaction point, increasing their fandom and helping them make things people want. Bakery is a 2017 and 2024 Adage Small Agency of the Year.",
-    ],
-    responsibilities: [
-      jobDetailsTranslations.responsibility1 ||
-        "As a Senior Designer, you'll play a pivotal role in shaping brand worlds, campaigns, and cultural moments for our clients. You'll be responsible for taking ideas from concept to execution, creating work that gets attention, sparks conversation, and stands out in a crowded market. You will:",
-      jobDetailsTranslations.responsibility2 ||
-        "Invent and oversee campaign visuals, packaging, and marketing materials that drive cultural relevance.",
-      jobDetailsTranslations.responsibility3 ||
-        "Lead the project from concept to production, balancing big thinking with meticulous execution.",
-      jobDetailsTranslations.responsibility4 ||
-        "Bring fresh, unexpected design solutions that push brands forward while ensuring strategic clarity and business impact.",
-      jobDetailsTranslations.responsibility5 ||
-        "Work closely with Creative Directors, Art Directors, Writers, and Strategists to craft breakthrough work.",
-      jobDetailsTranslations.responsibility6 ||
-        "Stay on top of design trends, typography, color theory, and cultural movements to ensure Bakery's work remains fresh and category-defining.",
-      jobDetailsTranslations.responsibility7 ||
-        "Present all work successfully to the highest standards—clean, effective, and impossible to ignore.",
-      jobDetailsTranslations.responsibility8 ||
-        "Manage multiple projects efficiently, keeping deadlines, budgets, and client expectations in check.",
-      jobDetailsTranslations.responsibility9 ||
-        "Present work clearly and persuasively, making a strong case for design decisions.",
-    ],
-    requirements: [
-      jobDetailsTranslations.requirement1 ||
-        "An impressive portfolio of work created for leading lifestyle brands.",
-      jobDetailsTranslations.requirement2 ||
-        "5+ years of experience in a top-tier agency, or in-house creative team.",
-      jobDetailsTranslations.requirement3 ||
-        "A well-curated portfolio that showcases branding, visual storytelling, campaign work, and exceptional craft.",
-      jobDetailsTranslations.requirement4 ||
-        "Expertise in Adobe Creative Suite (Illustrator, Photoshop, InDesign).",
-      jobDetailsTranslations.requirement5 ||
-        "Strong illustration, typography, and layout skills with a meticulous eye for detail.",
-      jobDetailsTranslations.requirement6 ||
-        "Experience working across print, digital, packaging, and environmental design.",
-      jobDetailsTranslations.requirement7 ||
-        "The ability to juggle multiple projects and move in a fast-moving, high-output environment.",
-      jobDetailsTranslations.requirement8 ||
-        "A systematic design mindset—you don't just make things look good, you make them work in an efficient and effective system.",
-    ],
-    benefits: [
-      jobDetailsTranslations.benefit1 || "Medical, Dental and Vision Insurance",
-      jobDetailsTranslations.benefit2 || "Unlimited Vacation Time",
-      jobDetailsTranslations.benefit3 || "2 weeks Work from Anywhere (WFA)",
-      jobDetailsTranslations.benefit4 || "Annual Bonuses",
-      jobDetailsTranslations.benefit5 || "Pet-Friendly Office",
-      jobDetailsTranslations.benefit6 || "On-site Massage Therapist",
-      jobDetailsTranslations.benefit7 || "Yearly Creative Stipend",
-      jobDetailsTranslations.benefit8 || "Snacks, Meals and Drinks",
-      jobDetailsTranslations.benefit9 || "No Time Tracking!",
-    ],
+  // Map API data to component structure
+  const mapJobData = (apiData) => {
+    if (!apiData) return null;
+
+    return {
+      title: apiData.title || "No Title",
+      description: apiData.description || "No description available",
+      fullDescription: apiData.description ? [apiData.description] : ["No detailed description available"],
+      responsibilities: apiData.description ? [
+        "Key responsibilities include:",
+        apiData.description
+      ] : ["Responsibilities not specified"],
+      requirements: [
+        `Job Type: ${apiData.jobType || "Not specified"}`,
+        `Service Type: ${apiData.serviceTypeName || "Not specified"}`,
+        `Category: ${apiData.categoryName || "Not specified"}`,
+        `Duration: ${formatDate(apiData.startDate)} - ${formatDate(apiData.endDate)}`
+      ],
+      benefits: [
+        "Full-time position",
+        "Professional development opportunities",
+        "Competitive compensation"
+      ],
+      // For tender data
+      startDate: formatDate(apiData.startDate),
+      endDate: formatDate(apiData.endDate),
+      postedOn: formatDate(apiData.createdAt),
+      deadLine: formatDate(apiData.endDate), // Using endDate as deadline
+      location: "Remote", // Default since API doesn't have location
+      role: apiData.serviceTypeName || "Professional"
+    };
   };
 
-  const defaultTenderData = {
-    title:
-      jobDetailsTranslations.defaultTenderTitle || "Project 1: CRMS Alignment",
-    role: jobDetailsTranslations.defaultTenderRole || "Business Analyst",
-    fullDescription: [
-      jobDetailsTranslations.tenderDescription ||
-        "This project involves aligning customer relationship management systems across departments to improve data accessibility and performance.XYZ Corp",
-    ],
-    location: jobDetailsTranslations.tenderLocation || "Paris",
-    datePosted: jobDetailsTranslations.tenderDatePosted || "3/2025",
-    deadLine: jobDetailsTranslations.tenderDeadline || "05/2023",
-
-    requirements: [
-      jobDetailsTranslations.tenderRequirement1 ||
-        "5+ years of experience in Business Analysis",
-      jobDetailsTranslations.tenderRequirement2 ||
-        "Experience with CRM systems (Salesforce, Zoho, etc.)",
-      jobDetailsTranslations.tenderRequirement3 ||
-        "Strong problem-solving and analytical skills",
-      jobDetailsTranslations.tenderRequirement4 ||
-        "Ability to work in a fast-paced environment",
-    ],
-    startDate: jobDetailsTranslations.tenderStartDate || "07/2023",
-    endDate: jobDetailsTranslations.tenderEndDate || "12/2023",
-    postedOn: jobDetailsTranslations.tenderPostedOn || "3/2025",
-  };
-
-  const job = jobData || (isTenderPage ? defaultTenderData : defaultJobData);
+  const job = jobData ? mapJobData(jobData) : (isTenderPage ? {
+    title: "Project Details",
+    role: "Business Analyst",
+    fullDescription: ["Project details not available"],
+    location: "Remote",
+    datePosted: formatDate(new Date()),
+    deadLine: "N/A",
+    requirements: ["Details not specified"],
+    startDate: "N/A",
+    endDate: "N/A",
+    postedOn: "N/A",
+  } : {
+    title: "Job Details",
+    description: "Job information not available",
+    fullDescription: ["Job details not available"],
+    responsibilities: ["Responsibilities not specified"],
+    requirements: ["Requirements not specified"],
+    benefits: ["Benefits not specified"]
+  });
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -174,6 +123,18 @@ function JobDetailsPage({ jobData }) {
     }
   };
 
+  if (!job) {
+    return (
+      <div className="max-w-5xl mx-auto space-y-6 mb-6 2xl:mb-10">
+        <Card>
+          <CardContent className="p-6">
+            <p className="text-gray-700">No job data available</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-5xl mx-auto space-y-6 mb-6 2xl:mb-10">
       {/* Header Section */}
@@ -183,10 +144,9 @@ function JobDetailsPage({ jobData }) {
             <div className="space-y-2">
               <p className="text-sm text-gray-500">
                 {isTenderPage
-                  ? jobDetailsTranslations.tenderDetailsLabel ||
-                    "Tender Details"
+                  ? jobDetailsTranslations.tenderDetailsLabel || "Tender Details"
                   : jobDetailsTranslations.jobDetailsLabel || "Job Details"}
-              </p>{" "}
+              </p>
               <div className="flex gap-2 lg:hidden">
                 <Button
                   variant="outline"
@@ -207,6 +167,9 @@ function JobDetailsPage({ jobData }) {
                 </Button>
               </div>
               <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
+              {job.role && (
+                <p className="text-lg text-gray-600">{job.role}</p>
+              )}
             </div>
 
             <div className="flex gap-2 hidden lg:block">
@@ -247,8 +210,7 @@ function JobDetailsPage({ jobData }) {
         <Card>
           <CardHeader>
             <CardTitle className="text-xl font-bold text-gray-900">
-              {jobDetailsTranslations.responsibilitiesTitle ||
-                "RESPONSIBILITIES"}
+              {jobDetailsTranslations.responsibilitiesTitle || "RESPONSIBILITIES"}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -294,7 +256,7 @@ function JobDetailsPage({ jobData }) {
       </Card>
 
       {/* Benefits Section - Only show for jobs */}
-      {!isTenderPage && (
+      {!isTenderPage && job.benefits && (
         <Card>
           <CardHeader>
             <CardTitle className="text-xl font-bold text-gray-900">
@@ -303,7 +265,7 @@ function JobDetailsPage({ jobData }) {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {job.benefits?.map((benefit, index) => (
+              {job.benefits.map((benefit, index) => (
                 <div key={index} className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
                   <p className="text-gray-700">{benefit}</p>
@@ -314,6 +276,7 @@ function JobDetailsPage({ jobData }) {
         </Card>
       )}
 
+      {/* Important Dates Section - For tenders */}
       {isTenderPage && (
         <Card>
           <CardHeader>
@@ -349,12 +312,10 @@ function JobDetailsPage({ jobData }) {
 
       <ShowLoginDialog open={openLoginDialog} onOpenChange={setOpenLoginDialog}>
         <DialogTitle className="text-2xl font-bold">
-          {jobDetailsTranslations.loginDialogTitle ||
-            "Login to Apply for this Position"}
+          {jobDetailsTranslations.loginDialogTitle || "Login to Apply for this Position"}
         </DialogTitle>
         <DialogDescription className="text-sm text-gray-600">
-          {jobDetailsTranslations.loginDialogDescription ||
-            "Please login to apply for this position"}
+          {jobDetailsTranslations.loginDialogDescription || "Please login to apply for this position"}
         </DialogDescription>
         <div className="flex justify-end">
           <Button
@@ -369,4 +330,4 @@ function JobDetailsPage({ jobData }) {
   );
 }
 
-export default JobDetailsPage;
+export default JobTenderDetails;

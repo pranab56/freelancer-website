@@ -1,15 +1,18 @@
 import TipTapEditor from "@/utils/TipTapEditor/TipTapEditor";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setTenderDescription } from "@/redux/features/createTender/createtenderSlice";
+import { useState } from "react";
 
 function TenderDescription() {
-  const dispatch = useDispatch();
-
-  const resetTrigger = useSelector((state) => state.createTender.resetTrigger);
+  const [tenderDescription, setTenderDescription] = useState("");
+  const [resetTrigger, setResetTrigger] = useState(false);
 
   const handleTenderDescription = (description) => {
-    dispatch(setTenderDescription(description));
+    setTenderDescription(description);
+  };
+
+  // If you need a reset function, you can add:
+  const resetDescription = () => {
+    setTenderDescription("");
+    setResetTrigger(prev => !prev); // Toggle reset trigger if needed by TipTapEditor
   };
 
   return (

@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 function SkilledFreelancersSection() {
   const [isClient, setIsClient] = useState(false);
-  const messages = useSelector((state) => state.language.messages);
-  const locale = useSelector((state) => state.language.currentLocale);
+  const messages = "Hello world";
+  const locale = "Hello world";
 
   // Only render on client side to prevent hydration issues
   useEffect(() => {

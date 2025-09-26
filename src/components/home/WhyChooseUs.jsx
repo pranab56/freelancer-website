@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 function WhyChooseUs() {
   const [isClient, setIsClient] = useState(false);
-  const messages = useSelector((state) => state.language.messages);
+  const messages = "Hello world";
 
   // Only render on client side to prevent hydration issues
   useEffect(() => {
@@ -33,9 +32,8 @@ function WhyChooseUs() {
                     {[...Array(3)].map((_, index) => (
                       <div
                         key={index}
-                        className={`border-2 rounded-lg border-black w-10/12 mb-4 flex items-center bg-white/80 backdrop-blur-sm p-2 ${
-                          index % 2 === 1 ? "ml-12" : "mr-12"
-                        }`}
+                        className={`border-2 rounded-lg border-black w-10/12 mb-4 flex items-center bg-white/80 backdrop-blur-sm p-2 ${index % 2 === 1 ? "ml-12" : "mr-12"
+                          }`}
                       >
                         <div className="w-full space-y-2">
                           <div className="h-6 bg-gray-300 rounded max-w-48"></div>
@@ -120,9 +118,8 @@ function WhyChooseUs() {
                 {features.map((feature, index) => (
                   <div
                     key={index}
-                    className={`border-2 rounded-lg border-black w-10/12 hover:shadow-md transition-shadow duration-300 flex items-center bg-white/80 backdrop-blur-sm p-2 ${
-                      index % 2 === 1 ? "ml-12" : "mr-12"
-                    }`}
+                    className={`border-2 rounded-lg border-black w-10/12 hover:shadow-md transition-shadow duration-300 flex items-center bg-white/80 backdrop-blur-sm p-2 ${index % 2 === 1 ? "ml-12" : "mr-12"
+                      }`}
                   >
                     <CardContent className="p-0">
                       <h3 className="text-lg font-semibold text-gray-800 mb-2 h2-gradient-text">

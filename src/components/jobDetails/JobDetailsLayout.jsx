@@ -1,10 +1,21 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import JobTenderSidebar from "../common/JobTenderSidebar";
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from "react";
+
 import JobTenderDetails from "../common/JobTenderDetails";
+import JobTenderSidebar from "../common/JobTenderSidebar";
+import { useSingleJobsQuery } from '../../features/jobBoard/jobBoardApi';
 
 function JobDetailsLayout() {
+  const params = useParams();
   const [isClient, setIsClient] = useState(false);
+
+  const { data, isLoading, isError } = useSingleJobsQuery(params?.id, {
+    skip: !params?.id
+  });
+
+  // Extract job data from API response
+  const jobData = data?.data;
 
   // Only render on client side to prevent hydration issues
   useEffect(() => {
@@ -12,7 +23,7 @@ function JobDetailsLayout() {
   }, []);
 
   // Show loading state on server, content on client
-  if (!isClient) {
+  if (!isClient || isLoading) {
     return (
       <div className="flex flex-col md:flex-row md:items-start gap-x-6 max-w-7xl mx-auto mt-10 px-4 sm:px-6 lg:px-8 2xl:px-0">
         {/* Sidebar skeleton */}
@@ -42,16 +53,27 @@ function JobDetailsLayout() {
     );
   }
 
+  if (isError) {
+    return (
+      <div className="flex justify-center items-center min-h-96">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-900">Error loading job details</h2>
+          <p className="text-gray-600">Please try again later</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col md:flex-row md:items-start gap-x-6 max-w-7xl mx-auto mt-10 px-4 sm:px-6 lg:px-8 2xl:px-0">
       {/* Sidebar */}
       <div className="w-full md:max-w-[17rem] flex-1 flex-shrink-0">
-        <JobTenderSidebar />
+        <JobTenderSidebar jobData={jobData} />
       </div>
 
       {/* Main Content */}
       <div className="w-full flex-1 overflow-auto pt-6 md:pt-0">
-        <JobTenderDetails jobData={null} />
+        <JobTenderDetails jobData={jobData} />
       </div>
     </div>
   );

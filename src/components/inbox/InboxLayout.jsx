@@ -1,6 +1,5 @@
 import React from "react";
 import ChatListSidebar from "./ChatListSidebar";
-
 import ChatInterface from "./ChatBoxLayout";
 
 function InboxLayout() {

@@ -1,11 +1,12 @@
 "use client";
 
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { Provider } from "@/redux/Provider";
-import React, { useState, useEffect } from "react";
-import { Toaster } from "@/components/ui/sonner";
 import LanguageInitializer from "@/components/common/LanguageInitializer";
+import { Inter } from "next/font/google";
+import { useEffect, useState } from "react";
+import { Toaster } from 'react-hot-toast';
+import { Provider } from 'react-redux';
+import { store } from '../utils/store';
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -62,7 +63,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Provider>
+        <Provider store={store}>
           <LanguageInitializer initialLocale="en" />
           <GlobalErrorBoundary>{children}</GlobalErrorBoundary>
           <Toaster />

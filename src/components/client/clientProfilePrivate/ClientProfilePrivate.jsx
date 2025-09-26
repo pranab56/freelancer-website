@@ -1,24 +1,53 @@
 "use client";
 import { Button } from "@/components/ui/button";
-
-import Image from "next/image";
-import React, { useState } from "react";
-
-import EditProfileDialog from "./EditProfileDialog";
 import provideIcon from "@/utils/IconProvider/provideIcon";
+import Image from "next/image";
+import { useState } from "react";
+import { useGetMyprofileQuery } from '../../../features/clientProfile/ClientProfile';
+import EditProfileDialog from "./EditProfileDialog";
 
 function ClientProfilePrivate({ translations }) {
   const [isEditProfileDialogOpen, setIsEditProfileDialogOpen] = useState(false);
+  const { data, error, isLoading, refetch } = useGetMyprofileQuery();
 
-  const clientInfo = {
-    name: "John Doe",
-    profilePicture: "/client/profile/client.png",
-    bio: "I am UI/UX wizard",
-    department: "Designer",
-    location: "Paris, France",
-    email: "john.doe@example.com",
-    isVerified: true,
+  // Use API data or fallback to empty values
+  const clientInfo = data?.data || {
+    fullName: "",
+    profile: "",
+    aboutCompany: "",
+    designation: "",
+    location: "",
+    email: "",
+    isVarified: false,
+    language: [],
+    companyName: ""
   };
+
+  const handleEditProfileClose = () => {
+    setIsEditProfileDialogOpen(false);
+    // Refetch data after closing dialog to get updated profile
+    refetch();
+  };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4 w-full max-w-7xl mx-auto py-6 px-4 md:px-6 2xl:px-0">
+        <div className="flex justify-center items-center h-64">
+          <p>Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4 w-full max-w-7xl mx-auto py-6 px-4 md:px-6 2xl:px-0">
+        <div className="flex justify-center items-center h-64">
+          <p>Error loading profile</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 w-full max-w-7xl mx-auto py-6 px-4 md:px-6 2xl:px-0">
@@ -32,25 +61,35 @@ function ClientProfilePrivate({ translations }) {
       </div>
       <div className="flex gap-10 items-start py-2">
         <Image
-          src={clientInfo.profilePicture}
+          src={clientInfo.profile || "/client/profile/client.png"}
           alt="client-profile"
           width={150}
           height={150}
+          onError={(e) => {
+            e.target.src = "/client/profile/client.png";
+          }}
         />
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold">{clientInfo.name}</h1>
-          <p>{clientInfo.bio}</p>
+          <h1 className="text-2xl font-bold">{clientInfo.fullName}</h1>
+          <p className="text-sm text-gray-600">{clientInfo.companyName}</p>
           <p>
-            {translations.department}: {clientInfo.department}
+            {translations.department}: {clientInfo.designation || "Not specified"}
           </p>
           <p>
-            {translations.location}: {clientInfo.location}
+            {translations.location}: {clientInfo.location || "Not specified"}
           </p>
           <p>
             {translations.email}: {clientInfo.email}
           </p>
-          <p>{clientInfo.phone}</p>
-          {clientInfo.isVerified && (
+
+          {/* Display languages */}
+          {clientInfo.language && clientInfo.language.length > 0 && (
+            <p>
+              Languages: {clientInfo.language.join(", ")}
+            </p>
+          )}
+
+          {clientInfo.isVarified && (
             <div className="flex items-center gap-2">
               <span>{provideIcon({ name: "verified" })}</span>{" "}
               {translations.verifiedClient}
@@ -62,11 +101,12 @@ function ClientProfilePrivate({ translations }) {
         <h1 className="h2-gradient-text text-2xl font-bold text-justify">
           {translations.aboutCompany}
         </h1>
-        <p>{translations.companyDescription}</p>
+        <p>{clientInfo.aboutCompany || translations.companyDescription}</p>
       </div>
       <EditProfileDialog
         isOpen={isEditProfileDialogOpen}
-        onClose={() => setIsEditProfileDialogOpen(false)}
+        onClose={handleEditProfileClose}
+        profileData={clientInfo}
       />
     </div>
   );

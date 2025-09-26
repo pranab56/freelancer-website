@@ -1,17 +1,63 @@
+// components/ContactForm.js
 "use client";
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Mail } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
+import { useEffect, useState } from "react";
+import toast from 'react-hot-toast';
+import { useCreateContactMutation } from '../../features/contact/contactApi';
 import { Label } from "../ui/label";
 
 function ContactForm() {
   const [isClient, setIsClient] = useState(false);
-  const messages = useSelector((state) => state.language.messages);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    message: ""
+  });
+
+  const messages = "EN";
   const contactFormTranslations = messages?.contactUs?.form || {};
+
+  const [createContact, { isLoading, isSuccess, isError, error }] = useCreateContactMutation();
+
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await createContact(formData).unwrap();
+      // Reset form on success
+      if (isSuccess) {
+        setFormData({
+          fullName: "",
+          email: "",
+          phoneNumber: "",
+          message: ""
+        });
+      }
+
+      console.log("response", response)
+
+      toast.success(response?.message || 'Message sent successfully!');
+    } catch (err) {
+      console.error('Failed to send message:', err);
+
+      console.log("Error ", err);
+      toast.error(err?.message || 'Failed to send message. Please try again.');
+    }
+  };
 
   // Only render on client side to prevent hydration issues
   useEffect(() => {
@@ -62,7 +108,7 @@ function ContactForm() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Form Section */}
         <div className="lg:col-span-2">
-          <div className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name Fields Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="border border-blue-200 rounded-xl flex flex-col items-start p-2 px-3">
@@ -70,12 +116,15 @@ function ContactForm() {
                   {contactFormTranslations.firstName?.label || "First Name*"}
                 </Label>
                 <Input
+                  name="fullName"
                   type="text"
+                  value={formData.fullName}
+                  onChange={handleChange}
                   placeholder={
                     contactFormTranslations.firstName?.placeholder ||
                     "First Name*"
                   }
-                  defaultValue="Ali"
+                  required
                   className="h-6 p-0 border-none shadow-none focus:border-none"
                 />
               </div>
@@ -89,7 +138,6 @@ function ContactForm() {
                     contactFormTranslations.lastName?.placeholder ||
                     "Last Name*"
                   }
-                  defaultValue="Tufan"
                   className=" p-0 border-none shadow-none focus:border-none "
                 />
               </div>
@@ -102,11 +150,14 @@ function ContactForm() {
                   {contactFormTranslations.email?.label || "Email*"}
                 </Label>
                 <Input
+                  name="email"
                   type="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder={
                     contactFormTranslations.email?.placeholder || "Email*"
                   }
-                  defaultValue="example@gmail.com"
+                  required
                   className="p-0 border-none shadow-none focus:border-none"
                 />
               </div>
@@ -115,11 +166,14 @@ function ContactForm() {
                   {contactFormTranslations.phone?.label || "Phone*"}
                 </Label>
                 <Input
+                  name="phoneNumber"
                   type="tel"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
                   placeholder={
                     contactFormTranslations.phone?.placeholder || "Phone"
                   }
-                  defaultValue="+90 123 456 789"
+                  required
                   className="p-0 border-none shadow-none focus:border-none"
                 />
               </div>
@@ -128,21 +182,31 @@ function ContactForm() {
             {/* Message Field */}
             <div>
               <Textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
                 placeholder={
                   contactFormTranslations.message?.placeholder || "Message"
                 }
                 rows={10}
+                required
                 className="border-blue-200 rounded-xl focus:border-blue-400 focus:ring-blue-400 h-40 resize-none"
               />
             </div>
 
+
+
             {/* Submit Button */}
             <div className="flex justify-center">
-              <Button className="button-gradient  text-white px-12  py-3 h-12 rounded-xl font-medium text-base min-w-60 md:w-auto">
-                {contactFormTranslations.submit || "Send Message"}
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="button-gradient text-white px-12 py-3 h-12 rounded-xl font-medium text-base min-w-60 md:w-auto"
+              >
+                {isLoading ? "Sending..." : (contactFormTranslations.submit || "Send Message")}
               </Button>
             </div>
-          </div>
+          </form>
         </div>
 
         {/* Contact Details Card */}

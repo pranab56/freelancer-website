@@ -1,25 +1,5 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
-import ReactCountryFlag from "react-country-flag";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-import { Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Drawer,
   DrawerClose,
@@ -28,90 +8,65 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
 import {
-  logout,
-  setCurrentUser,
-} from "@/redux/features/currentUser/currentuserSlice";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import provideIcon from "@/utils/IconProvider/provideIcon";
-import LanguageSelector from "@/components/common/LanguageSelector";
-import { useLocale } from "@/components/common/TranslationWrapper";
+import { Menu, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+// English translations
+const translations = {
+  jobBoard: "Job Board",
+  tenders: "Tenders",
+  myProjects: "My Projects",
+  invoices: "Invoices",
+  inbox: "Inbox",
+  mySubscription: "My Subscription",
+  package: "Package",
+  viewProfile: "View Profile",
+  accountSettings: "Account Settings",
+  billingPlans: "Billing & Plans",
+  helpSupport: "Help & Support",
+  signOut: "Sign Out",
+  client: "Client",
+};
 
 function ClientNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [currentUser, setCurrentUser] = useState({ type: "client" });
   const pathname = usePathname();
   const router = useRouter();
-  const dispatch = useDispatch();
-  const localeFromHook = useLocale();
-
-  // Get translations from Redux
-  const messages = useSelector((state) => state.language.messages);
-  const loading = useSelector((state) => state.language.loading);
-  const currentLocale = useSelector((state) => state.language.currentLocale);
-
-  // Extensive debugging logs
-  console.log("ClientNavbar - Full Redux State:", {
-    messages,
-    loading,
-    currentLocale,
-    hasClientSection: !!messages?.client,
-    hasNavbarSection: !!messages?.client?.navbar,
-    navbarKeys: messages?.client?.navbar
-      ? Object.keys(messages.client.navbar)
-      : "No keys",
-  });
-
-  const translations = useMemo(() => {
-    const navbarTranslations = messages?.client?.navbar || {
-      jobBoard: "Job Board",
-      tenders: "Tenders",
-      myProjects: "My Projects",
-      invoices: "Invoices",
-      inbox: "Inbox",
-      mySubscription: "My Subscription",
-      viewProfile: "View Profile",
-      accountSettings: "Account Settings",
-      billingPlans: "Billing & Plans",
-      helpSupport: "Help & Support",
-      signOut: "Sign Out",
-      client: "Client",
-    };
-
-    console.log("ClientNavbar - Translations Computed:", {
-      navbarTranslations,
-      fallbackUsed: !messages?.client?.navbar,
-    });
-
-    return navbarTranslations;
-  }, [messages]);
-
-  // Use only Redux state for locale
-  const locale = localeFromHook;
-  const userType = useSelector((state) => state.currentUser.currentUser.type);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Navigation items - only client specific pages
   const navItems = [
     { label: translations.jobBoard, href: `/job-board` },
     { label: translations.tenders, href: `/tenders` },
-    { label: translations.myProjects, href: `/my-projects` },
-    { label: translations.invoices, href: `/invoices` },
-    { label: translations.inbox, href: `/inbox` },
+    { label: translations.myProjects, href: `/my-projects`},
+    { label: translations.invoices, href: `/invoices`},
+    { label: translations.inbox, href: `/chat` },
     { label: translations.mySubscription, href: `/my-subscription` },
+    { label: translations.package, href: `/package` }, // This is the package route
   ];
+
+  // Debug: Check what's in navItems
+  console.log("Nav Items:", navItems);
+  console.log("Package route exists:", navItems.find(item => item.href === '/package'));
 
   // Helper function to determine if link is active
   const isActiveLink = (href) => {
     return pathname === href;
   };
 
-  // Mock user data (in real app, this would come from auth context)
+  // Mock user data
   const user = {
     name: "John Client",
     role: translations.client,
@@ -120,17 +75,13 @@ function ClientNavBar() {
 
   const handleSignOut = () => {
     localStorage.removeItem("token");
-    dispatch(logout());
+    setCurrentUser(null);
     router.replace("/");
   };
 
-  const showAsClient = () => {
-    if (userType === "freelancer") {
-      dispatch(setCurrentUser({ type: "freelancer" }));
-    } else {
-      dispatch(setCurrentUser({ type: "client" }));
-    }
-  };
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!mounted) {
     return null;
@@ -143,33 +94,33 @@ function ClientNavBar() {
         <div className="flex items-center">
           <Link href={`/`}>{provideIcon({ name: "company_logo" })}</Link>
         </div>
+
         {/* Desktop Navigation Links */}
         <div className="hidden lg:flex items-center space-x-8">
-          {/* Language Selector */}
+          {navItems.map((item, index) => {
+            console.log(`Rendering: ${item.label} -> ${item.href}`); // Debug each item
+            return (
+              <Link
+                key={index}
+                href={item.href}
+                className={`font-medium transition-colors ${isActiveLink(item.href)
+                    ? "text-blue-600 hover:text-blue-700"
+                    : "text-gray-700 hover:text-gray-900"
+                  }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
 
-          {navItems.map((item, index) => (
-            <Link
-              key={index}
-              href={item.href}
-              className={`font-medium transition-colors ${
-                isActiveLink(item.href)
-                  ? "text-blue-600 hover:text-blue-700"
-                  : "text-gray-700 hover:text-gray-900"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>{" "}
-        <LanguageSelector className="hidden lg:flex" />
-        {/* <Button onClick={showAsClient}>View As Client</Button> */}
         {/* User Profile Section */}
         <div className="hidden lg:flex items-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild className="!h-10">
               <Button
                 variant="ghost"
-                className="flex items-center space-x-3 shadow-md border hover:bg-gray-50 h-12 "
+                className="flex items-center space-x-3 shadow-md border hover:bg-gray-50 h-12"
               >
                 <Image
                   src={user.avatar}
@@ -221,6 +172,7 @@ function ClientNavBar() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+
         {/* Mobile Menu */}
         <div className="lg:hidden">
           <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -253,16 +205,13 @@ function ClientNavBar() {
                 </div>
               </DrawerHeader>
               <div className="px-6 pb-6 space-y-2">
-                {/* Mobile Language Selector */}
-                <LanguageSelector className="w-full mb-2" />
                 {/* Mobile Navigation */}
                 {navItems.map((item, index) => (
                   <Button
                     key={index}
                     variant="ghost"
-                    className={`w-full justify-start ${
-                      isActiveLink(item.href) ? "bg-blue-50 text-blue-600" : ""
-                    }`}
+                    className={`w-full justify-start ${isActiveLink(item.href) ? "bg-blue-50 text-blue-600" : ""
+                      }`}
                     asChild
                   >
                     <Link href={item.href}>{item.label}</Link>

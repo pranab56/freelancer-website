@@ -1,17 +1,13 @@
 "use client";
-import React, { useState, useRef, useMemo } from "react";
-import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { X, Paperclip, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -19,27 +15,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSelector } from "react-redux";
+import { Textarea } from "@/components/ui/textarea";
+import { Paperclip, Trash2 } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function ProjectCompleteDialog({ isOpen, onClose }) {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const fileInputRef = useRef(null);
 
-  // Get translations from Redux
-  const messages = useSelector((state) => state.language.messages);
+  // Static translations object (you can pass this as props or use context instead)
   const dialogTranslations = useMemo(
-    () =>
-      messages?.invoiceDialogs?.projectComplete || {
-        title: "Complete Project",
-        completeMessageLabel: "Complete Message",
-        completeMessagePlaceholder: "Write Message",
-        fileMessageLabel: "File/Message",
-        fileMessagePlaceholder: "Write Message/ Send Message",
-        uploadedImagesLabel: "Uploaded Images",
-        cancelButton: "Cancel",
-        completeButton: "Mark as Completed",
-      },
-    [messages]
+    () => ({
+      title: "Complete Project",
+      completeMessageLabel: "Complete Message",
+      completeMessagePlaceholder: "Write Message",
+      fileMessageLabel: "File/Message",
+      fileMessagePlaceholder: "Write Message/ Send Message",
+      uploadedImagesLabel: "Uploaded Images",
+      cancelButton: "Cancel",
+      completeButton: "Mark as Completed",
+    }),
+    []
   );
 
   const {

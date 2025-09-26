@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { Paperclip } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
-import { Paperclip } from "lucide-react";
-import { toast } from "sonner";
+import { Textarea } from "../ui/textarea";
 
 export default function ReportFreeLancer({ onClose }) {
   const {

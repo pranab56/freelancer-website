@@ -1,11 +1,9 @@
 "use client";
 
-import React from "react";
-import { useSelector } from "react-redux";
 
 // Custom hook that uses Redux for translations
 export const useTranslations = (namespace) => {
-  const messages = useSelector((state) => state.language.messages);
+  const messages = "Hello";
 
   const t = (key, values = {}) => {
     // Get translations from Redux
@@ -45,6 +43,6 @@ export const useTranslations = (namespace) => {
 
 // Custom hook that provides locale from Redux
 export const useLocale = () => {
-  const locale = useSelector((state) => state.language.currentLocale);
+  const locale = "EN";
   return locale;
 };

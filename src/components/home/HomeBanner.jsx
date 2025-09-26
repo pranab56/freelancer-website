@@ -8,9 +8,8 @@ import { useSelector } from "react-redux";
 const HomeBannerContent = dynamic(
   () =>
     Promise.resolve(() => {
-      const locale = useSelector((state) => state.language.currentLocale);
-      const isLoggedIn = useSelector((state) => state.currentUser.isLoggedIn);
-      const messages = useSelector((state) => state.language.messages);
+      const isLoggedIn = true;
+      const messages = true;
 
       const bannerTranslations = messages?.home?.banner || {
         title: "The Future of Freelance.",

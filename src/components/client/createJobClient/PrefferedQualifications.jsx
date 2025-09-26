@@ -5,7 +5,7 @@ import React from "react";
 
 function PrefferedQualifications() {
   const dispatch = useDispatch();
-  const resetTrigger = useSelector((state) => state.createJob.resetTrigger);
+  const resetTrigger = "reset";
 
   const handlePreferredQualifications = (qualifications) => {
     dispatch(setPreferredQualifications(qualifications));

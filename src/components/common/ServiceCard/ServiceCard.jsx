@@ -1,76 +1,100 @@
-import React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
   CardFooter,
+  CardHeader
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
-import { useSelector } from "react-redux";
-import { currentLanguage } from "../../../redux/features/languageSlice";
 
-function ServiceCard() {
-  const messages = useSelector((state) => state.language.messages);
-  const serviceCardTranslations = messages?.home?.services?.serviceCard || {};
-  const language = useSelector(currentLanguage);
+function ServiceCard({ freelancer }) {
+  // Safely extract top-level freelancer data
+  const {
+    profile = "/services/avatar.png",
+    fullName = "Unknown Freelancer",
+    designation = "Freelancer",
+    dailyRate = 0,
+    yearsOfExperience = "0 years",
+    freelancerId = null
+  } = freelancer || {};
+
+  // Safely extract nested data (handles null freelancerId)
+  const { experience = [], skills = [] } = freelancerId || {};
+
+  // Derived values with safe defaults
+  const jobCompleted = experience.length;
+  const primarySkill = skills.length > 0 ? skills[0].skill : "General";
+
+  // Generate avatar initials
+  const getInitials = (name) => {
+    return name
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  // Safely get first experience description
+  const firstDescription = experience.length > 0
+    ? experience[0]?.description || ""
+    : "";
+
   return (
-    <Card className="max-w-sm border-none bg-white">
+    <Card className="w-full border-none bg-white flex flex-col h-[28rem]">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-        <Image src="/services/card.png" alt="card" width={400} height={400} />
+        <div className="w-full h-40 relative overflow-hidden rounded-t-lg">
+          <Image
+            src="/services/card.png"
+            alt="card background"
+            fill
+            className="object-cover"
+          />
+        </div>
       </CardHeader>
 
-      <CardContent className="space-y-3">
-        <div
-          className={`flex items-center justify-between ${
-            language === "fr" ? "items-end" : ""
-          }`}
-        >
-          <div
-            className={`flex items-center space-x-3 ${
-              language === "fr" ? "flex flex-col items-start" : ""
-            }`}
-          >
+      <CardContent className="space-y-3 flex-grow">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
             <Avatar>
-              <AvatarImage src="/services/avatar.png" />
-              <AvatarFallback>OR</AvatarFallback>
+              <AvatarImage src={profile} />
+              <AvatarFallback>{getInitials(fullName)}</AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium">Olivia Rhye</p>
-              <p className="text-xs text-muted-foreground">20 Jan 2022</p>
+              <p className="text-sm font-medium">{fullName}</p>
+              <p className="text-xs text-muted-foreground">{yearsOfExperience} experience</p>
             </div>
           </div>
           <div className="text-right">
             <p className="text-xs text-muted-foreground">
-              {serviceCardTranslations.jobCompleted?.replace("{count}", "30") ||
-                "Job Completed: 30"}
+              Job Completed: {jobCompleted}
             </p>
             <p className="text-normal h2-gradient-text font-bold">
-              {serviceCardTranslations.dailyRate?.replace("${amount}", "50") ||
-                "Daily Rate: $50"}
+              Daily Rate: ${dailyRate}
             </p>
           </div>
         </div>
 
         <div>
           <h4 className="text-sm font-medium h2-gradient-text">
-            UI/UX Designer
+            {designation}
           </h4>
-          <p className="text-lg text-black font-semibold ">
-            UX review presentations
+          <p className="text-lg text-black font-semibold">
+            {primarySkill} Specialist
           </p>
         </div>
 
-        <p className="text-sm text-muted-foreground">
-          I will do ui ux design for saas, web app, dashboard in figma
+        <p className="text-sm text-muted-foreground line-clamp-3">
+          {firstDescription
+            ? `${firstDescription.substring(0, 100)}...`
+            : "Experienced professional ready to help with your project."}
         </p>
       </CardContent>
 
-      <CardFooter className="flex justify-end">
+      <CardFooter className="flex justify-end mt-auto pt-4">
         <Button className="button-gradient">
-          {serviceCardTranslations.hireButton || "Hire Freelancer →"}
+          Hire Freelancer →
         </Button>
       </CardFooter>
     </Card>

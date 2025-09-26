@@ -1,7 +1,6 @@
-import React from "react";
-import { Card, CardContent, CardFooter } from "../ui/card";
 import Image from "next/image";
 import Link from "next/link";
+import { Card, CardContent, CardFooter } from "../ui/card";
 
 function JobTenderCard({ type = "tender", data }) {
   const defaultJobData = {
@@ -25,9 +24,8 @@ function JobTenderCard({ type = "tender", data }) {
   return (
     <div>
       <Link
-        href={`/${type === "job" ? "job-details" : "tenders-details"}/${
-          cardData.id
-        }`}
+        href={`/${type === "job" ? "job-details" : "tenders-details"}/${cardData._id
+          }`}
       >
         <Card className="max-w-[20rem] mx-auto  -space-y-6  -md:space-y-8 p-1 md:p-2">
           <CardContent className="p-1 md:p-2">

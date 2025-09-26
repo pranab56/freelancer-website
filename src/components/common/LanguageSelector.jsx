@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-import ReactCountryFlag from "react-country-flag";
 import {
   Select,
   SelectContent,
@@ -9,66 +7,53 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  loadMessages,
-  setLocale,
-  setMessages,
-} from "@/redux/features/languageSlice";
+import { useEffect, useState } from "react";
+import ReactCountryFlag from "react-country-flag";
 
 export default function LanguageSelector({ className = "" }) {
-  const dispatch = useDispatch();
-  const locale = useSelector((state) => state.language.currentLocale);
-  const allMessages = useSelector((state) => state.language.allMessages);
+  // Default to 'en', but you could load from localStorage if needed
+  const [locale, setLocale] = useState("en");
 
-  const handleLanguageChange = async (newLocale) => {
-    console.log("LanguageSelector - Switching to:", newLocale);
-    console.log("LanguageSelector - Current locale:", locale);
-    console.log(
-      "LanguageSelector - Cached messages:",
-      Object.keys(allMessages)
-    );
-    console.log("LanguageSelector - All messages:", allMessages);
-
-    // Check if messages are already loaded
-    if (allMessages[newLocale]) {
-      console.log("LanguageSelector - Using cached messages for:", newLocale);
-      console.log(
-        "LanguageSelector - Cached messages content:",
-        allMessages[newLocale]
-      );
-      // If messages are cached, just update the locale and messages
-      dispatch(setLocale(newLocale));
-      dispatch(
-        setMessages({ locale: newLocale, messages: allMessages[newLocale] })
-      );
-    } else {
-      console.log("LanguageSelector - Loading messages for:", newLocale);
-      // Load messages from file
-      dispatch(loadMessages(newLocale));
+  // Optional: Load initial language from localStorage on mount
+  useEffect(() => {
+    const savedLocale = typeof window !== "undefined" ? localStorage.getItem("locale") : null;
+    if (savedLocale === "en" || savedLocale === "fr") {
+      setLocale(savedLocale);
     }
+  }, []);
+
+  const handleLanguageChange = (newLocale) => {
+    setLocale(newLocale);
+    // Optional: persist in localStorage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("locale", newLocale);
+    }
+    // Note: Without Redux or context, this change only affects this component
+    // If you need to update the whole app language, you'd need a context provider
   };
+
+  const getFlagAndLabel = (loc) => {
+    if (loc === "en") {
+      return { countryCode: "GB", label: "English" };
+    } else if (loc === "fr") {
+      return { countryCode: "FR", label: "Français" };
+    }
+    return { countryCode: "GB", label: "English" };
+  };
+
+  const current = getFlagAndLabel(locale);
 
   return (
     <Select value={locale} onValueChange={handleLanguageChange}>
-      <SelectTrigger className={`w-[130px] !h-10 ${className}`}>
+      <SelectTrigger className={`w-[130px] !h-10 ${className} ring-0 outline-none focus:border-none `}>
         <div className="flex items-center">
-          {locale === "en" ? (
-            <ReactCountryFlag
-              countryCode="GB"
-              svg
-              className="mr-2"
-              style={{ width: "18px", height: "18px" }}
-            />
-          ) : (
-            <ReactCountryFlag
-              countryCode="FR"
-              svg
-              className="mr-2"
-              style={{ width: "18px", height: "18px" }}
-            />
-          )}
-          <SelectValue>{locale === "en" ? "English" : "Français"}</SelectValue>
+          <ReactCountryFlag
+            countryCode={current.countryCode}
+            svg
+            className="mr-2"
+            style={{ width: "18px", height: "18px" }}
+          />
+          <SelectValue>{current.label}</SelectValue>
         </div>
       </SelectTrigger>
       <SelectContent>

@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { useSelector } from "react-redux";
 
 // Separate Glassmorphism Card Component
 function TalentCard() {
   const [isClient, setIsClient] = useState(false);
-  const messages = useSelector((state) => state.language.messages);
+  const messages = "Hello world";
 
   // Only render on client side to prevent hydration issues
   useEffect(() => {

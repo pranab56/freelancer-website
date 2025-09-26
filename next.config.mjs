@@ -14,12 +14,16 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "http",        // ← changed from https to http
+        hostname: "10.10.7.107", // ← internal IP
+        port: "5006",            // ← must match the port in the URL
+        pathname: "/**",
+      },
     ],
   },
-  // Ensure proper output for Vercel
   output: "standalone",
 
-  // Add webpack configuration to handle CORS in development
   webpack: (config, { dev }) => {
     if (dev) {
       config.devServer = {
