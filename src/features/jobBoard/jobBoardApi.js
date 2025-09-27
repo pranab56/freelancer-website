@@ -1,4 +1,4 @@
-import { baseApi } from '../../utils/apiBaseQuery';
+import { baseApi } from "../../utils/apiBaseQuery";
 
 export const jobBoardApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -20,37 +20,64 @@ export const jobBoardApi = baseApi.injectEndpoints({
       invalidatesTags: ["jobBoard"],
     }),
 
-
     // features/jobBoard/jobBoardApi.js
     allProjectByClient: builder.query({
-      query: ({ categoryName , serviceTypeName, searchTerm }) => {
+      query: ({ categoryName, serviceTypeName, searchTerm }) => {
         let url = `/jobs/me?`;
-        // `/jobs/me?categoryName=${categoryName}&serviceTypeName=${serviceTypeName}&searchTerm=${searchTerm}`,
-        if(categoryName) {
-          url += `categoryName=${categoryName}&`;
+        const params = [];
+
+        if (categoryName && categoryName.trim()) {
+          params.push(`categoryName=${encodeURIComponent(categoryName)}`);
         }
-        if(serviceTypeName) {
-          url += `serviceTypeName=${serviceTypeName}&`;
+        if (serviceTypeName && serviceTypeName.trim()) {
+          params.push(`serviceTypeName=${encodeURIComponent(serviceTypeName)}`);
         }
-        if(searchTerm) {
-          url += `searchTerm=${searchTerm}&`;
+        if (searchTerm && searchTerm.trim()) {
+          params.push(`searchTerm=${encodeURIComponent(searchTerm)}`);
         }
-       return {
-        url: url,
-        method: "GET",
+
+        if (params.length > 0) {
+          url += params.join("&");
+        } else {
+          url = url.slice(0, -1); // Remove the '?' if no params
         }
+
+        return {
+          url: url,
+          method: "GET",
+        };
       },
       providesTags: ["jobBoard"],
     }),
 
     getAllJobs: builder.query({
-      query: ({ categoryName, serviceTypeName, searchTerm }) => ({
-        url: `/jobs?categoryName=${categoryName}&serviceTypeName=${serviceTypeName}&searchTerm=${searchTerm}`,
-        method: "GET",
-      }),
+      query: ({ categoryName, serviceTypeName, searchTerm }) => {
+        let url = `/jobs?`;
+        const params = [];
+
+        if (categoryName && categoryName.trim()) {
+          params.push(`categoryName=${encodeURIComponent(categoryName)}`);
+        }
+        if (serviceTypeName && serviceTypeName.trim()) {
+          params.push(`serviceTypeName=${encodeURIComponent(serviceTypeName)}`);
+        }
+        if (searchTerm && searchTerm.trim()) {
+          params.push(`searchTerm=${encodeURIComponent(searchTerm)}`);
+        }
+
+        if (params.length > 0) {
+          url += params.join("&");
+        } else {
+          url = url.slice(0, -1); // Remove the '?' if no params
+        }
+
+        return {
+          url: url,
+          method: "GET",
+        };
+      },
       providesTags: ["jobBoard"],
     }),
-
 
     singleJobs: builder.query({
       query: (id) => ({
@@ -60,7 +87,6 @@ export const jobBoardApi = baseApi.injectEndpoints({
       providesTags: ["jobBoard"],
     }),
 
-
     deleteJobs: builder.query({
       query: (id) => ({
         url: `/jobs/${id}`,
@@ -68,8 +94,8 @@ export const jobBoardApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["jobBoard"],
     }),
-    overrideExisting: true
-  })
+    overrideExisting: true,
+  }),
 });
 
 // Export hooks

@@ -2,7 +2,6 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import { baseURL } from "../../utils/BaseURL";
 import { getImageUrl } from "@/utils/getImageUrl";
 import CommentSection from "./CommentSection";
 
